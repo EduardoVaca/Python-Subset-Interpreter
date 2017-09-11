@@ -5,11 +5,16 @@
 # -------------------------------------
 
 # List of all possible tokens allowed in my interpreter.
-tokens = (
-    'NAME', 'NUMBER',
+tokens = (    
     'COMMENT',
     'EQ', 'NEQ', 'GT', 'GE', 'LT', 'LE',
-    'PLUS', 'MINUS', 'PROD', 'DIV', 'EQUALS'
+    'PLUS', 'MINUS', 'PROD', 'DIV', 'EQUALS',
+    'IF', 'ELSE',
+    'FOR', 'IN', 'COL',
+    'INPUT', 'OUTPUT',
+    'LAMBDA', 'MAP', 'REDUCE', 'FILTER',
+    'LPAREN', 'RPAREN', 'LSQUARE', 'RSQUARE', 'COMA',
+    'NAME', 'NUMBER',
 )
 
 # Token definition with regex.
@@ -25,7 +30,15 @@ t_GE        = r'>='
 t_LT        = r'<'
 t_LE        = r'<='
 t_COMMENT   = r'\#'
+t_COL       = r':'
+t_LPAREN    = r'\('
+t_RPAREN    = r'\)'
+t_LSQUARE   = r'\['
+t_RSQUARE   = r'\]'
+t_COMA      = r','
 t_NAME      = r'[a-zA-Z_][a-zA-Z0-9_]*'
+
+# TODO: ADD NOTE OF WHY USING FUNCTIONs
 
 def t_NUMBER(t):
     r'\d+'
@@ -35,6 +48,47 @@ def t_NUMBER(t):
         print("Integer value too large %d", t.value)
         t.value = 0
     return t
+
+def t_IF(t):
+    r'if'
+    return t
+
+def t_ELSE(t):
+    r'else'
+    return t
+
+def t_FOR(t):
+    r'for'
+    return t
+
+def t_IN(t):
+    r'in'
+    return t
+
+def t_LAMBDA(t):
+    r'lambda'
+    return t
+
+def t_MAP(t):
+    r'map'
+    return t
+
+def t_REDUCE(t):
+    r'reduce'
+    return t
+
+def t_FILTER(t):
+    r'filter'
+    return t
+
+def t_INPUT(t):
+    r'input'
+    return t
+
+def t_OUTPUT(t):
+    r'output'
+    return t
+
 
 # Ignored characters
 t_ignore = " \t"
