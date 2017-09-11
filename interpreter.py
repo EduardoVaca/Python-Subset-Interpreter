@@ -4,18 +4,28 @@
 # A01207563
 # -------------------------------------
 
+# Dictionary for reserved_word : token.
+reserved_words = {
+    'if': 'IF',
+    'else': 'ELSE',
+    'for': 'FOR',
+    'in': 'IN',
+    'lambda': 'LAMBDA',
+    'map': 'MAP',
+    'reduce': 'REDUCE',
+    'filter': 'FILTER',
+    'input': 'INPUT',
+    'output': 'OUTPUT',
+}
+
 # List of all possible tokens allowed in my interpreter.
-tokens = (    
+tokens = [    
     'COMMENT',
     'EQ', 'NEQ', 'GT', 'GE', 'LT', 'LE',
     'PLUS', 'MINUS', 'PROD', 'DIV', 'EQUALS',
-    'IF', 'ELSE',
-    'FOR', 'IN', 'COL',
-    'INPUT', 'OUTPUT',
-    'LAMBDA', 'MAP', 'REDUCE', 'FILTER',
     'LPAREN', 'RPAREN', 'LSQUARE', 'RSQUARE', 'COMA',
-    'NAME', 'NUMBER',
-)
+    'ID', 'NUMBER', 'COL',
+] + list(reserved_words.values())
 
 # Token definition with regex.
 t_PLUS      = r'\+'
@@ -36,9 +46,6 @@ t_RPAREN    = r'\)'
 t_LSQUARE   = r'\['
 t_RSQUARE   = r'\]'
 t_COMA      = r','
-t_NAME      = r'[a-zA-Z_][a-zA-Z0-9_]*'
-
-# TODO: ADD NOTE OF WHY USING FUNCTIONs
 
 def t_NUMBER(t):
     r'\d+'
@@ -49,46 +56,10 @@ def t_NUMBER(t):
         t.value = 0
     return t
 
-def t_IF(t):
-    r'if'
+def t_ID(t):
+    r'[a-zA-Z_][a-zA-Z0-9_]*'
+    t.type = reserved_words.get(t.value,'ID')    # Check for reserved words
     return t
-
-def t_ELSE(t):
-    r'else'
-    return t
-
-def t_FOR(t):
-    r'for'
-    return t
-
-def t_IN(t):
-    r'in'
-    return t
-
-def t_LAMBDA(t):
-    r'lambda'
-    return t
-
-def t_MAP(t):
-    r'map'
-    return t
-
-def t_REDUCE(t):
-    r'reduce'
-    return t
-
-def t_FILTER(t):
-    r'filter'
-    return t
-
-def t_INPUT(t):
-    r'input'
-    return t
-
-def t_OUTPUT(t):
-    r'output'
-    return t
-
 
 # Ignored characters
 t_ignore = " \t"
