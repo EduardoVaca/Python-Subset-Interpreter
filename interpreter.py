@@ -20,7 +20,7 @@ reserved_words = {
 
 # List of all possible tokens allowed in my interpreter.
 tokens = [    
-    'COMMENT',
+    'COMMENT', 'STRING',
     'EQ', 'NEQ', 'GT', 'GE', 'LT', 'LE',
     'PLUS', 'MINUS', 'PROD', 'DIV', 'EQUALS',
     'LPAREN', 'RPAREN', 'LSQUARE', 'RSQUARE', 'COMA',
@@ -54,6 +54,10 @@ def t_NUMBER(t):
     except ValueError:
         print("Integer value too large %d", t.value)
         t.value = 0
+    return t
+
+def t_STRING(t):
+    r'\'[a-zA-Z_][a-zA-Z0-9_]*\''
     return t
 
 def t_ID(t):
