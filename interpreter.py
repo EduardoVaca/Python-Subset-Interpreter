@@ -83,11 +83,15 @@ def t_error(t):
 import ply.lex as lex
 lexer = lex.lex()
 
-while True:
-    try:
-        s = input('Vaca > ')
-    except EOFError:
-        break
-    lexer.input(s)
-    for token in lexer:
-        print(token)
+def main():
+    while True:
+        try:
+            s = input('Vaca > ')
+        except EOFError:
+            break
+        lexer.input(s)
+        for token in lexer:
+            print(token)
+
+if __name__ == '__main__':
+    main()
