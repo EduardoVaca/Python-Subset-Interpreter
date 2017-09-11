@@ -28,6 +28,8 @@ tokens = [
 ] + list(reserved_words.values())
 
 # Token definition with regex.
+# Each token has a matching declarationof form: t_TOKNAME
+# (must match with token name form tokens list)
 t_PLUS      = r'\+'
 t_MINUS     = r'-'
 t_PROD      = r'\*'
@@ -47,6 +49,7 @@ t_LSQUARE   = r'\['
 t_RSQUARE   = r'\]'
 t_COMA      = r','
 
+# More complex tokens are defined with functions.
 def t_NUMBER(t):
     r'\d+'
     try:
