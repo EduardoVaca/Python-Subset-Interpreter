@@ -22,6 +22,12 @@ class TestLexer(unittest.TestCase):
         LEXER.input('# this is a comment')
         self.checks_tokens(['COMMENT', 'ID', 'ID', 'ID', 'ID'])
 
+    def test_one_var_definition(self):
+        """Tests that one variable definition is tokenized correctly,
+        """
+        LEXER.input('x = 10')
+        self.checks_tokens(['ID', 'EQUALS', 'NUMBER'])
+
     def checks_tokens(self, correct_token_list):
         """Checks that the tokens obtained by lexer are the expected.
         PARAMS:
