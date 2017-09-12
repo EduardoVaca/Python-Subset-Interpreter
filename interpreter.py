@@ -62,7 +62,7 @@ def t_NUMBER(t):
     return t
 
 def t_STRING(t):
-    r'\'[a-zA-Z_][a-zA-Z0-9_]*\''
+    r'\'.*\''
     return t
 
 def t_ID(t):
