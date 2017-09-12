@@ -3,8 +3,9 @@
 # Carlos Eduardo Vaca Guerra
 # A01207563
 # -------------------------------------
+import ply.lex as lex
 
-# Dictionary for reserved_word : token.
+# Dictionary for reserverd words. { reserved_word : token }
 reserved_words = {
     'if': 'IF',
     'else': 'ELSE',
@@ -29,7 +30,7 @@ tokens = [
 
 # Token definition with regex.
 # Each token has a matching declarationof form: t_TOKNAME
-# (must match with token name form tokens list)
+# (must match with token name from tokens list)
 t_PLUS      = r'\+'
 t_MINUS     = r'-'
 t_PROD      = r'\*'
@@ -50,6 +51,7 @@ t_RSQUARE   = r'\]'
 t_COMA      = r','
 
 # More complex tokens are defined with functions.
+# Hierarchy is set by order of func definition.
 def t_NUMBER(t):
     r'\d+'
     try:
@@ -65,7 +67,7 @@ def t_STRING(t):
 
 def t_ID(t):
     r'[a-zA-Z_][a-zA-Z0-9_]*'
-    t.type = reserved_words.get(t.value,'ID')    # Check for reserved words
+    t.type = reserved_words.get(t.value, 'ID')    # Check for reserved words
     return t
 
 # Ignored characters
@@ -74,16 +76,19 @@ t_ignore = " \t"
 def t_newline(t):
     r'\n+'
     t.lexer.lineno += t.value.count("\n")
-    
+   
 def t_error(t):
+    """Method that defines behavior in case an error is found at tokenizing.
+    """
     print("Illegal character '%s'" % t.value[0])
     t.lexer.skip(1)
 
 # Build the lexer
-import ply.lex as lex
 lexer = lex.lex()
 
 def main():
+    """Main function to be run at execution.
+    """
     while True:
         try:
             s = input('Vaca > ')
