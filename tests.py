@@ -34,6 +34,18 @@ class TestLexer(unittest.TestCase):
         LEXER.input('x = \'This is a string\'')
         self.checks_tokens(['ID', 'EQUALS', 'STRING'])
 
+    def test_all_data_types(self):
+        """Tests that all data types are tokenized correctly.
+        """
+        LEXER.input('x = \'This is a string\'')
+        self.checks_tokens(['ID', 'EQUALS', 'STRING'])
+        LEXER.input('x = 1234')
+        self.checks_tokens(['ID', 'EQUALS', 'NUMBER'])
+        LEXER.input('x = true')
+        self.checks_tokens(['ID', 'EQUALS', 'BOOLEAN'])
+        LEXER.input('x = false')
+        self.checks_tokens(['ID', 'EQUALS', 'BOOLEAN'])
+
     def checks_tokens(self, correct_token_list):
         """Checks that the tokens obtained by lexer are the expected.
         PARAMS:

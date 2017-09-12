@@ -21,7 +21,7 @@ reserved_words = {
 
 # List of all possible tokens allowed in my interpreter.
 tokens = [    
-    'COMMENT', 'STRING',
+    'COMMENT', 'STRING', 'BOOLEAN',
     'EQ', 'NEQ', 'GT', 'GE', 'LT', 'LE',
     'PLUS', 'MINUS', 'PROD', 'DIV', 'EQUALS',
     'LPAREN', 'RPAREN', 'LSQUARE', 'RSQUARE', 'COMA',
@@ -63,6 +63,10 @@ def t_NUMBER(t):
 
 def t_STRING(t):
     r'\'.*\''
+    return t
+
+def t_BOOLEAN(t):
+    r'true|false'
     return t
 
 def t_ID(t):
