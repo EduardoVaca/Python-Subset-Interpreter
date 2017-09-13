@@ -84,7 +84,7 @@ def t_newline(t):
 def t_error(t):
     """Method that defines behavior in case an error is found at tokenizing.
     """
-    print("Illegal character '%s'" % t.value[0])
+    print("ERROR: Illegal symbol '%s'" % t.value[0])
     t.lexer.skip(1)
 
 # Build the lexer

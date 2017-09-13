@@ -102,6 +102,37 @@ class TestLexer(unittest.TestCase):
             'REDUCE', 'LPAREN', 'LAMBDA', 'ID', 'COMA', 'ID', 'COL',
             'ID', 'PLUS', 'ID', 'COMA', 'ID', 'RPAREN'])
 
+    # Tests that only succed on lexical analyzer phase.
+    def test_var_definition_misplaced(self):
+        """Tests that in the lexical analyzer phase a misplaced definition
+        of a variable is accepted.
+        """
+        LEXER.input('=    x 120')
+        self.checks_tokens(['EQUALS', 'ID', 'NUMBER'])
+        LEXER.input('true x =')
+        self.checks_tokens(['BOOLEAN', 'ID', 'EQUALS'])
+
+    def test_string_wrong_place(self):
+        """Tests that in the lexical analyzer phase a string in
+        wrong place is accepted.
+        """
+        LEXER.input('for \'hi\' in list:')
+        self.checks_tokens(['FOR', 'STRING', 'IN', 'ID', 'COL'])
+
+    def test_var_wrong_place(self):
+        """Tests that in the lexical analyzer phase a variable in
+        wrong place is accepted.
+        """
+        LEXER.input('a b = 10')
+        self.checks_tokens(['ID', 'ID', 'EQUALS', 'NUMBER'])
+
+    def test_loop_wrong_grammar(self):
+        """Tests that in the lexical analyzer phase a loop with
+        wrong grammar is accepted.
+        """
+        LEXER.input('x in list for:')
+        self.checks_tokens(['ID', 'IN', 'ID', 'FOR', 'COL'])
+
     def checks_tokens(self, correct_token_list):
         """Checks that the tokens obtained by lexer are the expected.
         PARAMS:
