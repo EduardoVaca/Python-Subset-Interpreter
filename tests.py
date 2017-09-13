@@ -72,6 +72,36 @@ class TestLexer(unittest.TestCase):
         LEXER.input('print(\'Hello World\')')
         self.checks_tokens(['OUTPUT', 'LPAREN', 'STRING', 'RPAREN'])
 
+    def test_lamdbda_func(self):
+        """Tests that lambda function is tokenized correctly.
+        """
+        LEXER.input('lambda x: x*2')
+        self.checks_tokens(['LAMBDA', 'ID', 'COL', 'ID', 'PROD', 'NUMBER'])
+
+    def test_map_func(self):
+        """Tests that map function is tokenized correctly.
+        """
+        LEXER.input('map(lambda x: x+1, list)')
+        self.checks_tokens([
+            'MAP', 'LPAREN', 'LAMBDA', 'ID', 'COL', 'ID', 'PLUS',
+            'NUMBER', 'COMA', 'ID', 'RPAREN'])
+
+    def test_filter_func(self):
+        """Tests that filter function is tokenized correctly.
+        """
+        LEXER.input('filter(lambda x: x == 2, list)')
+        self.checks_tokens([
+            'FILTER', 'LPAREN', 'LAMBDA', 'ID', 'COL', 'ID', 'EQ',
+            'NUMBER', 'COMA', 'ID', 'RPAREN'])
+
+    def tests_reduce_func(self):
+        """Tests that reduce function is tokenized correctly.
+        """
+        LEXER.input('reduce(lambda x,y: x+y, list)')
+        self.checks_tokens([
+            'REDUCE', 'LPAREN', 'LAMBDA', 'ID', 'COMA', 'ID', 'COL',
+            'ID', 'PLUS', 'ID', 'COMA', 'ID', 'RPAREN'])
+
     def checks_tokens(self, correct_token_list):
         """Checks that the tokens obtained by lexer are the expected.
         PARAMS:
