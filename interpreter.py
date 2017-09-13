@@ -16,7 +16,7 @@ reserved_words = {
     'reduce': 'REDUCE',
     'filter': 'FILTER',
     'input': 'INPUT',
-    'output': 'OUTPUT',
+    'print': 'OUTPUT',
 }
 
 # List of all possible tokens allowed in my interpreter.

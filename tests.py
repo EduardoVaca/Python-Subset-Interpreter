@@ -46,6 +46,32 @@ class TestLexer(unittest.TestCase):
         LEXER.input('x = false')
         self.checks_tokens(['ID', 'EQUALS', 'BOOLEAN'])
 
+    def test_loop_instruction(self):
+        """Tests that for loop instruction is tokenized correctly.
+        """
+        LEXER.input('for x in xs:')
+        self.checks_tokens(['FOR', 'ID', 'IN', 'ID', 'COL'])
+
+    def test_conditional_instruction(self):
+        """Tests that conditional instruction is tokenized correctly.
+        """
+        LEXER.input('if x:')
+        self.checks_tokens(['IF', 'ID', 'COL'])
+        LEXER.input('else:')
+        self.checks_tokens(['ELSE', 'COL'])
+
+    def test_input_instruction(self):
+        """Tests that input instruction is tokenized correctly.
+        """
+        LEXER.input('input()')
+        self.checks_tokens(['INPUT', 'LPAREN', 'RPAREN'])
+
+    def test_output_instruction(self):
+        """Tests that output instruction is tokenized correctly.
+        """
+        LEXER.input('print(\'Hello World\')')
+        self.checks_tokens(['OUTPUT', 'LPAREN', 'STRING', 'RPAREN'])
+
     def checks_tokens(self, correct_token_list):
         """Checks that the tokens obtained by lexer are the expected.
         PARAMS:
