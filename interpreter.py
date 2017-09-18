@@ -42,7 +42,6 @@ t_GT        = r'>'
 t_GE        = r'>='
 t_LT        = r'<'
 t_LE        = r'<='
-t_COMMENT   = r'\#'
 t_COL       = r':'
 t_LPAREN    = r'\('
 t_RPAREN    = r'\)'
@@ -59,6 +58,10 @@ def t_NUMBER(t):
     except ValueError:
         print("Integer value too large %d", t.value)
         t.value = 0
+    return t
+
+def t_COMMENT(t):
+    r'\#.*'
     return t
 
 def t_STRING(t):

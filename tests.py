@@ -14,13 +14,13 @@ class TestLexer(unittest.TestCase):
         """Tests that one word comments is tokenized correctly.
         """
         LEXER.input('# word')
-        self.checks_tokens(['COMMENT', 'ID'])
+        self.checks_tokens(['COMMENT'])
 
     def test_one_line_comment(self):
         """Tests that a one line comment is tokenized correctly.
         """
         LEXER.input('# this is a comment')
-        self.checks_tokens(['COMMENT', 'ID', 'ID', 'ID', 'ID'])
+        self.checks_tokens(['COMMENT'])
 
     def test_one_var_definition(self):
         """Tests that one variable definition is tokenized correctly.
