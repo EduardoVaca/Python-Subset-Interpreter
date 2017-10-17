@@ -79,8 +79,7 @@ def t_BOOLEAN(t):
 
 def t_ID(t):
     r'[a-zA-Z_][a-zA-Z0-9_]*'
-    t.type = reserved_words.get(t.value, 'ID')    # Check for reserved words
-    print(t)
+    t.type = reserved_words.get(t.value, 'ID')    # Check for reserved words    
     return t
 
 # Ignored characters
@@ -101,10 +100,16 @@ lexer = lex.lex()
 
 # Parser rules
 
+# 7
+def p_statement(t):
+    '''statement    : expressionStmt
+                    | conditionalStmt SEMI'''
+    pass
+
 # 10
 def p_conditionalStmt(t):
-    '''conditionalStmt  : IF expressionStmt COL
-                        | IF expressionStmt COL ELSE COL'''
+    '''conditionalStmt  : IF expressionStmt COL statement
+                        | IF expressionStmt COL statement ELSE COL statement'''
     pass
 
 # 11

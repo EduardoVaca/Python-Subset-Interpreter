@@ -11,7 +11,6 @@ Unused terminals:
     LSQUARE
     RSQUARE
     COMA
-    SEMI
     FOR
     IN
     LAMBDA
@@ -23,585 +22,759 @@ Unused terminals:
 
 Grammar
 
-Rule 0     S' -> conditionalStmt
-Rule 1     conditionalStmt -> IF expressionStmt COL
-Rule 2     conditionalStmt -> IF expressionStmt COL ELSE COL
-Rule 3     expressionStmt -> expressionStmt OR andExpression
-Rule 4     expressionStmt -> andExpression
-Rule 5     andExpression -> andExpression AND unaryRelExpression
-Rule 6     andExpression -> unaryRelExpression
-Rule 7     unaryRelExpression -> NOT unaryRelExpression
-Rule 8     unaryRelExpression -> relExpression
-Rule 9     relExpression -> sumExpression relop sumExpression
-Rule 10    relExpression -> sumExpression
-Rule 11    relop -> LE
-Rule 12    relop -> LT
-Rule 13    relop -> GT
-Rule 14    relop -> GE
-Rule 15    relop -> EQ
-Rule 16    relop -> NEQ
-Rule 17    sumExpression -> sumExpression sumop term
-Rule 18    sumExpression -> term
-Rule 19    sumop -> PLUS
-Rule 20    sumop -> MINUS
-Rule 21    term -> term mulop sumElement
-Rule 22    term -> sumElement
-Rule 23    sumElement -> ID
-Rule 24    sumElement -> NUMBER
-Rule 25    mulop -> PROD
-Rule 26    mulop -> DIV
+Rule 0     S' -> statement
+Rule 1     statement -> expressionStmt
+Rule 2     statement -> conditionalStmt SEMI
+Rule 3     conditionalStmt -> IF expressionStmt COL statement
+Rule 4     conditionalStmt -> IF expressionStmt COL statement ELSE COL statement
+Rule 5     expressionStmt -> expressionStmt OR andExpression
+Rule 6     expressionStmt -> andExpression
+Rule 7     andExpression -> andExpression AND unaryRelExpression
+Rule 8     andExpression -> unaryRelExpression
+Rule 9     unaryRelExpression -> NOT unaryRelExpression
+Rule 10    unaryRelExpression -> relExpression
+Rule 11    relExpression -> sumExpression relop sumExpression
+Rule 12    relExpression -> sumExpression
+Rule 13    relop -> LE
+Rule 14    relop -> LT
+Rule 15    relop -> GT
+Rule 16    relop -> GE
+Rule 17    relop -> EQ
+Rule 18    relop -> NEQ
+Rule 19    sumExpression -> sumExpression sumop term
+Rule 20    sumExpression -> term
+Rule 21    sumop -> PLUS
+Rule 22    sumop -> MINUS
+Rule 23    term -> term mulop sumElement
+Rule 24    term -> sumElement
+Rule 25    sumElement -> ID
+Rule 26    sumElement -> NUMBER
+Rule 27    mulop -> PROD
+Rule 28    mulop -> DIV
 
 Terminals, with rules where they appear
 
-AND                  : 5
+AND                  : 7
 BOOLEAN              : 
-COL                  : 1 2 2
+COL                  : 3 4 4
 COMA                 : 
 COMMENT              : 
-DIV                  : 26
-ELSE                 : 2
-EQ                   : 15
+DIV                  : 28
+ELSE                 : 4
+EQ                   : 17
 EQUALS               : 
 FILTER               : 
 FOR                  : 
-GE                   : 14
-GT                   : 13
-ID                   : 23
-IF                   : 1 2
+GE                   : 16
+GT                   : 15
+ID                   : 25
+IF                   : 3 4
 IN                   : 
 INPUT                : 
 LAMBDA               : 
-LE                   : 11
+LE                   : 13
 LPAREN               : 
 LSQUARE              : 
-LT                   : 12
+LT                   : 14
 MAP                  : 
-MINUS                : 20
-NEQ                  : 16
-NOT                  : 7
-NUMBER               : 24
-OR                   : 3
+MINUS                : 22
+NEQ                  : 18
+NOT                  : 9
+NUMBER               : 26
+OR                   : 5
 OUTPUT               : 
-PLUS                 : 19
-PROD                 : 25
+PLUS                 : 21
+PROD                 : 27
 REDUCE               : 
 RPAREN               : 
 RSQUARE              : 
-SEMI                 : 
+SEMI                 : 2
 STRING               : 
 error                : 
 
 Nonterminals, with rules where they appear
 
-andExpression        : 3 4 5
-conditionalStmt      : 0
-expressionStmt       : 1 2 3
-mulop                : 21
-relExpression        : 8
-relop                : 9
-sumElement           : 21 22
-sumExpression        : 9 9 10 17
-sumop                : 17
-term                 : 17 18 21
-unaryRelExpression   : 5 6 7
+andExpression        : 5 6 7
+conditionalStmt      : 2
+expressionStmt       : 1 3 4 5
+mulop                : 23
+relExpression        : 10
+relop                : 11
+statement            : 3 4 4 0
+sumElement           : 23 24
+sumExpression        : 11 11 12 19
+sumop                : 19
+term                 : 19 20 23
+unaryRelExpression   : 7 8 9
 
 Parsing method: LALR
 
 state 0
 
-    (0) S' -> . conditionalStmt
-    (1) conditionalStmt -> . IF expressionStmt COL
-    (2) conditionalStmt -> . IF expressionStmt COL ELSE COL
+    (0) S' -> . statement
+    (1) statement -> . expressionStmt
+    (2) statement -> . conditionalStmt SEMI
+    (5) expressionStmt -> . expressionStmt OR andExpression
+    (6) expressionStmt -> . andExpression
+    (3) conditionalStmt -> . IF expressionStmt COL statement
+    (4) conditionalStmt -> . IF expressionStmt COL statement ELSE COL statement
+    (7) andExpression -> . andExpression AND unaryRelExpression
+    (8) andExpression -> . unaryRelExpression
+    (9) unaryRelExpression -> . NOT unaryRelExpression
+    (10) unaryRelExpression -> . relExpression
+    (11) relExpression -> . sumExpression relop sumExpression
+    (12) relExpression -> . sumExpression
+    (19) sumExpression -> . sumExpression sumop term
+    (20) sumExpression -> . term
+    (23) term -> . term mulop sumElement
+    (24) term -> . sumElement
+    (25) sumElement -> . ID
+    (26) sumElement -> . NUMBER
 
-    IF              shift and go to state 2
+    IF              shift and go to state 5
+    NOT             shift and go to state 7
+    ID              shift and go to state 12
+    NUMBER          shift and go to state 13
 
-    conditionalStmt                shift and go to state 1
+    statement                      shift and go to state 1
+    expressionStmt                 shift and go to state 2
+    conditionalStmt                shift and go to state 3
+    andExpression                  shift and go to state 4
+    unaryRelExpression             shift and go to state 6
+    relExpression                  shift and go to state 8
+    sumExpression                  shift and go to state 9
+    term                           shift and go to state 10
+    sumElement                     shift and go to state 11
 
 state 1
 
-    (0) S' -> conditionalStmt .
+    (0) S' -> statement .
 
 
 
 state 2
 
-    (1) conditionalStmt -> IF . expressionStmt COL
-    (2) conditionalStmt -> IF . expressionStmt COL ELSE COL
-    (3) expressionStmt -> . expressionStmt OR andExpression
-    (4) expressionStmt -> . andExpression
-    (5) andExpression -> . andExpression AND unaryRelExpression
-    (6) andExpression -> . unaryRelExpression
-    (7) unaryRelExpression -> . NOT unaryRelExpression
-    (8) unaryRelExpression -> . relExpression
-    (9) relExpression -> . sumExpression relop sumExpression
-    (10) relExpression -> . sumExpression
-    (17) sumExpression -> . sumExpression sumop term
-    (18) sumExpression -> . term
-    (21) term -> . term mulop sumElement
-    (22) term -> . sumElement
-    (23) sumElement -> . ID
-    (24) sumElement -> . NUMBER
+    (1) statement -> expressionStmt .
+    (5) expressionStmt -> expressionStmt . OR andExpression
 
-    NOT             shift and go to state 6
-    ID              shift and go to state 11
-    NUMBER          shift and go to state 12
+    $end            reduce using rule 1 (statement -> expressionStmt .)
+    ELSE            reduce using rule 1 (statement -> expressionStmt .)
+    SEMI            reduce using rule 1 (statement -> expressionStmt .)
+    OR              shift and go to state 14
 
-    expressionStmt                 shift and go to state 3
-    andExpression                  shift and go to state 4
-    unaryRelExpression             shift and go to state 5
-    relExpression                  shift and go to state 7
-    sumExpression                  shift and go to state 8
-    term                           shift and go to state 9
-    sumElement                     shift and go to state 10
 
 state 3
 
-    (1) conditionalStmt -> IF expressionStmt . COL
-    (2) conditionalStmt -> IF expressionStmt . COL ELSE COL
-    (3) expressionStmt -> expressionStmt . OR andExpression
+    (2) statement -> conditionalStmt . SEMI
 
-    COL             shift and go to state 13
-    OR              shift and go to state 14
+    SEMI            shift and go to state 15
 
 
 state 4
 
-    (4) expressionStmt -> andExpression .
-    (5) andExpression -> andExpression . AND unaryRelExpression
+    (6) expressionStmt -> andExpression .
+    (7) andExpression -> andExpression . AND unaryRelExpression
 
-    COL             reduce using rule 4 (expressionStmt -> andExpression .)
-    OR              reduce using rule 4 (expressionStmt -> andExpression .)
-    AND             shift and go to state 15
+    OR              reduce using rule 6 (expressionStmt -> andExpression .)
+    $end            reduce using rule 6 (expressionStmt -> andExpression .)
+    COL             reduce using rule 6 (expressionStmt -> andExpression .)
+    ELSE            reduce using rule 6 (expressionStmt -> andExpression .)
+    SEMI            reduce using rule 6 (expressionStmt -> andExpression .)
+    AND             shift and go to state 16
 
 
 state 5
 
-    (6) andExpression -> unaryRelExpression .
+    (3) conditionalStmt -> IF . expressionStmt COL statement
+    (4) conditionalStmt -> IF . expressionStmt COL statement ELSE COL statement
+    (5) expressionStmt -> . expressionStmt OR andExpression
+    (6) expressionStmt -> . andExpression
+    (7) andExpression -> . andExpression AND unaryRelExpression
+    (8) andExpression -> . unaryRelExpression
+    (9) unaryRelExpression -> . NOT unaryRelExpression
+    (10) unaryRelExpression -> . relExpression
+    (11) relExpression -> . sumExpression relop sumExpression
+    (12) relExpression -> . sumExpression
+    (19) sumExpression -> . sumExpression sumop term
+    (20) sumExpression -> . term
+    (23) term -> . term mulop sumElement
+    (24) term -> . sumElement
+    (25) sumElement -> . ID
+    (26) sumElement -> . NUMBER
 
-    AND             reduce using rule 6 (andExpression -> unaryRelExpression .)
-    COL             reduce using rule 6 (andExpression -> unaryRelExpression .)
-    OR              reduce using rule 6 (andExpression -> unaryRelExpression .)
+    NOT             shift and go to state 7
+    ID              shift and go to state 12
+    NUMBER          shift and go to state 13
 
+    expressionStmt                 shift and go to state 17
+    andExpression                  shift and go to state 4
+    unaryRelExpression             shift and go to state 6
+    relExpression                  shift and go to state 8
+    sumExpression                  shift and go to state 9
+    term                           shift and go to state 10
+    sumElement                     shift and go to state 11
 
 state 6
 
-    (7) unaryRelExpression -> NOT . unaryRelExpression
-    (7) unaryRelExpression -> . NOT unaryRelExpression
-    (8) unaryRelExpression -> . relExpression
-    (9) relExpression -> . sumExpression relop sumExpression
-    (10) relExpression -> . sumExpression
-    (17) sumExpression -> . sumExpression sumop term
-    (18) sumExpression -> . term
-    (21) term -> . term mulop sumElement
-    (22) term -> . sumElement
-    (23) sumElement -> . ID
-    (24) sumElement -> . NUMBER
+    (8) andExpression -> unaryRelExpression .
 
-    NOT             shift and go to state 6
-    ID              shift and go to state 11
-    NUMBER          shift and go to state 12
+    AND             reduce using rule 8 (andExpression -> unaryRelExpression .)
+    OR              reduce using rule 8 (andExpression -> unaryRelExpression .)
+    $end            reduce using rule 8 (andExpression -> unaryRelExpression .)
+    COL             reduce using rule 8 (andExpression -> unaryRelExpression .)
+    ELSE            reduce using rule 8 (andExpression -> unaryRelExpression .)
+    SEMI            reduce using rule 8 (andExpression -> unaryRelExpression .)
 
-    unaryRelExpression             shift and go to state 16
-    relExpression                  shift and go to state 7
-    sumExpression                  shift and go to state 8
-    term                           shift and go to state 9
-    sumElement                     shift and go to state 10
 
 state 7
 
-    (8) unaryRelExpression -> relExpression .
+    (9) unaryRelExpression -> NOT . unaryRelExpression
+    (9) unaryRelExpression -> . NOT unaryRelExpression
+    (10) unaryRelExpression -> . relExpression
+    (11) relExpression -> . sumExpression relop sumExpression
+    (12) relExpression -> . sumExpression
+    (19) sumExpression -> . sumExpression sumop term
+    (20) sumExpression -> . term
+    (23) term -> . term mulop sumElement
+    (24) term -> . sumElement
+    (25) sumElement -> . ID
+    (26) sumElement -> . NUMBER
 
-    AND             reduce using rule 8 (unaryRelExpression -> relExpression .)
-    COL             reduce using rule 8 (unaryRelExpression -> relExpression .)
-    OR              reduce using rule 8 (unaryRelExpression -> relExpression .)
+    NOT             shift and go to state 7
+    ID              shift and go to state 12
+    NUMBER          shift and go to state 13
 
+    unaryRelExpression             shift and go to state 18
+    relExpression                  shift and go to state 8
+    sumExpression                  shift and go to state 9
+    term                           shift and go to state 10
+    sumElement                     shift and go to state 11
 
 state 8
 
-    (9) relExpression -> sumExpression . relop sumExpression
-    (10) relExpression -> sumExpression .
-    (17) sumExpression -> sumExpression . sumop term
-    (11) relop -> . LE
-    (12) relop -> . LT
-    (13) relop -> . GT
-    (14) relop -> . GE
-    (15) relop -> . EQ
-    (16) relop -> . NEQ
-    (19) sumop -> . PLUS
-    (20) sumop -> . MINUS
+    (10) unaryRelExpression -> relExpression .
 
-    AND             reduce using rule 10 (relExpression -> sumExpression .)
-    COL             reduce using rule 10 (relExpression -> sumExpression .)
-    OR              reduce using rule 10 (relExpression -> sumExpression .)
-    LE              shift and go to state 19
-    LT              shift and go to state 20
-    GT              shift and go to state 21
-    GE              shift and go to state 22
-    EQ              shift and go to state 23
-    NEQ             shift and go to state 24
-    PLUS            shift and go to state 25
-    MINUS           shift and go to state 26
+    AND             reduce using rule 10 (unaryRelExpression -> relExpression .)
+    OR              reduce using rule 10 (unaryRelExpression -> relExpression .)
+    $end            reduce using rule 10 (unaryRelExpression -> relExpression .)
+    COL             reduce using rule 10 (unaryRelExpression -> relExpression .)
+    ELSE            reduce using rule 10 (unaryRelExpression -> relExpression .)
+    SEMI            reduce using rule 10 (unaryRelExpression -> relExpression .)
 
-    relop                          shift and go to state 17
-    sumop                          shift and go to state 18
 
 state 9
 
-    (18) sumExpression -> term .
-    (21) term -> term . mulop sumElement
-    (25) mulop -> . PROD
-    (26) mulop -> . DIV
+    (11) relExpression -> sumExpression . relop sumExpression
+    (12) relExpression -> sumExpression .
+    (19) sumExpression -> sumExpression . sumop term
+    (13) relop -> . LE
+    (14) relop -> . LT
+    (15) relop -> . GT
+    (16) relop -> . GE
+    (17) relop -> . EQ
+    (18) relop -> . NEQ
+    (21) sumop -> . PLUS
+    (22) sumop -> . MINUS
 
-    LE              reduce using rule 18 (sumExpression -> term .)
-    LT              reduce using rule 18 (sumExpression -> term .)
-    GT              reduce using rule 18 (sumExpression -> term .)
-    GE              reduce using rule 18 (sumExpression -> term .)
-    EQ              reduce using rule 18 (sumExpression -> term .)
-    NEQ             reduce using rule 18 (sumExpression -> term .)
-    PLUS            reduce using rule 18 (sumExpression -> term .)
-    MINUS           reduce using rule 18 (sumExpression -> term .)
-    AND             reduce using rule 18 (sumExpression -> term .)
-    COL             reduce using rule 18 (sumExpression -> term .)
-    OR              reduce using rule 18 (sumExpression -> term .)
-    PROD            shift and go to state 28
-    DIV             shift and go to state 29
+    AND             reduce using rule 12 (relExpression -> sumExpression .)
+    OR              reduce using rule 12 (relExpression -> sumExpression .)
+    $end            reduce using rule 12 (relExpression -> sumExpression .)
+    COL             reduce using rule 12 (relExpression -> sumExpression .)
+    ELSE            reduce using rule 12 (relExpression -> sumExpression .)
+    SEMI            reduce using rule 12 (relExpression -> sumExpression .)
+    LE              shift and go to state 21
+    LT              shift and go to state 22
+    GT              shift and go to state 23
+    GE              shift and go to state 24
+    EQ              shift and go to state 25
+    NEQ             shift and go to state 26
+    PLUS            shift and go to state 27
+    MINUS           shift and go to state 28
 
-    mulop                          shift and go to state 27
+    relop                          shift and go to state 19
+    sumop                          shift and go to state 20
 
 state 10
 
-    (22) term -> sumElement .
+    (20) sumExpression -> term .
+    (23) term -> term . mulop sumElement
+    (27) mulop -> . PROD
+    (28) mulop -> . DIV
 
-    PROD            reduce using rule 22 (term -> sumElement .)
-    DIV             reduce using rule 22 (term -> sumElement .)
-    LE              reduce using rule 22 (term -> sumElement .)
-    LT              reduce using rule 22 (term -> sumElement .)
-    GT              reduce using rule 22 (term -> sumElement .)
-    GE              reduce using rule 22 (term -> sumElement .)
-    EQ              reduce using rule 22 (term -> sumElement .)
-    NEQ             reduce using rule 22 (term -> sumElement .)
-    PLUS            reduce using rule 22 (term -> sumElement .)
-    MINUS           reduce using rule 22 (term -> sumElement .)
-    AND             reduce using rule 22 (term -> sumElement .)
-    COL             reduce using rule 22 (term -> sumElement .)
-    OR              reduce using rule 22 (term -> sumElement .)
+    LE              reduce using rule 20 (sumExpression -> term .)
+    LT              reduce using rule 20 (sumExpression -> term .)
+    GT              reduce using rule 20 (sumExpression -> term .)
+    GE              reduce using rule 20 (sumExpression -> term .)
+    EQ              reduce using rule 20 (sumExpression -> term .)
+    NEQ             reduce using rule 20 (sumExpression -> term .)
+    PLUS            reduce using rule 20 (sumExpression -> term .)
+    MINUS           reduce using rule 20 (sumExpression -> term .)
+    AND             reduce using rule 20 (sumExpression -> term .)
+    OR              reduce using rule 20 (sumExpression -> term .)
+    $end            reduce using rule 20 (sumExpression -> term .)
+    COL             reduce using rule 20 (sumExpression -> term .)
+    ELSE            reduce using rule 20 (sumExpression -> term .)
+    SEMI            reduce using rule 20 (sumExpression -> term .)
+    PROD            shift and go to state 30
+    DIV             shift and go to state 31
 
+    mulop                          shift and go to state 29
 
 state 11
 
-    (23) sumElement -> ID .
+    (24) term -> sumElement .
 
-    PROD            reduce using rule 23 (sumElement -> ID .)
-    DIV             reduce using rule 23 (sumElement -> ID .)
-    LE              reduce using rule 23 (sumElement -> ID .)
-    LT              reduce using rule 23 (sumElement -> ID .)
-    GT              reduce using rule 23 (sumElement -> ID .)
-    GE              reduce using rule 23 (sumElement -> ID .)
-    EQ              reduce using rule 23 (sumElement -> ID .)
-    NEQ             reduce using rule 23 (sumElement -> ID .)
-    PLUS            reduce using rule 23 (sumElement -> ID .)
-    MINUS           reduce using rule 23 (sumElement -> ID .)
-    AND             reduce using rule 23 (sumElement -> ID .)
-    COL             reduce using rule 23 (sumElement -> ID .)
-    OR              reduce using rule 23 (sumElement -> ID .)
+    PROD            reduce using rule 24 (term -> sumElement .)
+    DIV             reduce using rule 24 (term -> sumElement .)
+    LE              reduce using rule 24 (term -> sumElement .)
+    LT              reduce using rule 24 (term -> sumElement .)
+    GT              reduce using rule 24 (term -> sumElement .)
+    GE              reduce using rule 24 (term -> sumElement .)
+    EQ              reduce using rule 24 (term -> sumElement .)
+    NEQ             reduce using rule 24 (term -> sumElement .)
+    PLUS            reduce using rule 24 (term -> sumElement .)
+    MINUS           reduce using rule 24 (term -> sumElement .)
+    AND             reduce using rule 24 (term -> sumElement .)
+    OR              reduce using rule 24 (term -> sumElement .)
+    $end            reduce using rule 24 (term -> sumElement .)
+    COL             reduce using rule 24 (term -> sumElement .)
+    ELSE            reduce using rule 24 (term -> sumElement .)
+    SEMI            reduce using rule 24 (term -> sumElement .)
 
 
 state 12
 
-    (24) sumElement -> NUMBER .
+    (25) sumElement -> ID .
 
-    PROD            reduce using rule 24 (sumElement -> NUMBER .)
-    DIV             reduce using rule 24 (sumElement -> NUMBER .)
-    LE              reduce using rule 24 (sumElement -> NUMBER .)
-    LT              reduce using rule 24 (sumElement -> NUMBER .)
-    GT              reduce using rule 24 (sumElement -> NUMBER .)
-    GE              reduce using rule 24 (sumElement -> NUMBER .)
-    EQ              reduce using rule 24 (sumElement -> NUMBER .)
-    NEQ             reduce using rule 24 (sumElement -> NUMBER .)
-    PLUS            reduce using rule 24 (sumElement -> NUMBER .)
-    MINUS           reduce using rule 24 (sumElement -> NUMBER .)
-    AND             reduce using rule 24 (sumElement -> NUMBER .)
-    COL             reduce using rule 24 (sumElement -> NUMBER .)
-    OR              reduce using rule 24 (sumElement -> NUMBER .)
+    PROD            reduce using rule 25 (sumElement -> ID .)
+    DIV             reduce using rule 25 (sumElement -> ID .)
+    LE              reduce using rule 25 (sumElement -> ID .)
+    LT              reduce using rule 25 (sumElement -> ID .)
+    GT              reduce using rule 25 (sumElement -> ID .)
+    GE              reduce using rule 25 (sumElement -> ID .)
+    EQ              reduce using rule 25 (sumElement -> ID .)
+    NEQ             reduce using rule 25 (sumElement -> ID .)
+    PLUS            reduce using rule 25 (sumElement -> ID .)
+    MINUS           reduce using rule 25 (sumElement -> ID .)
+    AND             reduce using rule 25 (sumElement -> ID .)
+    OR              reduce using rule 25 (sumElement -> ID .)
+    $end            reduce using rule 25 (sumElement -> ID .)
+    COL             reduce using rule 25 (sumElement -> ID .)
+    ELSE            reduce using rule 25 (sumElement -> ID .)
+    SEMI            reduce using rule 25 (sumElement -> ID .)
 
 
 state 13
 
-    (1) conditionalStmt -> IF expressionStmt COL .
-    (2) conditionalStmt -> IF expressionStmt COL . ELSE COL
+    (26) sumElement -> NUMBER .
 
-    $end            reduce using rule 1 (conditionalStmt -> IF expressionStmt COL .)
-    ELSE            shift and go to state 30
+    PROD            reduce using rule 26 (sumElement -> NUMBER .)
+    DIV             reduce using rule 26 (sumElement -> NUMBER .)
+    LE              reduce using rule 26 (sumElement -> NUMBER .)
+    LT              reduce using rule 26 (sumElement -> NUMBER .)
+    GT              reduce using rule 26 (sumElement -> NUMBER .)
+    GE              reduce using rule 26 (sumElement -> NUMBER .)
+    EQ              reduce using rule 26 (sumElement -> NUMBER .)
+    NEQ             reduce using rule 26 (sumElement -> NUMBER .)
+    PLUS            reduce using rule 26 (sumElement -> NUMBER .)
+    MINUS           reduce using rule 26 (sumElement -> NUMBER .)
+    AND             reduce using rule 26 (sumElement -> NUMBER .)
+    OR              reduce using rule 26 (sumElement -> NUMBER .)
+    $end            reduce using rule 26 (sumElement -> NUMBER .)
+    COL             reduce using rule 26 (sumElement -> NUMBER .)
+    ELSE            reduce using rule 26 (sumElement -> NUMBER .)
+    SEMI            reduce using rule 26 (sumElement -> NUMBER .)
 
 
 state 14
 
-    (3) expressionStmt -> expressionStmt OR . andExpression
-    (5) andExpression -> . andExpression AND unaryRelExpression
-    (6) andExpression -> . unaryRelExpression
-    (7) unaryRelExpression -> . NOT unaryRelExpression
-    (8) unaryRelExpression -> . relExpression
-    (9) relExpression -> . sumExpression relop sumExpression
-    (10) relExpression -> . sumExpression
-    (17) sumExpression -> . sumExpression sumop term
-    (18) sumExpression -> . term
-    (21) term -> . term mulop sumElement
-    (22) term -> . sumElement
-    (23) sumElement -> . ID
-    (24) sumElement -> . NUMBER
+    (5) expressionStmt -> expressionStmt OR . andExpression
+    (7) andExpression -> . andExpression AND unaryRelExpression
+    (8) andExpression -> . unaryRelExpression
+    (9) unaryRelExpression -> . NOT unaryRelExpression
+    (10) unaryRelExpression -> . relExpression
+    (11) relExpression -> . sumExpression relop sumExpression
+    (12) relExpression -> . sumExpression
+    (19) sumExpression -> . sumExpression sumop term
+    (20) sumExpression -> . term
+    (23) term -> . term mulop sumElement
+    (24) term -> . sumElement
+    (25) sumElement -> . ID
+    (26) sumElement -> . NUMBER
 
-    NOT             shift and go to state 6
-    ID              shift and go to state 11
-    NUMBER          shift and go to state 12
+    NOT             shift and go to state 7
+    ID              shift and go to state 12
+    NUMBER          shift and go to state 13
 
-    andExpression                  shift and go to state 31
-    unaryRelExpression             shift and go to state 5
-    relExpression                  shift and go to state 7
-    sumExpression                  shift and go to state 8
-    term                           shift and go to state 9
-    sumElement                     shift and go to state 10
+    andExpression                  shift and go to state 32
+    unaryRelExpression             shift and go to state 6
+    relExpression                  shift and go to state 8
+    sumExpression                  shift and go to state 9
+    term                           shift and go to state 10
+    sumElement                     shift and go to state 11
 
 state 15
 
-    (5) andExpression -> andExpression AND . unaryRelExpression
-    (7) unaryRelExpression -> . NOT unaryRelExpression
-    (8) unaryRelExpression -> . relExpression
-    (9) relExpression -> . sumExpression relop sumExpression
-    (10) relExpression -> . sumExpression
-    (17) sumExpression -> . sumExpression sumop term
-    (18) sumExpression -> . term
-    (21) term -> . term mulop sumElement
-    (22) term -> . sumElement
-    (23) sumElement -> . ID
-    (24) sumElement -> . NUMBER
+    (2) statement -> conditionalStmt SEMI .
 
-    NOT             shift and go to state 6
-    ID              shift and go to state 11
-    NUMBER          shift and go to state 12
+    $end            reduce using rule 2 (statement -> conditionalStmt SEMI .)
+    ELSE            reduce using rule 2 (statement -> conditionalStmt SEMI .)
+    SEMI            reduce using rule 2 (statement -> conditionalStmt SEMI .)
 
-    unaryRelExpression             shift and go to state 32
-    relExpression                  shift and go to state 7
-    sumExpression                  shift and go to state 8
-    term                           shift and go to state 9
-    sumElement                     shift and go to state 10
 
 state 16
 
-    (7) unaryRelExpression -> NOT unaryRelExpression .
+    (7) andExpression -> andExpression AND . unaryRelExpression
+    (9) unaryRelExpression -> . NOT unaryRelExpression
+    (10) unaryRelExpression -> . relExpression
+    (11) relExpression -> . sumExpression relop sumExpression
+    (12) relExpression -> . sumExpression
+    (19) sumExpression -> . sumExpression sumop term
+    (20) sumExpression -> . term
+    (23) term -> . term mulop sumElement
+    (24) term -> . sumElement
+    (25) sumElement -> . ID
+    (26) sumElement -> . NUMBER
 
-    AND             reduce using rule 7 (unaryRelExpression -> NOT unaryRelExpression .)
-    COL             reduce using rule 7 (unaryRelExpression -> NOT unaryRelExpression .)
-    OR              reduce using rule 7 (unaryRelExpression -> NOT unaryRelExpression .)
+    NOT             shift and go to state 7
+    ID              shift and go to state 12
+    NUMBER          shift and go to state 13
 
+    unaryRelExpression             shift and go to state 33
+    relExpression                  shift and go to state 8
+    sumExpression                  shift and go to state 9
+    term                           shift and go to state 10
+    sumElement                     shift and go to state 11
 
 state 17
 
-    (9) relExpression -> sumExpression relop . sumExpression
-    (17) sumExpression -> . sumExpression sumop term
-    (18) sumExpression -> . term
-    (21) term -> . term mulop sumElement
-    (22) term -> . sumElement
-    (23) sumElement -> . ID
-    (24) sumElement -> . NUMBER
+    (3) conditionalStmt -> IF expressionStmt . COL statement
+    (4) conditionalStmt -> IF expressionStmt . COL statement ELSE COL statement
+    (5) expressionStmt -> expressionStmt . OR andExpression
 
-    ID              shift and go to state 11
-    NUMBER          shift and go to state 12
+    COL             shift and go to state 34
+    OR              shift and go to state 14
 
-    sumExpression                  shift and go to state 33
-    term                           shift and go to state 9
-    sumElement                     shift and go to state 10
 
 state 18
 
-    (17) sumExpression -> sumExpression sumop . term
-    (21) term -> . term mulop sumElement
-    (22) term -> . sumElement
-    (23) sumElement -> . ID
-    (24) sumElement -> . NUMBER
+    (9) unaryRelExpression -> NOT unaryRelExpression .
 
-    ID              shift and go to state 11
-    NUMBER          shift and go to state 12
+    AND             reduce using rule 9 (unaryRelExpression -> NOT unaryRelExpression .)
+    OR              reduce using rule 9 (unaryRelExpression -> NOT unaryRelExpression .)
+    $end            reduce using rule 9 (unaryRelExpression -> NOT unaryRelExpression .)
+    COL             reduce using rule 9 (unaryRelExpression -> NOT unaryRelExpression .)
+    ELSE            reduce using rule 9 (unaryRelExpression -> NOT unaryRelExpression .)
+    SEMI            reduce using rule 9 (unaryRelExpression -> NOT unaryRelExpression .)
 
-    term                           shift and go to state 34
-    sumElement                     shift and go to state 10
 
 state 19
 
-    (11) relop -> LE .
+    (11) relExpression -> sumExpression relop . sumExpression
+    (19) sumExpression -> . sumExpression sumop term
+    (20) sumExpression -> . term
+    (23) term -> . term mulop sumElement
+    (24) term -> . sumElement
+    (25) sumElement -> . ID
+    (26) sumElement -> . NUMBER
 
-    ID              reduce using rule 11 (relop -> LE .)
-    NUMBER          reduce using rule 11 (relop -> LE .)
+    ID              shift and go to state 12
+    NUMBER          shift and go to state 13
 
+    sumExpression                  shift and go to state 35
+    term                           shift and go to state 10
+    sumElement                     shift and go to state 11
 
 state 20
 
-    (12) relop -> LT .
+    (19) sumExpression -> sumExpression sumop . term
+    (23) term -> . term mulop sumElement
+    (24) term -> . sumElement
+    (25) sumElement -> . ID
+    (26) sumElement -> . NUMBER
 
-    ID              reduce using rule 12 (relop -> LT .)
-    NUMBER          reduce using rule 12 (relop -> LT .)
+    ID              shift and go to state 12
+    NUMBER          shift and go to state 13
 
+    term                           shift and go to state 36
+    sumElement                     shift and go to state 11
 
 state 21
 
-    (13) relop -> GT .
+    (13) relop -> LE .
 
-    ID              reduce using rule 13 (relop -> GT .)
-    NUMBER          reduce using rule 13 (relop -> GT .)
+    ID              reduce using rule 13 (relop -> LE .)
+    NUMBER          reduce using rule 13 (relop -> LE .)
 
 
 state 22
 
-    (14) relop -> GE .
+    (14) relop -> LT .
 
-    ID              reduce using rule 14 (relop -> GE .)
-    NUMBER          reduce using rule 14 (relop -> GE .)
+    ID              reduce using rule 14 (relop -> LT .)
+    NUMBER          reduce using rule 14 (relop -> LT .)
 
 
 state 23
 
-    (15) relop -> EQ .
+    (15) relop -> GT .
 
-    ID              reduce using rule 15 (relop -> EQ .)
-    NUMBER          reduce using rule 15 (relop -> EQ .)
+    ID              reduce using rule 15 (relop -> GT .)
+    NUMBER          reduce using rule 15 (relop -> GT .)
 
 
 state 24
 
-    (16) relop -> NEQ .
+    (16) relop -> GE .
 
-    ID              reduce using rule 16 (relop -> NEQ .)
-    NUMBER          reduce using rule 16 (relop -> NEQ .)
+    ID              reduce using rule 16 (relop -> GE .)
+    NUMBER          reduce using rule 16 (relop -> GE .)
 
 
 state 25
 
-    (19) sumop -> PLUS .
+    (17) relop -> EQ .
 
-    ID              reduce using rule 19 (sumop -> PLUS .)
-    NUMBER          reduce using rule 19 (sumop -> PLUS .)
+    ID              reduce using rule 17 (relop -> EQ .)
+    NUMBER          reduce using rule 17 (relop -> EQ .)
 
 
 state 26
 
-    (20) sumop -> MINUS .
+    (18) relop -> NEQ .
 
-    ID              reduce using rule 20 (sumop -> MINUS .)
-    NUMBER          reduce using rule 20 (sumop -> MINUS .)
+    ID              reduce using rule 18 (relop -> NEQ .)
+    NUMBER          reduce using rule 18 (relop -> NEQ .)
 
 
 state 27
 
-    (21) term -> term mulop . sumElement
-    (23) sumElement -> . ID
-    (24) sumElement -> . NUMBER
+    (21) sumop -> PLUS .
 
-    ID              shift and go to state 11
-    NUMBER          shift and go to state 12
+    ID              reduce using rule 21 (sumop -> PLUS .)
+    NUMBER          reduce using rule 21 (sumop -> PLUS .)
 
-    sumElement                     shift and go to state 35
 
 state 28
 
-    (25) mulop -> PROD .
+    (22) sumop -> MINUS .
 
-    ID              reduce using rule 25 (mulop -> PROD .)
-    NUMBER          reduce using rule 25 (mulop -> PROD .)
+    ID              reduce using rule 22 (sumop -> MINUS .)
+    NUMBER          reduce using rule 22 (sumop -> MINUS .)
 
 
 state 29
 
-    (26) mulop -> DIV .
+    (23) term -> term mulop . sumElement
+    (25) sumElement -> . ID
+    (26) sumElement -> . NUMBER
 
-    ID              reduce using rule 26 (mulop -> DIV .)
-    NUMBER          reduce using rule 26 (mulop -> DIV .)
+    ID              shift and go to state 12
+    NUMBER          shift and go to state 13
 
+    sumElement                     shift and go to state 37
 
 state 30
 
-    (2) conditionalStmt -> IF expressionStmt COL ELSE . COL
+    (27) mulop -> PROD .
 
-    COL             shift and go to state 36
+    ID              reduce using rule 27 (mulop -> PROD .)
+    NUMBER          reduce using rule 27 (mulop -> PROD .)
 
 
 state 31
 
-    (3) expressionStmt -> expressionStmt OR andExpression .
-    (5) andExpression -> andExpression . AND unaryRelExpression
+    (28) mulop -> DIV .
 
-    COL             reduce using rule 3 (expressionStmt -> expressionStmt OR andExpression .)
-    OR              reduce using rule 3 (expressionStmt -> expressionStmt OR andExpression .)
-    AND             shift and go to state 15
+    ID              reduce using rule 28 (mulop -> DIV .)
+    NUMBER          reduce using rule 28 (mulop -> DIV .)
 
 
 state 32
 
-    (5) andExpression -> andExpression AND unaryRelExpression .
+    (5) expressionStmt -> expressionStmt OR andExpression .
+    (7) andExpression -> andExpression . AND unaryRelExpression
 
-    AND             reduce using rule 5 (andExpression -> andExpression AND unaryRelExpression .)
-    COL             reduce using rule 5 (andExpression -> andExpression AND unaryRelExpression .)
-    OR              reduce using rule 5 (andExpression -> andExpression AND unaryRelExpression .)
+    OR              reduce using rule 5 (expressionStmt -> expressionStmt OR andExpression .)
+    $end            reduce using rule 5 (expressionStmt -> expressionStmt OR andExpression .)
+    COL             reduce using rule 5 (expressionStmt -> expressionStmt OR andExpression .)
+    ELSE            reduce using rule 5 (expressionStmt -> expressionStmt OR andExpression .)
+    SEMI            reduce using rule 5 (expressionStmt -> expressionStmt OR andExpression .)
+    AND             shift and go to state 16
 
 
 state 33
 
-    (9) relExpression -> sumExpression relop sumExpression .
-    (17) sumExpression -> sumExpression . sumop term
-    (19) sumop -> . PLUS
-    (20) sumop -> . MINUS
+    (7) andExpression -> andExpression AND unaryRelExpression .
 
-    AND             reduce using rule 9 (relExpression -> sumExpression relop sumExpression .)
-    COL             reduce using rule 9 (relExpression -> sumExpression relop sumExpression .)
-    OR              reduce using rule 9 (relExpression -> sumExpression relop sumExpression .)
-    PLUS            shift and go to state 25
-    MINUS           shift and go to state 26
+    AND             reduce using rule 7 (andExpression -> andExpression AND unaryRelExpression .)
+    OR              reduce using rule 7 (andExpression -> andExpression AND unaryRelExpression .)
+    $end            reduce using rule 7 (andExpression -> andExpression AND unaryRelExpression .)
+    COL             reduce using rule 7 (andExpression -> andExpression AND unaryRelExpression .)
+    ELSE            reduce using rule 7 (andExpression -> andExpression AND unaryRelExpression .)
+    SEMI            reduce using rule 7 (andExpression -> andExpression AND unaryRelExpression .)
 
-    sumop                          shift and go to state 18
 
 state 34
 
-    (17) sumExpression -> sumExpression sumop term .
-    (21) term -> term . mulop sumElement
-    (25) mulop -> . PROD
-    (26) mulop -> . DIV
+    (3) conditionalStmt -> IF expressionStmt COL . statement
+    (4) conditionalStmt -> IF expressionStmt COL . statement ELSE COL statement
+    (1) statement -> . expressionStmt
+    (2) statement -> . conditionalStmt SEMI
+    (5) expressionStmt -> . expressionStmt OR andExpression
+    (6) expressionStmt -> . andExpression
+    (3) conditionalStmt -> . IF expressionStmt COL statement
+    (4) conditionalStmt -> . IF expressionStmt COL statement ELSE COL statement
+    (7) andExpression -> . andExpression AND unaryRelExpression
+    (8) andExpression -> . unaryRelExpression
+    (9) unaryRelExpression -> . NOT unaryRelExpression
+    (10) unaryRelExpression -> . relExpression
+    (11) relExpression -> . sumExpression relop sumExpression
+    (12) relExpression -> . sumExpression
+    (19) sumExpression -> . sumExpression sumop term
+    (20) sumExpression -> . term
+    (23) term -> . term mulop sumElement
+    (24) term -> . sumElement
+    (25) sumElement -> . ID
+    (26) sumElement -> . NUMBER
 
-    LE              reduce using rule 17 (sumExpression -> sumExpression sumop term .)
-    LT              reduce using rule 17 (sumExpression -> sumExpression sumop term .)
-    GT              reduce using rule 17 (sumExpression -> sumExpression sumop term .)
-    GE              reduce using rule 17 (sumExpression -> sumExpression sumop term .)
-    EQ              reduce using rule 17 (sumExpression -> sumExpression sumop term .)
-    NEQ             reduce using rule 17 (sumExpression -> sumExpression sumop term .)
-    PLUS            reduce using rule 17 (sumExpression -> sumExpression sumop term .)
-    MINUS           reduce using rule 17 (sumExpression -> sumExpression sumop term .)
-    AND             reduce using rule 17 (sumExpression -> sumExpression sumop term .)
-    COL             reduce using rule 17 (sumExpression -> sumExpression sumop term .)
-    OR              reduce using rule 17 (sumExpression -> sumExpression sumop term .)
-    PROD            shift and go to state 28
-    DIV             shift and go to state 29
+    IF              shift and go to state 5
+    NOT             shift and go to state 7
+    ID              shift and go to state 12
+    NUMBER          shift and go to state 13
 
-    mulop                          shift and go to state 27
+    expressionStmt                 shift and go to state 2
+    statement                      shift and go to state 38
+    conditionalStmt                shift and go to state 3
+    andExpression                  shift and go to state 4
+    unaryRelExpression             shift and go to state 6
+    relExpression                  shift and go to state 8
+    sumExpression                  shift and go to state 9
+    term                           shift and go to state 10
+    sumElement                     shift and go to state 11
 
 state 35
 
-    (21) term -> term mulop sumElement .
+    (11) relExpression -> sumExpression relop sumExpression .
+    (19) sumExpression -> sumExpression . sumop term
+    (21) sumop -> . PLUS
+    (22) sumop -> . MINUS
 
-    PROD            reduce using rule 21 (term -> term mulop sumElement .)
-    DIV             reduce using rule 21 (term -> term mulop sumElement .)
-    LE              reduce using rule 21 (term -> term mulop sumElement .)
-    LT              reduce using rule 21 (term -> term mulop sumElement .)
-    GT              reduce using rule 21 (term -> term mulop sumElement .)
-    GE              reduce using rule 21 (term -> term mulop sumElement .)
-    EQ              reduce using rule 21 (term -> term mulop sumElement .)
-    NEQ             reduce using rule 21 (term -> term mulop sumElement .)
-    PLUS            reduce using rule 21 (term -> term mulop sumElement .)
-    MINUS           reduce using rule 21 (term -> term mulop sumElement .)
-    AND             reduce using rule 21 (term -> term mulop sumElement .)
-    COL             reduce using rule 21 (term -> term mulop sumElement .)
-    OR              reduce using rule 21 (term -> term mulop sumElement .)
+    AND             reduce using rule 11 (relExpression -> sumExpression relop sumExpression .)
+    OR              reduce using rule 11 (relExpression -> sumExpression relop sumExpression .)
+    $end            reduce using rule 11 (relExpression -> sumExpression relop sumExpression .)
+    COL             reduce using rule 11 (relExpression -> sumExpression relop sumExpression .)
+    ELSE            reduce using rule 11 (relExpression -> sumExpression relop sumExpression .)
+    SEMI            reduce using rule 11 (relExpression -> sumExpression relop sumExpression .)
+    PLUS            shift and go to state 27
+    MINUS           shift and go to state 28
 
+    sumop                          shift and go to state 20
 
 state 36
 
-    (2) conditionalStmt -> IF expressionStmt COL ELSE COL .
+    (19) sumExpression -> sumExpression sumop term .
+    (23) term -> term . mulop sumElement
+    (27) mulop -> . PROD
+    (28) mulop -> . DIV
 
-    $end            reduce using rule 2 (conditionalStmt -> IF expressionStmt COL ELSE COL .)
+    LE              reduce using rule 19 (sumExpression -> sumExpression sumop term .)
+    LT              reduce using rule 19 (sumExpression -> sumExpression sumop term .)
+    GT              reduce using rule 19 (sumExpression -> sumExpression sumop term .)
+    GE              reduce using rule 19 (sumExpression -> sumExpression sumop term .)
+    EQ              reduce using rule 19 (sumExpression -> sumExpression sumop term .)
+    NEQ             reduce using rule 19 (sumExpression -> sumExpression sumop term .)
+    PLUS            reduce using rule 19 (sumExpression -> sumExpression sumop term .)
+    MINUS           reduce using rule 19 (sumExpression -> sumExpression sumop term .)
+    AND             reduce using rule 19 (sumExpression -> sumExpression sumop term .)
+    OR              reduce using rule 19 (sumExpression -> sumExpression sumop term .)
+    $end            reduce using rule 19 (sumExpression -> sumExpression sumop term .)
+    COL             reduce using rule 19 (sumExpression -> sumExpression sumop term .)
+    ELSE            reduce using rule 19 (sumExpression -> sumExpression sumop term .)
+    SEMI            reduce using rule 19 (sumExpression -> sumExpression sumop term .)
+    PROD            shift and go to state 30
+    DIV             shift and go to state 31
+
+    mulop                          shift and go to state 29
+
+state 37
+
+    (23) term -> term mulop sumElement .
+
+    PROD            reduce using rule 23 (term -> term mulop sumElement .)
+    DIV             reduce using rule 23 (term -> term mulop sumElement .)
+    LE              reduce using rule 23 (term -> term mulop sumElement .)
+    LT              reduce using rule 23 (term -> term mulop sumElement .)
+    GT              reduce using rule 23 (term -> term mulop sumElement .)
+    GE              reduce using rule 23 (term -> term mulop sumElement .)
+    EQ              reduce using rule 23 (term -> term mulop sumElement .)
+    NEQ             reduce using rule 23 (term -> term mulop sumElement .)
+    PLUS            reduce using rule 23 (term -> term mulop sumElement .)
+    MINUS           reduce using rule 23 (term -> term mulop sumElement .)
+    AND             reduce using rule 23 (term -> term mulop sumElement .)
+    OR              reduce using rule 23 (term -> term mulop sumElement .)
+    $end            reduce using rule 23 (term -> term mulop sumElement .)
+    COL             reduce using rule 23 (term -> term mulop sumElement .)
+    ELSE            reduce using rule 23 (term -> term mulop sumElement .)
+    SEMI            reduce using rule 23 (term -> term mulop sumElement .)
+
+
+state 38
+
+    (3) conditionalStmt -> IF expressionStmt COL statement .
+    (4) conditionalStmt -> IF expressionStmt COL statement . ELSE COL statement
+
+    SEMI            reduce using rule 3 (conditionalStmt -> IF expressionStmt COL statement .)
+    ELSE            shift and go to state 39
+
+
+state 39
+
+    (4) conditionalStmt -> IF expressionStmt COL statement ELSE . COL statement
+
+    COL             shift and go to state 40
+
+
+state 40
+
+    (4) conditionalStmt -> IF expressionStmt COL statement ELSE COL . statement
+    (1) statement -> . expressionStmt
+    (2) statement -> . conditionalStmt SEMI
+    (5) expressionStmt -> . expressionStmt OR andExpression
+    (6) expressionStmt -> . andExpression
+    (3) conditionalStmt -> . IF expressionStmt COL statement
+    (4) conditionalStmt -> . IF expressionStmt COL statement ELSE COL statement
+    (7) andExpression -> . andExpression AND unaryRelExpression
+    (8) andExpression -> . unaryRelExpression
+    (9) unaryRelExpression -> . NOT unaryRelExpression
+    (10) unaryRelExpression -> . relExpression
+    (11) relExpression -> . sumExpression relop sumExpression
+    (12) relExpression -> . sumExpression
+    (19) sumExpression -> . sumExpression sumop term
+    (20) sumExpression -> . term
+    (23) term -> . term mulop sumElement
+    (24) term -> . sumElement
+    (25) sumElement -> . ID
+    (26) sumElement -> . NUMBER
+
+    IF              shift and go to state 5
+    NOT             shift and go to state 7
+    ID              shift and go to state 12
+    NUMBER          shift and go to state 13
+
+    expressionStmt                 shift and go to state 2
+    statement                      shift and go to state 41
+    conditionalStmt                shift and go to state 3
+    andExpression                  shift and go to state 4
+    unaryRelExpression             shift and go to state 6
+    relExpression                  shift and go to state 8
+    sumExpression                  shift and go to state 9
+    term                           shift and go to state 10
+    sumElement                     shift and go to state 11
+
+state 41
+
+    (4) conditionalStmt -> IF expressionStmt COL statement ELSE COL statement .
+
+    SEMI            reduce using rule 4 (conditionalStmt -> IF expressionStmt COL statement ELSE COL statement .)
 
