@@ -25,7 +25,7 @@ reserved_words = {
 
 # List of all possible tokens allowed in my interpreter.
 tokens = [    
-    'COMMENT', 'STRING', 'BOOLEAN',
+    'COMMENT', 'STRING', 'OP_STRING', 'OP_NUMBER', 'BOOLEAN', 'OP_BOOLEAN',
     'EQ', 'NEQ', 'GT', 'GE', 'LT', 'LE',
     'PLUS', 'MINUS', 'PROD', 'DIV', 'EQUALS',
     'LPAREN', 'RPAREN', 'LSQUARE', 'RSQUARE', 'COMA',
@@ -56,6 +56,7 @@ t_SEMI      = r';'
 
 # More complex tokens are defined with functions.
 # Hierarchy is set by order of func definition.
+
 def t_NUMBER(t):
     r'\d+'
     try:
@@ -65,12 +66,28 @@ def t_NUMBER(t):
         t.value = 0
     return t
 
+def t_OP_NUMBER(t):
+    r'(,\d+)+'
+    print(t)
+    return t
+
 def t_COMMENT(t):
     r'\#.*'
     return t
 
+def t_OP_STRING(t):
+    r'(,\'[^\']*\')+'
+    print(t)
+    return t
+
 def t_STRING(t):
-    r'\'.*\''
+    r'\'[^\']*\''
+    print(t)
+    return t
+
+def t_OP_BOOLEAN(t):
+    r'(,(true|false))+'
+    print(t)
     return t
 
 def t_BOOLEAN(t):
@@ -99,6 +116,46 @@ def t_error(t):
 lexer = lex.lex()
 
 # Parser rules
+
+# 1
+def p_declarationList(t):
+    '''declarationList  : declarationList declaration
+                        | declaration'''
+    pass
+
+# 2
+def p_declaration(t):
+    '''declaration  : varDeclaration
+                    | statement'''
+    pass
+
+# 3
+def p_varDeclaration(t):
+    'varDeclaration   : ID EQUALS declarationElement'
+    pass
+
+# 4
+def p_declarationElement(t):
+    '''declarationElement   : list
+                            | STRING
+                            | NUMBER
+                            | BOOLEAN'''
+    pass
+
+# 5
+def p_list(t):
+    'list   : LSQUARE listElements RSQUARE'
+    pass
+
+# 6
+def p_listElements(t):
+    '''listElements : NUMBER
+                    | NUMBER OP_NUMBER
+                    | STRING
+                    | STRING OP_STRING
+                    | BOOLEAN
+                    | BOOLEAN OP_BOOLEAN'''
+    pass
 
 # 7
 def p_statement(t):

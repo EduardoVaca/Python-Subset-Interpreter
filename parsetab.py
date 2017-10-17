@@ -5,9 +5,9 @@ _tabversion = '3.10'
 
 _lr_method = 'LALR'
 
-_lr_signature = 'COMMENT STRING BOOLEAN EQ NEQ GT GE LT LE PLUS MINUS PROD DIV EQUALS LPAREN RPAREN LSQUARE RSQUARE COMA ID NUMBER COL SEMI IF ELSE FOR IN AND OR NOT LAMBDA MAP REDUCE FILTER INPUT OUTPUTstatement    : expressionStmt\n                    | conditionalStmt SEMI\n                    | iterationStmt SEMIiterationStmt    : FOR ID IN iterationElement COL statementiterationElement   : IDconditionalStmt  : IF expressionStmt COL statement\n                        | IF expressionStmt COL statement ELSE COL statementexpressionStmt   : expressionStmt OR andExpression\n                        | andExpressionandExpression    : andExpression AND unaryRelExpression\n                        | unaryRelExpressionunaryRelExpression   : NOT unaryRelExpression\n                            | relExpressionrelExpression    : sumExpression relop sumExpression\n                        | sumExpressionrelop    : LE\n                | LT\n                | GT\n                | GE\n                | EQ\n                | NEQsumExpression    : sumExpression sumop term\n                        | termsumop    : PLUS\n                | MINUSterm : term mulop sumElement\n            | sumElementsumElement   : ID\n                    | NUMBERmulop    : PROD\n                | DIV'
+_lr_signature = 'COMMENT STRING OP_STRING OP_NUMBER BOOLEAN OP_BOOLEAN EQ NEQ GT GE LT LE PLUS MINUS PROD DIV EQUALS LPAREN RPAREN LSQUARE RSQUARE COMA ID NUMBER COL SEMI IF ELSE FOR IN AND OR NOT LAMBDA MAP REDUCE FILTER INPUT OUTPUTdeclarationList  : declarationList declaration\n                        | declarationdeclaration  : varDeclaration\n                    | statementvarDeclaration   : ID EQUALS declarationElementdeclarationElement   : list\n                            | STRING\n                            | NUMBER\n                            | BOOLEANlist   : LSQUARE listElements RSQUARElistElements : NUMBER\n                    | NUMBER OP_NUMBER\n                    | STRING\n                    | STRING OP_STRING\n                    | BOOLEAN\n                    | BOOLEAN OP_BOOLEANstatement    : expressionStmt\n                    | conditionalStmt SEMI\n                    | iterationStmt SEMIiterationStmt    : FOR ID IN iterationElement COL statementiterationElement   : IDconditionalStmt  : IF expressionStmt COL statement\n                        | IF expressionStmt COL statement ELSE COL statementexpressionStmt   : expressionStmt OR andExpression\n                        | andExpressionandExpression    : andExpression AND unaryRelExpression\n                        | unaryRelExpressionunaryRelExpression   : NOT unaryRelExpression\n                            | relExpressionrelExpression    : sumExpression relop sumExpression\n                        | sumExpressionrelop    : LE\n                | LT\n                | GT\n                | GE\n                | EQ\n                | NEQsumExpression    : sumExpression sumop term\n                        | termsumop    : PLUS\n                | MINUSterm : term mulop sumElement\n            | sumElementsumElement   : ID\n                    | NUMBERmulop    : PROD\n                | DIV'
     
-_lr_action_items = {'IF':([0,38,47,48,],[6,6,6,6,]),'FOR':([0,38,47,48,],[7,7,7,7,]),'NOT':([0,6,10,16,19,38,47,48,],[10,10,10,10,10,10,10,10,]),'ID':([0,6,7,10,16,19,23,24,25,26,27,28,29,30,31,32,33,34,35,38,39,47,48,],[8,8,21,8,8,8,8,8,-16,-17,-18,-19,-20,-21,-24,-25,8,-30,-31,8,44,8,8,]),'NUMBER':([0,6,10,16,19,23,24,25,26,27,28,29,30,31,32,33,34,35,38,47,48,],[15,15,15,15,15,15,15,-16,-17,-18,-19,-20,-21,-24,-25,15,-30,-31,15,15,15,]),'$end':([1,2,5,8,9,11,12,13,14,15,17,18,22,36,37,40,41,42,],[0,-1,-9,-28,-11,-13,-15,-23,-27,-29,-2,-3,-12,-8,-10,-14,-22,-26,]),'ELSE':([2,5,8,9,11,12,13,14,15,17,18,22,36,37,40,41,42,43,],[-1,-9,-28,-11,-13,-15,-23,-27,-29,-2,-3,-12,-8,-10,-14,-22,-26,46,]),'SEMI':([2,3,4,5,8,9,11,12,13,14,15,17,18,22,36,37,40,41,42,43,49,50,],[-1,17,18,-9,-28,-11,-13,-15,-23,-27,-29,-2,-3,-12,-8,-10,-14,-22,-26,-6,-4,-7,]),'OR':([2,5,8,9,11,12,13,14,15,20,22,36,37,40,41,42,],[16,-9,-28,-11,-13,-15,-23,-27,-29,16,-12,-8,-10,-14,-22,-26,]),'COL':([5,8,9,11,12,13,14,15,20,22,36,37,40,41,42,44,45,46,],[-9,-28,-11,-13,-15,-23,-27,-29,38,-12,-8,-10,-14,-22,-26,-5,47,48,]),'AND':([5,8,9,11,12,13,14,15,22,36,37,40,41,42,],[19,-28,-11,-13,-15,-23,-27,-29,-12,19,-10,-14,-22,-26,]),'PROD':([8,13,14,15,41,42,],[-28,34,-27,-29,34,-26,]),'DIV':([8,13,14,15,41,42,],[-28,35,-27,-29,35,-26,]),'LE':([8,12,13,14,15,41,42,],[-28,25,-23,-27,-29,-22,-26,]),'LT':([8,12,13,14,15,41,42,],[-28,26,-23,-27,-29,-22,-26,]),'GT':([8,12,13,14,15,41,42,],[-28,27,-23,-27,-29,-22,-26,]),'GE':([8,12,13,14,15,41,42,],[-28,28,-23,-27,-29,-22,-26,]),'EQ':([8,12,13,14,15,41,42,],[-28,29,-23,-27,-29,-22,-26,]),'NEQ':([8,12,13,14,15,41,42,],[-28,30,-23,-27,-29,-22,-26,]),'PLUS':([8,12,13,14,15,40,41,42,],[-28,31,-23,-27,-29,31,-22,-26,]),'MINUS':([8,12,13,14,15,40,41,42,],[-28,32,-23,-27,-29,32,-22,-26,]),'IN':([21,],[39,]),}
+_lr_action_items = {'ID':([0,1,2,3,4,5,6,9,10,11,12,13,14,15,16,17,18,19,21,22,23,24,26,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,48,49,50,51,52,53,54,62,67,68,],[5,5,-2,-3,-4,-44,-17,-25,26,27,-27,26,-29,-31,-39,-43,-45,-1,26,-18,-19,26,-44,-28,26,26,-32,-33,-34,-35,-36,-37,-40,-41,26,-46,-47,-5,-6,-7,-8,-9,-24,-26,26,60,-30,-38,-42,-10,26,26,]),'IF':([0,1,2,3,4,5,6,9,12,14,15,16,17,18,19,22,23,26,28,42,43,44,45,46,48,49,50,52,53,54,62,67,68,],[10,10,-2,-3,-4,-44,-17,-25,-27,-29,-31,-39,-43,-45,-1,-18,-19,-44,-28,-5,-6,-7,-8,-9,-24,-26,10,-30,-38,-42,-10,10,10,]),'FOR':([0,1,2,3,4,5,6,9,12,14,15,16,17,18,19,22,23,26,28,42,43,44,45,46,48,49,50,52,53,54,62,67,68,],[11,11,-2,-3,-4,-44,-17,-25,-27,-29,-31,-39,-43,-45,-1,-18,-19,-44,-28,-5,-6,-7,-8,-9,-24,-26,11,-30,-38,-42,-10,11,11,]),'NOT':([0,1,2,3,4,5,6,9,10,12,13,14,15,16,17,18,19,21,22,23,24,26,28,42,43,44,45,46,48,49,50,52,53,54,62,67,68,],[13,13,-2,-3,-4,-44,-17,-25,13,-27,13,-29,-31,-39,-43,-45,-1,13,-18,-19,13,-44,-28,-5,-6,-7,-8,-9,-24,-26,13,-30,-38,-42,-10,13,13,]),'NUMBER':([0,1,2,3,4,5,6,9,10,12,13,14,15,16,17,18,19,20,21,22,23,24,26,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,52,53,54,62,67,68,],[18,18,-2,-3,-4,-44,-17,-25,18,-27,18,-29,-31,-39,-43,-45,-1,45,18,-18,-19,18,-44,-28,18,18,-32,-33,-34,-35,-36,-37,-40,-41,18,-46,-47,-5,-6,-7,-8,-9,56,-24,-26,18,-30,-38,-42,-10,18,18,]),'$end':([1,2,3,4,5,6,9,12,14,15,16,17,18,19,22,23,26,28,42,43,44,45,46,48,49,52,53,54,62,],[0,-2,-3,-4,-44,-17,-25,-27,-29,-31,-39,-43,-45,-1,-18,-19,-44,-28,-5,-6,-7,-8,-9,-24,-26,-30,-38,-42,-10,]),'EQUALS':([5,],[20,]),'PROD':([5,16,17,18,26,53,54,],[-44,40,-43,-45,-44,40,-42,]),'DIV':([5,16,17,18,26,53,54,],[-44,41,-43,-45,-44,41,-42,]),'LE':([5,15,16,17,18,26,53,54,],[-44,31,-39,-43,-45,-44,-38,-42,]),'LT':([5,15,16,17,18,26,53,54,],[-44,32,-39,-43,-45,-44,-38,-42,]),'GT':([5,15,16,17,18,26,53,54,],[-44,33,-39,-43,-45,-44,-38,-42,]),'GE':([5,15,16,17,18,26,53,54,],[-44,34,-39,-43,-45,-44,-38,-42,]),'EQ':([5,15,16,17,18,26,53,54,],[-44,35,-39,-43,-45,-44,-38,-42,]),'NEQ':([5,15,16,17,18,26,53,54,],[-44,36,-39,-43,-45,-44,-38,-42,]),'PLUS':([5,15,16,17,18,26,52,53,54,],[-44,37,-39,-43,-45,-44,37,-38,-42,]),'MINUS':([5,15,16,17,18,26,52,53,54,],[-44,38,-39,-43,-45,-44,38,-38,-42,]),'AND':([5,9,12,14,15,16,17,18,26,28,48,49,52,53,54,],[-44,24,-27,-29,-31,-39,-43,-45,-44,-28,24,-26,-30,-38,-42,]),'OR':([5,6,9,12,14,15,16,17,18,25,26,28,48,49,52,53,54,],[-44,21,-25,-27,-29,-31,-39,-43,-45,21,-44,-28,-24,-26,-30,-38,-42,]),'ELSE':([6,9,12,14,15,16,17,18,22,23,26,28,48,49,52,53,54,59,],[-17,-25,-27,-29,-31,-39,-43,-45,-18,-19,-44,-28,-24,-26,-30,-38,-42,66,]),'SEMI':([6,7,8,9,12,14,15,16,17,18,22,23,26,28,48,49,52,53,54,59,69,70,],[-17,22,23,-25,-27,-29,-31,-39,-43,-45,-18,-19,-44,-28,-24,-26,-30,-38,-42,-22,-20,-23,]),'COL':([9,12,14,15,16,17,18,25,26,28,48,49,52,53,54,60,61,66,],[-25,-27,-29,-31,-39,-43,-45,50,-44,-28,-24,-26,-30,-38,-42,-21,67,68,]),'STRING':([20,47,],[44,57,]),'BOOLEAN':([20,47,],[46,58,]),'LSQUARE':([20,],[47,]),'IN':([27,],[51,]),'RSQUARE':([55,56,57,58,63,64,65,],[62,-11,-13,-15,-12,-14,-16,]),'OP_NUMBER':([56,],[63,]),'OP_STRING':([57,],[64,]),'OP_BOOLEAN':([58,],[65,]),}
 
 _lr_action = {}
 for _k, _v in _lr_action_items.items():
@@ -16,7 +16,7 @@ for _k, _v in _lr_action_items.items():
       _lr_action[_x][_k] = _y
 del _lr_action_items
 
-_lr_goto_items = {'statement':([0,38,47,48,],[1,43,49,50,]),'expressionStmt':([0,6,38,47,48,],[2,20,2,2,2,]),'conditionalStmt':([0,38,47,48,],[3,3,3,3,]),'iterationStmt':([0,38,47,48,],[4,4,4,4,]),'andExpression':([0,6,16,38,47,48,],[5,5,36,5,5,5,]),'unaryRelExpression':([0,6,10,16,19,38,47,48,],[9,9,22,9,37,9,9,9,]),'relExpression':([0,6,10,16,19,38,47,48,],[11,11,11,11,11,11,11,11,]),'sumExpression':([0,6,10,16,19,23,38,47,48,],[12,12,12,12,12,40,12,12,12,]),'term':([0,6,10,16,19,23,24,38,47,48,],[13,13,13,13,13,13,41,13,13,13,]),'sumElement':([0,6,10,16,19,23,24,33,38,47,48,],[14,14,14,14,14,14,14,42,14,14,14,]),'relop':([12,],[23,]),'sumop':([12,40,],[24,24,]),'mulop':([13,41,],[33,33,]),'iterationElement':([39,],[45,]),}
+_lr_goto_items = {'declarationList':([0,],[1,]),'declaration':([0,1,],[2,19,]),'varDeclaration':([0,1,],[3,3,]),'statement':([0,1,50,67,68,],[4,4,59,69,70,]),'expressionStmt':([0,1,10,50,67,68,],[6,6,25,6,6,6,]),'conditionalStmt':([0,1,50,67,68,],[7,7,7,7,7,]),'iterationStmt':([0,1,50,67,68,],[8,8,8,8,8,]),'andExpression':([0,1,10,21,50,67,68,],[9,9,9,48,9,9,9,]),'unaryRelExpression':([0,1,10,13,21,24,50,67,68,],[12,12,12,28,12,49,12,12,12,]),'relExpression':([0,1,10,13,21,24,50,67,68,],[14,14,14,14,14,14,14,14,14,]),'sumExpression':([0,1,10,13,21,24,29,50,67,68,],[15,15,15,15,15,15,52,15,15,15,]),'term':([0,1,10,13,21,24,29,30,50,67,68,],[16,16,16,16,16,16,16,53,16,16,16,]),'sumElement':([0,1,10,13,21,24,29,30,39,50,67,68,],[17,17,17,17,17,17,17,17,54,17,17,17,]),'relop':([15,],[29,]),'sumop':([15,52,],[30,30,]),'mulop':([16,53,],[39,39,]),'declarationElement':([20,],[42,]),'list':([20,],[43,]),'listElements':([47,],[55,]),'iterationElement':([51,],[61,]),}
 
 _lr_goto = {}
 for _k, _v in _lr_goto_items.items():
@@ -25,36 +25,52 @@ for _k, _v in _lr_goto_items.items():
        _lr_goto[_x][_k] = _y
 del _lr_goto_items
 _lr_productions = [
-  ("S' -> statement","S'",1,None,None,None),
-  ('statement -> expressionStmt','statement',1,'p_statement','interpreter.py',105),
-  ('statement -> conditionalStmt SEMI','statement',2,'p_statement','interpreter.py',106),
-  ('statement -> iterationStmt SEMI','statement',2,'p_statement','interpreter.py',107),
-  ('iterationStmt -> FOR ID IN iterationElement COL statement','iterationStmt',6,'p_iterationStmt','interpreter.py',112),
-  ('iterationElement -> ID','iterationElement',1,'p_iterationElement','interpreter.py',117),
-  ('conditionalStmt -> IF expressionStmt COL statement','conditionalStmt',4,'p_conditionalStmt','interpreter.py',122),
-  ('conditionalStmt -> IF expressionStmt COL statement ELSE COL statement','conditionalStmt',7,'p_conditionalStmt','interpreter.py',123),
-  ('expressionStmt -> expressionStmt OR andExpression','expressionStmt',3,'p_expressionStmt','interpreter.py',128),
-  ('expressionStmt -> andExpression','expressionStmt',1,'p_expressionStmt','interpreter.py',129),
-  ('andExpression -> andExpression AND unaryRelExpression','andExpression',3,'p_andExpression','interpreter.py',134),
-  ('andExpression -> unaryRelExpression','andExpression',1,'p_andExpression','interpreter.py',135),
-  ('unaryRelExpression -> NOT unaryRelExpression','unaryRelExpression',2,'p_unaryRelExpression','interpreter.py',140),
-  ('unaryRelExpression -> relExpression','unaryRelExpression',1,'p_unaryRelExpression','interpreter.py',141),
-  ('relExpression -> sumExpression relop sumExpression','relExpression',3,'p_relExpression','interpreter.py',146),
-  ('relExpression -> sumExpression','relExpression',1,'p_relExpression','interpreter.py',147),
-  ('relop -> LE','relop',1,'p_relop','interpreter.py',152),
-  ('relop -> LT','relop',1,'p_relop','interpreter.py',153),
-  ('relop -> GT','relop',1,'p_relop','interpreter.py',154),
-  ('relop -> GE','relop',1,'p_relop','interpreter.py',155),
-  ('relop -> EQ','relop',1,'p_relop','interpreter.py',156),
-  ('relop -> NEQ','relop',1,'p_relop','interpreter.py',157),
-  ('sumExpression -> sumExpression sumop term','sumExpression',3,'p_sumExpression','interpreter.py',162),
-  ('sumExpression -> term','sumExpression',1,'p_sumExpression','interpreter.py',163),
-  ('sumop -> PLUS','sumop',1,'p_sumop','interpreter.py',168),
-  ('sumop -> MINUS','sumop',1,'p_sumop','interpreter.py',169),
-  ('term -> term mulop sumElement','term',3,'p_term','interpreter.py',174),
-  ('term -> sumElement','term',1,'p_term','interpreter.py',175),
-  ('sumElement -> ID','sumElement',1,'p_sumElement','interpreter.py',180),
-  ('sumElement -> NUMBER','sumElement',1,'p_sumElement','interpreter.py',181),
-  ('mulop -> PROD','mulop',1,'p_mulop','interpreter.py',186),
-  ('mulop -> DIV','mulop',1,'p_mulop','interpreter.py',187),
+  ("S' -> declarationList","S'",1,None,None,None),
+  ('declarationList -> declarationList declaration','declarationList',2,'p_declarationList','interpreter.py',121),
+  ('declarationList -> declaration','declarationList',1,'p_declarationList','interpreter.py',122),
+  ('declaration -> varDeclaration','declaration',1,'p_declaration','interpreter.py',127),
+  ('declaration -> statement','declaration',1,'p_declaration','interpreter.py',128),
+  ('varDeclaration -> ID EQUALS declarationElement','varDeclaration',3,'p_varDeclaration','interpreter.py',133),
+  ('declarationElement -> list','declarationElement',1,'p_declarationElement','interpreter.py',138),
+  ('declarationElement -> STRING','declarationElement',1,'p_declarationElement','interpreter.py',139),
+  ('declarationElement -> NUMBER','declarationElement',1,'p_declarationElement','interpreter.py',140),
+  ('declarationElement -> BOOLEAN','declarationElement',1,'p_declarationElement','interpreter.py',141),
+  ('list -> LSQUARE listElements RSQUARE','list',3,'p_list','interpreter.py',146),
+  ('listElements -> NUMBER','listElements',1,'p_listElements','interpreter.py',151),
+  ('listElements -> NUMBER OP_NUMBER','listElements',2,'p_listElements','interpreter.py',152),
+  ('listElements -> STRING','listElements',1,'p_listElements','interpreter.py',153),
+  ('listElements -> STRING OP_STRING','listElements',2,'p_listElements','interpreter.py',154),
+  ('listElements -> BOOLEAN','listElements',1,'p_listElements','interpreter.py',155),
+  ('listElements -> BOOLEAN OP_BOOLEAN','listElements',2,'p_listElements','interpreter.py',156),
+  ('statement -> expressionStmt','statement',1,'p_statement','interpreter.py',161),
+  ('statement -> conditionalStmt SEMI','statement',2,'p_statement','interpreter.py',162),
+  ('statement -> iterationStmt SEMI','statement',2,'p_statement','interpreter.py',163),
+  ('iterationStmt -> FOR ID IN iterationElement COL statement','iterationStmt',6,'p_iterationStmt','interpreter.py',168),
+  ('iterationElement -> ID','iterationElement',1,'p_iterationElement','interpreter.py',173),
+  ('conditionalStmt -> IF expressionStmt COL statement','conditionalStmt',4,'p_conditionalStmt','interpreter.py',178),
+  ('conditionalStmt -> IF expressionStmt COL statement ELSE COL statement','conditionalStmt',7,'p_conditionalStmt','interpreter.py',179),
+  ('expressionStmt -> expressionStmt OR andExpression','expressionStmt',3,'p_expressionStmt','interpreter.py',184),
+  ('expressionStmt -> andExpression','expressionStmt',1,'p_expressionStmt','interpreter.py',185),
+  ('andExpression -> andExpression AND unaryRelExpression','andExpression',3,'p_andExpression','interpreter.py',190),
+  ('andExpression -> unaryRelExpression','andExpression',1,'p_andExpression','interpreter.py',191),
+  ('unaryRelExpression -> NOT unaryRelExpression','unaryRelExpression',2,'p_unaryRelExpression','interpreter.py',196),
+  ('unaryRelExpression -> relExpression','unaryRelExpression',1,'p_unaryRelExpression','interpreter.py',197),
+  ('relExpression -> sumExpression relop sumExpression','relExpression',3,'p_relExpression','interpreter.py',202),
+  ('relExpression -> sumExpression','relExpression',1,'p_relExpression','interpreter.py',203),
+  ('relop -> LE','relop',1,'p_relop','interpreter.py',208),
+  ('relop -> LT','relop',1,'p_relop','interpreter.py',209),
+  ('relop -> GT','relop',1,'p_relop','interpreter.py',210),
+  ('relop -> GE','relop',1,'p_relop','interpreter.py',211),
+  ('relop -> EQ','relop',1,'p_relop','interpreter.py',212),
+  ('relop -> NEQ','relop',1,'p_relop','interpreter.py',213),
+  ('sumExpression -> sumExpression sumop term','sumExpression',3,'p_sumExpression','interpreter.py',218),
+  ('sumExpression -> term','sumExpression',1,'p_sumExpression','interpreter.py',219),
+  ('sumop -> PLUS','sumop',1,'p_sumop','interpreter.py',224),
+  ('sumop -> MINUS','sumop',1,'p_sumop','interpreter.py',225),
+  ('term -> term mulop sumElement','term',3,'p_term','interpreter.py',230),
+  ('term -> sumElement','term',1,'p_term','interpreter.py',231),
+  ('sumElement -> ID','sumElement',1,'p_sumElement','interpreter.py',236),
+  ('sumElement -> NUMBER','sumElement',1,'p_sumElement','interpreter.py',237),
+  ('mulop -> PROD','mulop',1,'p_mulop','interpreter.py',242),
+  ('mulop -> DIV','mulop',1,'p_mulop','interpreter.py',243),
 ]
