@@ -103,7 +103,18 @@ lexer = lex.lex()
 # 7
 def p_statement(t):
     '''statement    : expressionStmt
-                    | conditionalStmt SEMI'''
+                    | conditionalStmt SEMI
+                    | iterationStmt SEMI'''
+    pass
+
+# 8
+def p_iterationStmt(t):
+    'iterationStmt    : FOR ID IN iterationElement COL statement'
+    pass
+
+# 9
+def p_iterationElement(t):
+    'iterationElement   : ID'
     pass
 
 # 10
