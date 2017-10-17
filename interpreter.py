@@ -97,8 +97,22 @@ lexer = lex.lex()
 
 # Parser rules
 
+# 18
+def p_term(t):
+    '''term : term mulop sumElement
+            | sumElement'''
+    pass
+
+# 19
 def p_sumElement(t):
-    'sumElement : ID'
+    '''sumElement   : ID
+                    | NUMBER'''
+    pass
+
+# 20
+def p_mulop(t):
+    '''mulop    : PROD
+                | DIV'''
     pass
 
 def p_error(t):

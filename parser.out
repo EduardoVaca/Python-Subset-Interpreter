@@ -13,15 +13,12 @@ Unused terminals:
     LE
     PLUS
     MINUS
-    PROD
-    DIV
     EQUALS
     LPAREN
     RPAREN
     LSQUARE
     RSQUARE
     COMA
-    NUMBER
     COL
     SEMI
     IF
@@ -37,8 +34,13 @@ Unused terminals:
 
 Grammar
 
-Rule 0     S' -> sumElement
-Rule 1     sumElement -> ID
+Rule 0     S' -> mulop
+Rule 1     mulop -> PROD
+Rule 2     mulop -> DIV
+Rule 3     term -> term mulop sumElement
+Rule 4     term -> sumElement
+Rule 5     sumElement -> ID
+Rule 6     sumElement -> NUMBER
 
 Terminals, with rules where they appear
 
@@ -46,7 +48,7 @@ BOOLEAN              :
 COL                  : 
 COMA                 : 
 COMMENT              : 
-DIV                  : 
+DIV                  : 2
 ELSE                 : 
 EQ                   : 
 EQUALS               : 
@@ -54,7 +56,7 @@ FILTER               :
 FOR                  : 
 GE                   : 
 GT                   : 
-ID                   : 1
+ID                   : 5
 IF                   : 
 IN                   : 
 INPUT                : 
@@ -66,10 +68,10 @@ LT                   :
 MAP                  : 
 MINUS                : 
 NEQ                  : 
-NUMBER               : 
+NUMBER               : 6
 OUTPUT               : 
 PLUS                 : 
-PROD                 : 
+PROD                 : 1
 REDUCE               : 
 RPAREN               : 
 RSQUARE              : 
@@ -79,28 +81,39 @@ error                :
 
 Nonterminals, with rules where they appear
 
-sumElement           : 0
+mulop                : 3 0
+sumElement           : 3 4
+term                 : 3
 
 Parsing method: LALR
 
 state 0
 
-    (0) S' -> . sumElement
-    (1) sumElement -> . ID
+    (0) S' -> . mulop
+    (1) mulop -> . PROD
+    (2) mulop -> . DIV
 
-    ID              shift and go to state 2
+    PROD            shift and go to state 2
+    DIV             shift and go to state 3
 
-    sumElement                     shift and go to state 1
+    mulop                          shift and go to state 1
 
 state 1
 
-    (0) S' -> sumElement .
+    (0) S' -> mulop .
 
 
 
 state 2
 
-    (1) sumElement -> ID .
+    (1) mulop -> PROD .
 
-    $end            reduce using rule 1 (sumElement -> ID .)
+    $end            reduce using rule 1 (mulop -> PROD .)
+
+
+state 3
+
+    (2) mulop -> DIV .
+
+    $end            reduce using rule 2 (mulop -> DIV .)
 
