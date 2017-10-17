@@ -4,6 +4,7 @@
 # A01207563
 # -------------------------------------
 import ply.lex as lex
+import ply.yacc as yacc
 
 # Dictionary for reserverd words. { reserved_word : token }
 reserved_words = {
@@ -25,7 +26,7 @@ tokens = [
     'EQ', 'NEQ', 'GT', 'GE', 'LT', 'LE',
     'PLUS', 'MINUS', 'PROD', 'DIV', 'EQUALS',
     'LPAREN', 'RPAREN', 'LSQUARE', 'RSQUARE', 'COMA',
-    'ID', 'NUMBER', 'COL',
+    'ID', 'NUMBER', 'COL', 'SEMI',
 ] + list(reserved_words.values())
 
 # Token definition with regex.
@@ -48,6 +49,7 @@ t_RPAREN    = r'\)'
 t_LSQUARE   = r'\['
 t_RSQUARE   = r'\]'
 t_COMA      = r','
+t_SEMI      = r';'
 
 # More complex tokens are defined with functions.
 # Hierarchy is set by order of func definition.
@@ -93,17 +95,26 @@ def t_error(t):
 # Build the lexer
 lexer = lex.lex()
 
+# Parser rules
+
+def p_sumElement(t):
+    'sumElement : ID'
+    pass
+
+def p_error(t):
+    print("Syntax error at '%s'" % t.value)
+
+parser = yacc.yacc()
+
 def main():
     """Main function to be run at execution.
     """
     while True:
         try:
-            s = input('Vaca > ')
+            s = input('Cowpy > ')
         except EOFError:
             break
-        lexer.input(s)
-        for token in lexer:
-            print(token)
+        parser.parse(s)
 
 if __name__ == '__main__':
     main()

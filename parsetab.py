@@ -5,9 +5,9 @@ _tabversion = '3.10'
 
 _lr_method = 'LALR'
 
-_lr_signature = 'leftPLUSMINUSleftTIMESDIVIDErightUMINUSNAME NUMBER PLUS MINUS TIMES DIVIDE EQUALS LPAREN RPARENstatement : NAME EQUALS expressionstatement : expressionexpression : expression PLUS expression\n                  | expression MINUS expression\n                  | expression TIMES expression\n                  | expression DIVIDE expressionexpression : MINUS expression %prec UMINUSexpression : LPAREN expression RPARENexpression : NUMBERexpression : NAME'
+_lr_signature = 'COMMENT STRING BOOLEAN EQ NEQ GT GE LT LE PLUS MINUS PROD DIV EQUALS LPAREN RPAREN LSQUARE RSQUARE COMA ID NUMBER COL SEMI IF ELSE FOR IN LAMBDA MAP REDUCE FILTER INPUT OUTPUTsumElement : ID'
     
-_lr_action_items = {'TIMES':([2,3,5,12,13,14,15,16,17,18,19,20,],[7,-10,-9,7,-10,-7,-5,-6,7,7,7,-8,]),'DIVIDE':([2,3,5,12,13,14,15,16,17,18,19,20,],[8,-10,-9,8,-10,-7,-5,-6,8,8,8,-8,]),'$end':([1,2,3,5,13,14,15,16,17,18,19,20,],[0,-2,-10,-9,-10,-7,-5,-6,-3,-4,-1,-8,]),'MINUS':([0,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,],[6,10,-10,6,-9,6,6,6,6,6,6,10,-10,-7,-5,-6,-3,-4,10,-8,]),'EQUALS':([3,],[11,]),'RPAREN':([5,12,13,14,15,16,17,18,20,],[-9,20,-10,-7,-5,-6,-3,-4,-8,]),'NAME':([0,4,6,7,8,9,10,11,],[3,13,13,13,13,13,13,13,]),'LPAREN':([0,4,6,7,8,9,10,11,],[4,4,4,4,4,4,4,4,]),'NUMBER':([0,4,6,7,8,9,10,11,],[5,5,5,5,5,5,5,5,]),'PLUS':([2,3,5,12,13,14,15,16,17,18,19,20,],[9,-10,-9,9,-10,-7,-5,-6,-3,-4,9,-8,]),}
+_lr_action_items = {'ID':([0,],[2,]),'$end':([1,2,],[0,-1,]),}
 
 _lr_action = {}
 for _k, _v in _lr_action_items.items():
@@ -16,7 +16,7 @@ for _k, _v in _lr_action_items.items():
       _lr_action[_x][_k] = _y
 del _lr_action_items
 
-_lr_goto_items = {'expression':([0,4,6,7,8,9,10,11,],[2,12,14,15,16,17,18,19,]),'statement':([0,],[1,]),}
+_lr_goto_items = {'sumElement':([0,],[1,]),}
 
 _lr_goto = {}
 for _k, _v in _lr_goto_items.items():
@@ -25,15 +25,6 @@ for _k, _v in _lr_goto_items.items():
        _lr_goto[_x][_k] = _y
 del _lr_goto_items
 _lr_productions = [
-  ("S' -> statement","S'",1,None,None,None),
-  ('statement -> NAME EQUALS expression','statement',3,'p_statement_assign','test.py',61),
-  ('statement -> expression','statement',1,'p_statement_expr','test.py',65),
-  ('expression -> expression PLUS expression','expression',3,'p_expression_binop','test.py',69),
-  ('expression -> expression MINUS expression','expression',3,'p_expression_binop','test.py',70),
-  ('expression -> expression TIMES expression','expression',3,'p_expression_binop','test.py',71),
-  ('expression -> expression DIVIDE expression','expression',3,'p_expression_binop','test.py',72),
-  ('expression -> MINUS expression','expression',2,'p_expression_uminus','test.py',79),
-  ('expression -> LPAREN expression RPAREN','expression',3,'p_expression_group','test.py',83),
-  ('expression -> NUMBER','expression',1,'p_expression_number','test.py',87),
-  ('expression -> NAME','expression',1,'p_expression_name','test.py',91),
+  ("S' -> sumElement","S'",1,None,None,None),
+  ('sumElement -> ID','sumElement',1,'p_sumElement','interpreter.py',101),
 ]
