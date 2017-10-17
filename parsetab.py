@@ -5,9 +5,9 @@ _tabversion = '3.10'
 
 _lr_method = 'LALR'
 
-_lr_signature = 'COMMENT STRING BOOLEAN EQ NEQ GT GE LT LE PLUS MINUS PROD DIV EQUALS LPAREN RPAREN LSQUARE RSQUARE COMA ID NUMBER COL SEMI IF ELSE FOR IN LAMBDA MAP REDUCE FILTER INPUT OUTPUTmulop    : PROD\n                | DIVterm : term mulop sumElement\n            | sumElementsumElement   : ID\n                    | NUMBER'
+_lr_signature = 'COMMENT STRING BOOLEAN EQ NEQ GT GE LT LE PLUS MINUS PROD DIV EQUALS LPAREN RPAREN LSQUARE RSQUARE COMA ID NUMBER COL SEMI IF ELSE FOR IN AND OR NOT LAMBDA MAP REDUCE FILTER INPUT OUTPUTconditionalStmt  : IF expressionStmt COL\n                        | IF expressionStmt COL ELSE COLexpressionStmt   : expressionStmt OR andExpression\n                        | andExpressionandExpression    : andExpression AND unaryRelExpression\n                        | unaryRelExpressionunaryRelExpression   : NOT unaryRelExpression\n                            | relExpressionrelExpression    : sumExpression relop sumExpression\n                        | sumExpressionrelop    : LE\n                | LT\n                | GT\n                | GE\n                | EQ\n                | NEQsumExpression    : sumExpression sumop term\n                        | termsumop    : PLUS\n                | MINUSterm : term mulop sumElement\n            | sumElementsumElement   : ID\n                    | NUMBERmulop    : PROD\n                | DIV'
     
-_lr_action_items = {'PROD':([0,],[2,]),'DIV':([0,],[3,]),'$end':([1,2,3,],[0,-1,-2,]),}
+_lr_action_items = {'IF':([0,],[2,]),'$end':([1,13,36,],[0,-1,-2,]),'NOT':([2,6,14,15,],[6,6,6,6,]),'ID':([2,6,14,15,17,18,19,20,21,22,23,24,25,26,27,28,29,],[11,11,11,11,11,11,-11,-12,-13,-14,-15,-16,-19,-20,11,-25,-26,]),'NUMBER':([2,6,14,15,17,18,19,20,21,22,23,24,25,26,27,28,29,],[12,12,12,12,12,12,-11,-12,-13,-14,-15,-16,-19,-20,12,-25,-26,]),'COL':([3,4,5,7,8,9,10,11,12,16,30,31,32,33,34,35,],[13,-4,-6,-8,-10,-18,-22,-23,-24,-7,36,-3,-5,-9,-17,-21,]),'OR':([3,4,5,7,8,9,10,11,12,16,31,32,33,34,35,],[14,-4,-6,-8,-10,-18,-22,-23,-24,-7,-3,-5,-9,-17,-21,]),'AND':([4,5,7,8,9,10,11,12,16,31,32,33,34,35,],[15,-6,-8,-10,-18,-22,-23,-24,-7,15,-5,-9,-17,-21,]),'LE':([8,9,10,11,12,34,35,],[19,-18,-22,-23,-24,-17,-21,]),'LT':([8,9,10,11,12,34,35,],[20,-18,-22,-23,-24,-17,-21,]),'GT':([8,9,10,11,12,34,35,],[21,-18,-22,-23,-24,-17,-21,]),'GE':([8,9,10,11,12,34,35,],[22,-18,-22,-23,-24,-17,-21,]),'EQ':([8,9,10,11,12,34,35,],[23,-18,-22,-23,-24,-17,-21,]),'NEQ':([8,9,10,11,12,34,35,],[24,-18,-22,-23,-24,-17,-21,]),'PLUS':([8,9,10,11,12,33,34,35,],[25,-18,-22,-23,-24,25,-17,-21,]),'MINUS':([8,9,10,11,12,33,34,35,],[26,-18,-22,-23,-24,26,-17,-21,]),'PROD':([9,10,11,12,34,35,],[28,-22,-23,-24,28,-21,]),'DIV':([9,10,11,12,34,35,],[29,-22,-23,-24,29,-21,]),'ELSE':([13,],[30,]),}
 
 _lr_action = {}
 for _k, _v in _lr_action_items.items():
@@ -16,7 +16,7 @@ for _k, _v in _lr_action_items.items():
       _lr_action[_x][_k] = _y
 del _lr_action_items
 
-_lr_goto_items = {'mulop':([0,],[1,]),}
+_lr_goto_items = {'conditionalStmt':([0,],[1,]),'expressionStmt':([2,],[3,]),'andExpression':([2,14,],[4,31,]),'unaryRelExpression':([2,6,14,15,],[5,16,5,32,]),'relExpression':([2,6,14,15,],[7,7,7,7,]),'sumExpression':([2,6,14,15,17,],[8,8,8,8,33,]),'term':([2,6,14,15,17,18,],[9,9,9,9,9,34,]),'sumElement':([2,6,14,15,17,18,27,],[10,10,10,10,10,10,35,]),'relop':([8,],[17,]),'sumop':([8,33,],[18,18,]),'mulop':([9,34,],[27,27,]),}
 
 _lr_goto = {}
 for _k, _v in _lr_goto_items.items():
@@ -25,11 +25,31 @@ for _k, _v in _lr_goto_items.items():
        _lr_goto[_x][_k] = _y
 del _lr_goto_items
 _lr_productions = [
-  ("S' -> mulop","S'",1,None,None,None),
-  ('mulop -> PROD','mulop',1,'p_mulop','interpreter.py',102),
-  ('mulop -> DIV','mulop',1,'p_mulop','interpreter.py',103),
-  ('term -> term mulop sumElement','term',3,'p_term','interpreter.py',108),
-  ('term -> sumElement','term',1,'p_term','interpreter.py',109),
-  ('sumElement -> ID','sumElement',1,'p_sumElement','interpreter.py',114),
-  ('sumElement -> NUMBER','sumElement',1,'p_sumElement','interpreter.py',115),
+  ("S' -> conditionalStmt","S'",1,None,None,None),
+  ('conditionalStmt -> IF expressionStmt COL','conditionalStmt',3,'p_conditionalStmt','interpreter.py',106),
+  ('conditionalStmt -> IF expressionStmt COL ELSE COL','conditionalStmt',5,'p_conditionalStmt','interpreter.py',107),
+  ('expressionStmt -> expressionStmt OR andExpression','expressionStmt',3,'p_expressionStmt','interpreter.py',112),
+  ('expressionStmt -> andExpression','expressionStmt',1,'p_expressionStmt','interpreter.py',113),
+  ('andExpression -> andExpression AND unaryRelExpression','andExpression',3,'p_andExpression','interpreter.py',118),
+  ('andExpression -> unaryRelExpression','andExpression',1,'p_andExpression','interpreter.py',119),
+  ('unaryRelExpression -> NOT unaryRelExpression','unaryRelExpression',2,'p_unaryRelExpression','interpreter.py',124),
+  ('unaryRelExpression -> relExpression','unaryRelExpression',1,'p_unaryRelExpression','interpreter.py',125),
+  ('relExpression -> sumExpression relop sumExpression','relExpression',3,'p_relExpression','interpreter.py',130),
+  ('relExpression -> sumExpression','relExpression',1,'p_relExpression','interpreter.py',131),
+  ('relop -> LE','relop',1,'p_relop','interpreter.py',136),
+  ('relop -> LT','relop',1,'p_relop','interpreter.py',137),
+  ('relop -> GT','relop',1,'p_relop','interpreter.py',138),
+  ('relop -> GE','relop',1,'p_relop','interpreter.py',139),
+  ('relop -> EQ','relop',1,'p_relop','interpreter.py',140),
+  ('relop -> NEQ','relop',1,'p_relop','interpreter.py',141),
+  ('sumExpression -> sumExpression sumop term','sumExpression',3,'p_sumExpression','interpreter.py',146),
+  ('sumExpression -> term','sumExpression',1,'p_sumExpression','interpreter.py',147),
+  ('sumop -> PLUS','sumop',1,'p_sumop','interpreter.py',152),
+  ('sumop -> MINUS','sumop',1,'p_sumop','interpreter.py',153),
+  ('term -> term mulop sumElement','term',3,'p_term','interpreter.py',158),
+  ('term -> sumElement','term',1,'p_term','interpreter.py',159),
+  ('sumElement -> ID','sumElement',1,'p_sumElement','interpreter.py',164),
+  ('sumElement -> NUMBER','sumElement',1,'p_sumElement','interpreter.py',165),
+  ('mulop -> PROD','mulop',1,'p_mulop','interpreter.py',170),
+  ('mulop -> DIV','mulop',1,'p_mulop','interpreter.py',171),
 ]

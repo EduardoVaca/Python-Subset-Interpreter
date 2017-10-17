@@ -12,6 +12,9 @@ reserved_words = {
     'else': 'ELSE',
     'for': 'FOR',
     'in': 'IN',
+    'and': 'AND',
+    'or': 'OR',
+    'not': 'NOT',
     'lambda': 'LAMBDA',
     'map': 'MAP',
     'reduce': 'REDUCE',
@@ -77,6 +80,7 @@ def t_BOOLEAN(t):
 def t_ID(t):
     r'[a-zA-Z_][a-zA-Z0-9_]*'
     t.type = reserved_words.get(t.value, 'ID')    # Check for reserved words
+    print(t)
     return t
 
 # Ignored characters
@@ -97,6 +101,58 @@ lexer = lex.lex()
 
 # Parser rules
 
+# 10
+def p_conditionalStmt(t):
+    '''conditionalStmt  : IF expressionStmt COL
+                        | IF expressionStmt COL ELSE COL'''
+    pass
+
+# 11
+def p_expressionStmt(t):
+    '''expressionStmt   : expressionStmt OR andExpression
+                        | andExpression'''
+    pass
+
+# 12
+def p_andExpression(t):
+    '''andExpression    : andExpression AND unaryRelExpression
+                        | unaryRelExpression'''
+    pass 
+
+# 13
+def p_unaryRelExpression(t):
+    '''unaryRelExpression   : NOT unaryRelExpression
+                            | relExpression'''
+    pass
+
+# 14
+def p_relExpression(t):
+    '''relExpression    : sumExpression relop sumExpression
+                        | sumExpression'''
+    pass
+
+# 15
+def p_relop(t):
+    '''relop    : LE
+                | LT
+                | GT
+                | GE
+                | EQ
+                | NEQ'''
+    pass
+
+# 16
+def p_sumExpression(t):
+    '''sumExpression    : sumExpression sumop term
+                        | term'''
+    pass
+
+# 17
+def p_sumop(t):
+    '''sumop    : PLUS
+                | MINUS'''
+    pass
+
 # 18
 def p_term(t):
     '''term : term mulop sumElement
@@ -116,7 +172,10 @@ def p_mulop(t):
     pass
 
 def p_error(t):
-    print("Syntax error at '%s'" % t.value)
+    if t:
+        print("Syntax error at '%s'" % t.value)
+    else:
+        print('Syntax error')
 
 parser = yacc.yacc()
 
