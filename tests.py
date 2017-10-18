@@ -4,6 +4,7 @@ import interpreter
 
 
 LEXER = interpreter.lexer
+PARSER = interpreter.parser
 
 class TestLexer(unittest.TestCase):
     """Class that tests all cases for my Subset Python lexer.
@@ -99,7 +100,7 @@ class TestLexer(unittest.TestCase):
         """
         LEXER.input('reduce(lambda x,y: x+y, list)')
         self.checks_tokens([
-            'REDUCE', 'LPAREN', 'LAMBDA', 'ID', 'COMA', 'ID', 'COL',
+            'REDUCE', 'LPAREN', 'LAMBDA', 'ID', 'OP_ID', 'COL',
             'ID', 'PLUS', 'ID', 'COMA', 'ID', 'RPAREN'])
 
     # Tests that only succed on lexical analyzer phase.

@@ -137,8 +137,8 @@ def p_varDeclaration(t):
 # 4
 def p_declarationElement(t):
     '''declarationElement   : list
-                            | STRING
-                            | NUMBER
+                            | sumExpression
+                            | STRING                        
                             | BOOLEAN'''
     pass
 
@@ -289,7 +289,7 @@ def p_error(t):
     if t:
         print("Syntax error at '%s'" % t.value)
     else:
-        print('Syntax error')
+        print('Syntax error at EOF')
 
 parser = yacc.yacc()
 
@@ -299,6 +299,7 @@ def main():
     while True:
         try:
             s = input('Cowpy > ')
+            print(s)
         except EOFError:
             break
         parser.parse(s)
