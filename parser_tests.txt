@@ -1,6 +1,10 @@
 x = 45;
+y = x - 10;
 x = 45
 for x in [1,2,3,4]: if x > 2: print('x small'); else: print('x big');
 for x in lists if not x: print('not x');
 input(); print('This is output');
 input( print
+map(lambda x: x+1, [1,2,3,4,5]);
+reduce(lambda x,y: x+y, [1,2,3,4,5]);
+filter(lambda x: x > 10, my_list);
