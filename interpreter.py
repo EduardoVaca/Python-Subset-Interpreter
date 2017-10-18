@@ -164,7 +164,8 @@ def p_statement(t):
                     | iterationStmt SEMI
                     | functionalStmt
                     | inputStmt
-                    | outputStmt'''
+                    | outputStmt
+                    | commentStmt'''
     pass
 
 # 8
@@ -278,6 +279,10 @@ def p_inputStmt(t):
 # 25
 def p_outputStmt(t):
     'outputStmt : OUTPUT LPAREN declarationElement RPAREN'
+    pass
+
+def p_commentStmt(t):
+    'commentStmt    : COMMENT'
     pass
 
 def p_error(t):
