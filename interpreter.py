@@ -125,7 +125,7 @@ def p_declarationList(t):
 
 # 2
 def p_declaration(t):
-    '''declaration  : varDeclaration
+    '''declaration  : varDeclaration SEMI
                     | statement'''
     pass
 
@@ -159,18 +159,18 @@ def p_listElements(t):
 
 # 7
 def p_statement(t):
-    '''statement    : expressionStmt
-                    | conditionalStmt SEMI
-                    | iterationStmt SEMI
-                    | functionalStmt
-                    | inputStmt
-                    | outputStmt
+    '''statement    : expressionStmt SEMI
+                    | conditionalStmt
+                    | iterationStmt
+                    | functionalStmt SEMI
+                    | inputStmt SEMI
+                    | outputStmt SEMI
                     | commentStmt'''
     pass
 
 # 8
 def p_iterationStmt(t):
-    'iterationStmt    : FOR ID IN iterationElement COL statement'
+    'iterationStmt    : FOR ID IN iterationElement COL declarationList'
     pass
 
 # 9
@@ -181,8 +181,8 @@ def p_iterationElement(t):
 
 # 10
 def p_conditionalStmt(t):
-    '''conditionalStmt  : IF expressionStmt COL statement
-                        | IF expressionStmt COL statement ELSE COL statement'''
+    '''conditionalStmt  : IF expressionStmt COL declarationList
+                        | IF expressionStmt COL declarationList ELSE COL declarationList'''
     pass
 
 # 11
@@ -195,7 +195,7 @@ def p_expressionStmt(t):
 def p_andExpression(t):
     '''andExpression    : andExpression AND unaryRelExpression
                         | unaryRelExpression'''
-    pass 
+    pass
 
 # 13
 def p_unaryRelExpression(t):
