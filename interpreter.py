@@ -29,7 +29,7 @@ tokens = [
     'EQ', 'NEQ', 'GT', 'GE', 'LT', 'LE',
     'PLUS', 'MINUS', 'PROD', 'DIV', 'EQUALS',
     'LPAREN', 'RPAREN', 'LSQUARE', 'RSQUARE', 'COMA',
-    'ID', 'NUMBER', 'COL', 'SEMI',
+    'ID', 'OP_ID', 'NUMBER', 'COL', 'SEMI',
 ] + list(reserved_words.values())
 
 # Token definition with regex.
@@ -67,8 +67,7 @@ def t_NUMBER(t):
     return t
 
 def t_OP_NUMBER(t):
-    r'(,\d+)+'
-    print(t)
+    r'(,\d+)+'    
     return t
 
 def t_COMMENT(t):
@@ -76,22 +75,23 @@ def t_COMMENT(t):
     return t
 
 def t_OP_STRING(t):
-    r'(,\'[^\']*\')+'
-    print(t)
+    r'(,\'[^\']*\')+'    
     return t
 
 def t_STRING(t):
-    r'\'[^\']*\''
-    print(t)
+    r'\'[^\']*\''    
     return t
 
 def t_OP_BOOLEAN(t):
-    r'(,(true|false))+'
-    print(t)
+    r'(,(true|false))+' 
     return t
 
 def t_BOOLEAN(t):
     r'true|false'
+    return t
+
+def t_OP_ID(t):
+    r'(,[a-zA-Z_][a-zA-Z0-9_]*)+'
     return t
 
 def t_ID(t):
@@ -161,7 +161,10 @@ def p_listElements(t):
 def p_statement(t):
     '''statement    : expressionStmt
                     | conditionalStmt SEMI
-                    | iterationStmt SEMI'''
+                    | iterationStmt SEMI
+                    | functionalStmt
+                    | inputStmt
+                    | outputStmt'''
     pass
 
 # 8
@@ -171,7 +174,8 @@ def p_iterationStmt(t):
 
 # 9
 def p_iterationElement(t):
-    'iterationElement   : ID'
+    '''iterationElement : list
+                        | ID'''
     pass
 
 # 10
@@ -242,6 +246,38 @@ def p_sumElement(t):
 def p_mulop(t):
     '''mulop    : PROD
                 | DIV'''
+    pass
+
+# 21
+def p_functionalStmt(t):
+    '''functionalStmt   : FILTER LPAREN lambdaFilter RPAREN
+                        | MAP LPAREN lambdaStmt RPAREN
+                        | REDUCE LPAREN lambdaStmt RPAREN'''
+    pass
+
+# 22
+def p_lambdaStmt(t):
+    '''lambdaStmt   : LAMBDA lambdaElement COL sumExpression COMA iterationElement'''
+    pass
+
+def p_lambdaElement(t):
+    '''lambdaElement    : ID
+                        | ID OP_ID'''
+    pass
+
+# 23
+def p_lambdaFilter(t):
+    'lambdaFilter : LAMBDA lambdaElement COL expressionStmt COMA iterationElement'
+    pass
+
+# 24
+def p_inputStmt(t):
+    'inputStmt  : INPUT LPAREN RPAREN'
+    pass
+
+# 25
+def p_outputStmt(t):
+    'outputStmt : OUTPUT LPAREN declarationElement RPAREN'
     pass
 
 def p_error(t):
