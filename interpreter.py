@@ -115,6 +115,13 @@ def t_error(t):
 # Build the lexer
 lexer = lex.lex()
 
+# Scope tracker
+current_scope = 0
+
+# Symbol table for IDs
+# { 'x-0': (TYPE, VALUE) }
+symbol_table = {}
+
 # Parser rules
 
 # 1
@@ -130,17 +137,18 @@ def p_declaration(t):
     pass
 
 # 3
-def p_varDeclaration(t):
+def p_varDeclaration(p):
     'varDeclaration   : ID EQUALS declarationElement'
-    pass
+    lexer.input(p[3])
+    symbol_table[p[1]+'-'+str(current_scope)] = (lexer.token().type, p[3])
 
 # 4
-def p_declarationElement(t):
+def p_declarationElement(p):
     '''declarationElement   : list
                             | sumExpression
                             | STRING                        
                             | BOOLEAN'''
-    pass
+    p[0] = p[1]
 
 # 5
 def p_list(t):
@@ -238,10 +246,20 @@ def p_term(t):
     pass
 
 # 19
-def p_sumElement(t):
+def p_sumElement(p):
     '''sumElement   : ID
                     | NUMBER'''
-    pass
+    lexer.input(str(p[1]))
+    if lexer.token().type == 'ID':
+        try:
+            symbol = symbol_table[p[1]+'-'+str(current_scope)]
+            p[0] = symbol[1]
+        except LookupError:
+            print("Undefined name {}".format(p[1]))
+            p[0] = 0
+    else:
+        print('RETURNING {}'.format(p[1]))
+        p[0] = p[1]
 
 # 20
 def p_mulop(t):
@@ -299,10 +317,10 @@ def main():
     while True:
         try:
             s = input('Cowpy > ')
-            print(s)
         except EOFError:
             break
         parser.parse(s)
+        print(symbol_table)
 
 if __name__ == '__main__':
     main()
