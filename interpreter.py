@@ -6,6 +6,37 @@
 import ply.lex as lex
 import ply.yacc as yacc
 
+class SymbolTable(object):
+    """Structure for storing symbols.
+    { 'ID-Scope': (Type, Value, Scope)}
+    """
+
+    def __init__(self):
+        self.table = {}
+    
+    def __str__(self):
+        return str(self.table)
+
+    def add_symbol(self, id_name, symbol_type, symbol, scope):
+        """Adds a symbol to the table
+        PARAMS:
+        - id_name : Name of ID
+        - symbol_type : Type of the symbol
+        - symbol : Symbol to be stored
+        - scope : Current scope
+        """
+        current_symbol = 0
+        if symbol_type == 'STRING':
+            current_symbol = symbol[1:-1]
+        elif symbol_type == 'BOOLEAN':
+            current_symbol = True if symbol == 'true' else False
+        elif symbol_type == 'NUMBER':
+            current_symbol = int(symbol)
+        else:
+            #TODO: Missing lists!
+            current_symbol = symbol
+        self.table[id_name+'-'+str(scope)] = (symbol_type, current_symbol, scope)
+
 # Dictionary for reserverd words. { reserved_word : token }
 reserved_words = {
     'if': 'IF',
@@ -119,8 +150,7 @@ lexer = lex.lex()
 current_scope = 0
 
 # Symbol table for IDs
-# { 'x-0': (TYPE, VALUE) }
-symbol_table = {}
+symbol_table = SymbolTable()
 
 # Parser rules
 
@@ -140,7 +170,7 @@ def p_declaration(t):
 def p_varDeclaration(p):
     'varDeclaration   : ID EQUALS declarationElement'
     lexer.input(p[3])
-    symbol_table[p[1]+'-'+str(current_scope)] = (lexer.token().type, p[3])
+    symbol_table.add_symbol(p[1], lexer.token().type, p[3], current_scope)
 
 # 4
 def p_declarationElement(p):
