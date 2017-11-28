@@ -119,7 +119,7 @@ lexer = lex.lex()
 
 # 1
 def p_declarationList(t):
-    '''declarationList  : declarationList declaration
+    '''declarationList  : declaration declarationList
                         | declaration'''
     pass
 
