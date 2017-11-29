@@ -75,8 +75,7 @@ class List(Node):
     def __init__(self, item, items=None):
         self.type = 'LIST'
         self.item = item
-        if items:
-            self.items = items
+        self.items = items
     
     def execute(self):
         if not self.items:
@@ -161,6 +160,7 @@ class ListRelExpression(Node):
         if self.op == '!=': return [x for x in temp_list if x != temp_value]
         else: return 0
 
+
 symbol_table.add_symbol('x', '', 10, 0)
 n = Number(12)
 print(n.execute())
@@ -169,7 +169,7 @@ print(i.execute())
 bop = BinaryOp(i, '+', n)
 print(bop.execute())
 print('hi')
-l = List(1, ',2,3,4')
+l = List(1)
 print(l.execute())
 lbop = ListRelExpression(n, '>', l)
 print(lbop.execute())
