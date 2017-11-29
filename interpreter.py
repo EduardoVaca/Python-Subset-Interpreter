@@ -258,12 +258,22 @@ def p_relExpression(p):
     '''relExpression    : sumExpression relop sumExpression
                         | sumExpression'''
     if len(p) > 2:
-        if p[2] == '<': p[0] = p[1] < p[3]
-        if p[2] == '<=': p[0] = p[1] <= p[3]
-        if p[2] == '>': p[0] = p[1] > p[3]
-        if p[2] == '>=': p[0] = p[1] >= p[3]
-        if p[2] == '==': p[0] = p[1] == p[3]
-        if p[2] == '!=': p[0] = p[1] != p[3]
+        if (isinstance(p[1], list) and not isinstance(p[3], list)) or (not isinstance(p[1], list) and isinstance(p[3], list)):
+            temp_list = p[1] if isinstance(p[1], list) else p[3]
+            temp_value = p[1] if not isinstance(p[1], list) else p[3]
+            if p[2] == '<': p[0] = [x for x in temp_list if x < temp_value]
+            if p[2] == '<=': p[0] = [x for x in temp_list if x <= temp_value]
+            if p[2] == '>': p[0] = [x for x in temp_list if x > temp_value]
+            if p[2] == '<=': p[0] = [x for x in temp_list if x <= temp_value]
+            if p[2] == '==': p[0] = [x for x in temp_list if x == temp_value]
+            if p[2] == '!=': p[0] = [x for x in temp_list if x != temp_value]
+        else:
+            if p[2] == '<': p[0] = p[1] < p[3]
+            if p[2] == '<=': p[0] = p[1] <= p[3]
+            if p[2] == '>': p[0] = p[1] > p[3]
+            if p[2] == '>=': p[0] = p[1] >= p[3]
+            if p[2] == '==': p[0] = p[1] == p[3]
+            if p[2] == '!=': p[0] = p[1] != p[3]
     else:
         p[0] = p[1]
 
@@ -336,20 +346,24 @@ def p_mulop(p):
 # 21
 def p_functionalStmt(p):
     '''functionalStmt   : FILTER LPAREN lambdaFilter RPAREN
-                        | MAP LPAREN lambdaStmt RPAREN
-                        | REDUCE LPAREN lambdaStmt RPAREN'''
+                        | MAP LPAREN lambdaMap RPAREN
+                        | REDUCE LPAREN lambdaReduce RPAREN'''
     p[0] = p[3]
 
 # 22
-def p_lambdaStmt(p):
-    '''lambdaStmt   : LAMBDA COL sumExpression'''
+def p_lambdaMap(p):
+    'lambdaMap   : LAMBDA COL sumExpression'
     #TODO: Missing Reduce and Filter
     p[0] = p[3]
 
+def p_lambdaReduce(p):
+    'lambdaReduce : LAMBDA COL relExpression'
+    pass
+
 # 23
 def p_lambdaFilter(p):
-    'lambdaFilter : LAMBDA COL expressionStmt'
-    pass
+    'lambdaFilter : LAMBDA COL relExpression'
+    p[0] = p[3]
 
 # 24
 def p_inputStmt(p):

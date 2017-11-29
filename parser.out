@@ -58,20 +58,21 @@ Rule 52    sumElement -> NUMBER
 Rule 53    mulop -> PROD
 Rule 54    mulop -> DIV
 Rule 55    functionalStmt -> FILTER LPAREN lambdaFilter RPAREN
-Rule 56    functionalStmt -> MAP LPAREN lambdaStmt RPAREN
-Rule 57    functionalStmt -> REDUCE LPAREN lambdaStmt RPAREN
-Rule 58    lambdaStmt -> LAMBDA COL sumExpression
-Rule 59    lambdaFilter -> LAMBDA COL expressionStmt
-Rule 60    inputStmt -> INPUT LPAREN RPAREN
-Rule 61    outputStmt -> OUTPUT LPAREN declarationElement RPAREN
-Rule 62    commentStmt -> COMMENT
+Rule 56    functionalStmt -> MAP LPAREN lambdaMap RPAREN
+Rule 57    functionalStmt -> REDUCE LPAREN lambdaReduce RPAREN
+Rule 58    lambdaMap -> LAMBDA COL sumExpression
+Rule 59    lambdaReduce -> LAMBDA COL relExpression
+Rule 60    lambdaFilter -> LAMBDA COL relExpression
+Rule 61    inputStmt -> INPUT LPAREN RPAREN
+Rule 62    outputStmt -> OUTPUT LPAREN declarationElement RPAREN
+Rule 63    commentStmt -> COMMENT
 
 Terminals, with rules where they appear
 
 AND                  : 33
 BOOLEAN              : 9 17 18
-COL                  : 26 29 30 30 58 59
-COMMENT              : 62
+COL                  : 26 29 30 30 58 59 60
+COMMENT              : 63
 DIV                  : 54
 ELSE                 : 30
 EQ                   : 43
@@ -83,10 +84,10 @@ GT                   : 41
 ID                   : 5 26 28 51
 IF                   : 29 30
 IN                   : 26
-INPUT                : 60
-LAMBDA               : 58 59
+INPUT                : 61
+LAMBDA               : 58 59 60
 LE                   : 39
-LPAREN               : 55 56 57 60 61
+LPAREN               : 55 56 57 61 62
 LSQUARE              : 12
 LT                   : 40
 MAP                  : 56
@@ -98,11 +99,11 @@ OP_BOOLEAN           : 18
 OP_NUMBER            : 14
 OP_STRING            : 16
 OR                   : 31
-OUTPUT               : 61
+OUTPUT               : 62
 PLUS                 : 47
 PROD                 : 53
 REDUCE               : 57
-RPAREN               : 55 56 57 60 61
+RPAREN               : 55 56 57 61 62
 RSQUARE              : 12
 SEMI                 : 3 19 22 23 24
 STRING               : 8 15 16
@@ -114,20 +115,21 @@ andExpression        : 31 32 33
 commentStmt          : 25
 conditionalStmt      : 20
 declaration          : 1 2
-declarationElement   : 5 61
+declarationElement   : 5 62
 declarationList      : 1 26 29 30 30 0
-expressionStmt       : 19 29 30 31 59
+expressionStmt       : 19 29 30 31
 functionalStmt       : 11 22
 inputStmt            : 10 23
 iterationElement     : 26
 iterationStmt        : 21
 lambdaFilter         : 55
-lambdaStmt           : 56 57
+lambdaMap            : 56
+lambdaReduce         : 57
 list                 : 6 27
 listElements         : 12
 mulop                : 49
 outputStmt           : 24
-relExpression        : 36
+relExpression        : 36 59 60
 relop                : 37
 statement            : 4
 sumElement           : 49 50
@@ -160,11 +162,11 @@ state 0
     (30) conditionalStmt -> . IF expressionStmt COL declarationList ELSE COL declarationList
     (26) iterationStmt -> . FOR ID IN iterationElement COL declarationList
     (55) functionalStmt -> . FILTER LPAREN lambdaFilter RPAREN
-    (56) functionalStmt -> . MAP LPAREN lambdaStmt RPAREN
-    (57) functionalStmt -> . REDUCE LPAREN lambdaStmt RPAREN
-    (60) inputStmt -> . INPUT LPAREN RPAREN
-    (61) outputStmt -> . OUTPUT LPAREN declarationElement RPAREN
-    (62) commentStmt -> . COMMENT
+    (56) functionalStmt -> . MAP LPAREN lambdaMap RPAREN
+    (57) functionalStmt -> . REDUCE LPAREN lambdaReduce RPAREN
+    (61) inputStmt -> . INPUT LPAREN RPAREN
+    (62) outputStmt -> . OUTPUT LPAREN declarationElement RPAREN
+    (63) commentStmt -> . COMMENT
     (33) andExpression -> . andExpression AND unaryRelExpression
     (34) andExpression -> . unaryRelExpression
     (35) unaryRelExpression -> . NOT unaryRelExpression
@@ -236,11 +238,11 @@ state 2
     (30) conditionalStmt -> . IF expressionStmt COL declarationList ELSE COL declarationList
     (26) iterationStmt -> . FOR ID IN iterationElement COL declarationList
     (55) functionalStmt -> . FILTER LPAREN lambdaFilter RPAREN
-    (56) functionalStmt -> . MAP LPAREN lambdaStmt RPAREN
-    (57) functionalStmt -> . REDUCE LPAREN lambdaStmt RPAREN
-    (60) inputStmt -> . INPUT LPAREN RPAREN
-    (61) outputStmt -> . OUTPUT LPAREN declarationElement RPAREN
-    (62) commentStmt -> . COMMENT
+    (56) functionalStmt -> . MAP LPAREN lambdaMap RPAREN
+    (57) functionalStmt -> . REDUCE LPAREN lambdaReduce RPAREN
+    (61) inputStmt -> . INPUT LPAREN RPAREN
+    (62) outputStmt -> . OUTPUT LPAREN declarationElement RPAREN
+    (63) commentStmt -> . COMMENT
     (33) andExpression -> . andExpression AND unaryRelExpression
     (34) andExpression -> . unaryRelExpression
     (35) unaryRelExpression -> . NOT unaryRelExpression
@@ -451,7 +453,6 @@ state 13
     SEMI            reduce using rule 32 (expressionStmt -> andExpression .)
     OR              reduce using rule 32 (expressionStmt -> andExpression .)
     COL             reduce using rule 32 (expressionStmt -> andExpression .)
-    RPAREN          reduce using rule 32 (expressionStmt -> andExpression .)
     AND             shift and go to state 37
 
 
@@ -502,49 +503,49 @@ state 16
 
 state 17
 
-    (56) functionalStmt -> MAP . LPAREN lambdaStmt RPAREN
+    (56) functionalStmt -> MAP . LPAREN lambdaMap RPAREN
 
     LPAREN          shift and go to state 42
 
 
 state 18
 
-    (57) functionalStmt -> REDUCE . LPAREN lambdaStmt RPAREN
+    (57) functionalStmt -> REDUCE . LPAREN lambdaReduce RPAREN
 
     LPAREN          shift and go to state 43
 
 
 state 19
 
-    (60) inputStmt -> INPUT . LPAREN RPAREN
+    (61) inputStmt -> INPUT . LPAREN RPAREN
 
     LPAREN          shift and go to state 44
 
 
 state 20
 
-    (61) outputStmt -> OUTPUT . LPAREN declarationElement RPAREN
+    (62) outputStmt -> OUTPUT . LPAREN declarationElement RPAREN
 
     LPAREN          shift and go to state 45
 
 
 state 21
 
-    (62) commentStmt -> COMMENT .
+    (63) commentStmt -> COMMENT .
 
-    ID              reduce using rule 62 (commentStmt -> COMMENT .)
-    IF              reduce using rule 62 (commentStmt -> COMMENT .)
-    FOR             reduce using rule 62 (commentStmt -> COMMENT .)
-    FILTER          reduce using rule 62 (commentStmt -> COMMENT .)
-    MAP             reduce using rule 62 (commentStmt -> COMMENT .)
-    REDUCE          reduce using rule 62 (commentStmt -> COMMENT .)
-    INPUT           reduce using rule 62 (commentStmt -> COMMENT .)
-    OUTPUT          reduce using rule 62 (commentStmt -> COMMENT .)
-    COMMENT         reduce using rule 62 (commentStmt -> COMMENT .)
-    NOT             reduce using rule 62 (commentStmt -> COMMENT .)
-    NUMBER          reduce using rule 62 (commentStmt -> COMMENT .)
-    $end            reduce using rule 62 (commentStmt -> COMMENT .)
-    ELSE            reduce using rule 62 (commentStmt -> COMMENT .)
+    ID              reduce using rule 63 (commentStmt -> COMMENT .)
+    IF              reduce using rule 63 (commentStmt -> COMMENT .)
+    FOR             reduce using rule 63 (commentStmt -> COMMENT .)
+    FILTER          reduce using rule 63 (commentStmt -> COMMENT .)
+    MAP             reduce using rule 63 (commentStmt -> COMMENT .)
+    REDUCE          reduce using rule 63 (commentStmt -> COMMENT .)
+    INPUT           reduce using rule 63 (commentStmt -> COMMENT .)
+    OUTPUT          reduce using rule 63 (commentStmt -> COMMENT .)
+    COMMENT         reduce using rule 63 (commentStmt -> COMMENT .)
+    NOT             reduce using rule 63 (commentStmt -> COMMENT .)
+    NUMBER          reduce using rule 63 (commentStmt -> COMMENT .)
+    $end            reduce using rule 63 (commentStmt -> COMMENT .)
+    ELSE            reduce using rule 63 (commentStmt -> COMMENT .)
 
 
 state 22
@@ -555,7 +556,6 @@ state 22
     SEMI            reduce using rule 34 (andExpression -> unaryRelExpression .)
     OR              reduce using rule 34 (andExpression -> unaryRelExpression .)
     COL             reduce using rule 34 (andExpression -> unaryRelExpression .)
-    RPAREN          reduce using rule 34 (andExpression -> unaryRelExpression .)
 
 
 state 23
@@ -590,7 +590,6 @@ state 24
     SEMI            reduce using rule 36 (unaryRelExpression -> relExpression .)
     OR              reduce using rule 36 (unaryRelExpression -> relExpression .)
     COL             reduce using rule 36 (unaryRelExpression -> relExpression .)
-    RPAREN          reduce using rule 36 (unaryRelExpression -> relExpression .)
 
 
 state 25
@@ -741,10 +740,10 @@ state 31
     (12) list -> . LSQUARE listElements RSQUARE
     (45) sumExpression -> . sumExpression sumop term
     (46) sumExpression -> . term
-    (60) inputStmt -> . INPUT LPAREN RPAREN
+    (61) inputStmt -> . INPUT LPAREN RPAREN
     (55) functionalStmt -> . FILTER LPAREN lambdaFilter RPAREN
-    (56) functionalStmt -> . MAP LPAREN lambdaStmt RPAREN
-    (57) functionalStmt -> . REDUCE LPAREN lambdaStmt RPAREN
+    (56) functionalStmt -> . MAP LPAREN lambdaMap RPAREN
+    (57) functionalStmt -> . REDUCE LPAREN lambdaReduce RPAREN
     (49) term -> . term mulop sumElement
     (50) term -> . sumElement
     (51) sumElement -> . ID
@@ -936,7 +935,7 @@ state 40
 state 41
 
     (55) functionalStmt -> FILTER LPAREN . lambdaFilter RPAREN
-    (59) lambdaFilter -> . LAMBDA COL expressionStmt
+    (60) lambdaFilter -> . LAMBDA COL relExpression
 
     LAMBDA          shift and go to state 73
 
@@ -944,32 +943,32 @@ state 41
 
 state 42
 
-    (56) functionalStmt -> MAP LPAREN . lambdaStmt RPAREN
-    (58) lambdaStmt -> . LAMBDA COL sumExpression
+    (56) functionalStmt -> MAP LPAREN . lambdaMap RPAREN
+    (58) lambdaMap -> . LAMBDA COL sumExpression
 
     LAMBDA          shift and go to state 75
 
-    lambdaStmt                     shift and go to state 74
+    lambdaMap                      shift and go to state 74
 
 state 43
 
-    (57) functionalStmt -> REDUCE LPAREN . lambdaStmt RPAREN
-    (58) lambdaStmt -> . LAMBDA COL sumExpression
+    (57) functionalStmt -> REDUCE LPAREN . lambdaReduce RPAREN
+    (59) lambdaReduce -> . LAMBDA COL relExpression
 
-    LAMBDA          shift and go to state 75
+    LAMBDA          shift and go to state 77
 
-    lambdaStmt                     shift and go to state 76
+    lambdaReduce                   shift and go to state 76
 
 state 44
 
-    (60) inputStmt -> INPUT LPAREN . RPAREN
+    (61) inputStmt -> INPUT LPAREN . RPAREN
 
-    RPAREN          shift and go to state 77
+    RPAREN          shift and go to state 78
 
 
 state 45
 
-    (61) outputStmt -> OUTPUT LPAREN . declarationElement RPAREN
+    (62) outputStmt -> OUTPUT LPAREN . declarationElement RPAREN
     (6) declarationElement -> . list
     (7) declarationElement -> . sumExpression
     (8) declarationElement -> . STRING
@@ -979,10 +978,10 @@ state 45
     (12) list -> . LSQUARE listElements RSQUARE
     (45) sumExpression -> . sumExpression sumop term
     (46) sumExpression -> . term
-    (60) inputStmt -> . INPUT LPAREN RPAREN
+    (61) inputStmt -> . INPUT LPAREN RPAREN
     (55) functionalStmt -> . FILTER LPAREN lambdaFilter RPAREN
-    (56) functionalStmt -> . MAP LPAREN lambdaStmt RPAREN
-    (57) functionalStmt -> . REDUCE LPAREN lambdaStmt RPAREN
+    (56) functionalStmt -> . MAP LPAREN lambdaMap RPAREN
+    (57) functionalStmt -> . REDUCE LPAREN lambdaReduce RPAREN
     (49) term -> . term mulop sumElement
     (50) term -> . sumElement
     (51) sumElement -> . ID
@@ -998,7 +997,7 @@ state 45
     ID              shift and go to state 39
     NUMBER          shift and go to state 28
 
-    declarationElement             shift and go to state 78
+    declarationElement             shift and go to state 79
     list                           shift and go to state 61
     sumExpression                  shift and go to state 62
     inputStmt                      shift and go to state 65
@@ -1014,7 +1013,6 @@ state 46
     SEMI            reduce using rule 35 (unaryRelExpression -> NOT unaryRelExpression .)
     OR              reduce using rule 35 (unaryRelExpression -> NOT unaryRelExpression .)
     COL             reduce using rule 35 (unaryRelExpression -> NOT unaryRelExpression .)
-    RPAREN          reduce using rule 35 (unaryRelExpression -> NOT unaryRelExpression .)
 
 
 state 47
@@ -1030,7 +1028,7 @@ state 47
     ID              shift and go to state 39
     NUMBER          shift and go to state 28
 
-    sumExpression                  shift and go to state 79
+    sumExpression                  shift and go to state 80
     term                           shift and go to state 26
     sumElement                     shift and go to state 27
 
@@ -1045,7 +1043,7 @@ state 48
     ID              shift and go to state 39
     NUMBER          shift and go to state 28
 
-    term                           shift and go to state 80
+    term                           shift and go to state 81
     sumElement                     shift and go to state 27
 
 state 49
@@ -1121,7 +1119,7 @@ state 57
     ID              shift and go to state 39
     NUMBER          shift and go to state 28
 
-    sumElement                     shift and go to state 81
+    sumElement                     shift and go to state 82
 
 state 58
 
@@ -1210,11 +1208,11 @@ state 67
     (17) listElements -> . BOOLEAN
     (18) listElements -> . BOOLEAN OP_BOOLEAN
 
-    NUMBER          shift and go to state 83
-    STRING          shift and go to state 84
-    BOOLEAN         shift and go to state 85
+    NUMBER          shift and go to state 84
+    STRING          shift and go to state 85
+    BOOLEAN         shift and go to state 86
 
-    listElements                   shift and go to state 82
+    listElements                   shift and go to state 83
 
 state 68
 
@@ -1224,7 +1222,6 @@ state 68
     SEMI            reduce using rule 31 (expressionStmt -> expressionStmt OR andExpression .)
     OR              reduce using rule 31 (expressionStmt -> expressionStmt OR andExpression .)
     COL             reduce using rule 31 (expressionStmt -> expressionStmt OR andExpression .)
-    RPAREN          reduce using rule 31 (expressionStmt -> expressionStmt OR andExpression .)
     AND             shift and go to state 37
 
 
@@ -1236,7 +1233,6 @@ state 69
     SEMI            reduce using rule 33 (andExpression -> andExpression AND unaryRelExpression .)
     OR              reduce using rule 33 (andExpression -> andExpression AND unaryRelExpression .)
     COL             reduce using rule 33 (andExpression -> andExpression AND unaryRelExpression .)
-    RPAREN          reduce using rule 33 (andExpression -> andExpression AND unaryRelExpression .)
 
 
 state 70
@@ -1261,11 +1257,11 @@ state 70
     (30) conditionalStmt -> . IF expressionStmt COL declarationList ELSE COL declarationList
     (26) iterationStmt -> . FOR ID IN iterationElement COL declarationList
     (55) functionalStmt -> . FILTER LPAREN lambdaFilter RPAREN
-    (56) functionalStmt -> . MAP LPAREN lambdaStmt RPAREN
-    (57) functionalStmt -> . REDUCE LPAREN lambdaStmt RPAREN
-    (60) inputStmt -> . INPUT LPAREN RPAREN
-    (61) outputStmt -> . OUTPUT LPAREN declarationElement RPAREN
-    (62) commentStmt -> . COMMENT
+    (56) functionalStmt -> . MAP LPAREN lambdaMap RPAREN
+    (57) functionalStmt -> . REDUCE LPAREN lambdaReduce RPAREN
+    (61) inputStmt -> . INPUT LPAREN RPAREN
+    (62) outputStmt -> . OUTPUT LPAREN declarationElement RPAREN
+    (63) commentStmt -> . COMMENT
     (33) andExpression -> . andExpression AND unaryRelExpression
     (34) andExpression -> . unaryRelExpression
     (35) unaryRelExpression -> . NOT unaryRelExpression
@@ -1292,7 +1288,7 @@ state 70
     NUMBER          shift and go to state 28
 
     expressionStmt                 shift and go to state 6
-    declarationList                shift and go to state 86
+    declarationList                shift and go to state 87
     declaration                    shift and go to state 2
     varDeclaration                 shift and go to state 3
     statement                      shift and go to state 4
@@ -1316,63 +1312,70 @@ state 71
     (28) iterationElement -> . ID
     (12) list -> . LSQUARE listElements RSQUARE
 
-    ID              shift and go to state 87
+    ID              shift and go to state 88
     LSQUARE         shift and go to state 67
 
-    iterationElement               shift and go to state 88
-    list                           shift and go to state 89
+    iterationElement               shift and go to state 89
+    list                           shift and go to state 90
 
 state 72
 
     (55) functionalStmt -> FILTER LPAREN lambdaFilter . RPAREN
 
-    RPAREN          shift and go to state 90
+    RPAREN          shift and go to state 91
 
 
 state 73
 
-    (59) lambdaFilter -> LAMBDA . COL expressionStmt
+    (60) lambdaFilter -> LAMBDA . COL relExpression
 
-    COL             shift and go to state 91
+    COL             shift and go to state 92
 
 
 state 74
 
-    (56) functionalStmt -> MAP LPAREN lambdaStmt . RPAREN
+    (56) functionalStmt -> MAP LPAREN lambdaMap . RPAREN
 
-    RPAREN          shift and go to state 92
+    RPAREN          shift and go to state 93
 
 
 state 75
 
-    (58) lambdaStmt -> LAMBDA . COL sumExpression
+    (58) lambdaMap -> LAMBDA . COL sumExpression
 
-    COL             shift and go to state 93
+    COL             shift and go to state 94
 
 
 state 76
 
-    (57) functionalStmt -> REDUCE LPAREN lambdaStmt . RPAREN
-
-    RPAREN          shift and go to state 94
-
-
-state 77
-
-    (60) inputStmt -> INPUT LPAREN RPAREN .
-
-    SEMI            reduce using rule 60 (inputStmt -> INPUT LPAREN RPAREN .)
-    RPAREN          reduce using rule 60 (inputStmt -> INPUT LPAREN RPAREN .)
-
-
-state 78
-
-    (61) outputStmt -> OUTPUT LPAREN declarationElement . RPAREN
+    (57) functionalStmt -> REDUCE LPAREN lambdaReduce . RPAREN
 
     RPAREN          shift and go to state 95
 
 
+state 77
+
+    (59) lambdaReduce -> LAMBDA . COL relExpression
+
+    COL             shift and go to state 96
+
+
+state 78
+
+    (61) inputStmt -> INPUT LPAREN RPAREN .
+
+    SEMI            reduce using rule 61 (inputStmt -> INPUT LPAREN RPAREN .)
+    RPAREN          reduce using rule 61 (inputStmt -> INPUT LPAREN RPAREN .)
+
+
 state 79
+
+    (62) outputStmt -> OUTPUT LPAREN declarationElement . RPAREN
+
+    RPAREN          shift and go to state 97
+
+
+state 80
 
     (37) relExpression -> sumExpression relop sumExpression .
     (45) sumExpression -> sumExpression . sumop term
@@ -1389,7 +1392,7 @@ state 79
 
     sumop                          shift and go to state 48
 
-state 80
+state 81
 
     (45) sumExpression -> sumExpression sumop term .
     (49) term -> term . mulop sumElement
@@ -1414,7 +1417,7 @@ state 80
 
     mulop                          shift and go to state 57
 
-state 81
+state 82
 
     (49) term -> term mulop sumElement .
 
@@ -1435,41 +1438,41 @@ state 81
     RPAREN          reduce using rule 49 (term -> term mulop sumElement .)
 
 
-state 82
+state 83
 
     (12) list -> LSQUARE listElements . RSQUARE
 
-    RSQUARE         shift and go to state 96
+    RSQUARE         shift and go to state 98
 
 
-state 83
+state 84
 
     (13) listElements -> NUMBER .
     (14) listElements -> NUMBER . OP_NUMBER
 
     RSQUARE         reduce using rule 13 (listElements -> NUMBER .)
-    OP_NUMBER       shift and go to state 97
+    OP_NUMBER       shift and go to state 99
 
 
-state 84
+state 85
 
     (15) listElements -> STRING .
     (16) listElements -> STRING . OP_STRING
 
     RSQUARE         reduce using rule 15 (listElements -> STRING .)
-    OP_STRING       shift and go to state 98
+    OP_STRING       shift and go to state 100
 
 
-state 85
+state 86
 
     (17) listElements -> BOOLEAN .
     (18) listElements -> BOOLEAN . OP_BOOLEAN
 
     RSQUARE         reduce using rule 17 (listElements -> BOOLEAN .)
-    OP_BOOLEAN      shift and go to state 99
+    OP_BOOLEAN      shift and go to state 101
 
 
-state 86
+state 87
 
     (29) conditionalStmt -> IF expressionStmt COL declarationList .
     (30) conditionalStmt -> IF expressionStmt COL declarationList . ELSE COL declarationList
@@ -1487,33 +1490,33 @@ state 86
     NOT             reduce using rule 29 (conditionalStmt -> IF expressionStmt COL declarationList .)
     NUMBER          reduce using rule 29 (conditionalStmt -> IF expressionStmt COL declarationList .)
     $end            reduce using rule 29 (conditionalStmt -> IF expressionStmt COL declarationList .)
-    ELSE            shift and go to state 100
+    ELSE            shift and go to state 102
 
   ! ELSE            [ reduce using rule 29 (conditionalStmt -> IF expressionStmt COL declarationList .) ]
 
 
-state 87
+state 88
 
     (28) iterationElement -> ID .
 
     COL             reduce using rule 28 (iterationElement -> ID .)
 
 
-state 88
+state 89
 
     (26) iterationStmt -> FOR ID IN iterationElement . COL declarationList
 
-    COL             shift and go to state 101
+    COL             shift and go to state 103
 
 
-state 89
+state 90
 
     (27) iterationElement -> list .
 
     COL             reduce using rule 27 (iterationElement -> list .)
 
 
-state 90
+state 91
 
     (55) functionalStmt -> FILTER LPAREN lambdaFilter RPAREN .
 
@@ -1521,15 +1524,9 @@ state 90
     RPAREN          reduce using rule 55 (functionalStmt -> FILTER LPAREN lambdaFilter RPAREN .)
 
 
-state 91
+state 92
 
-    (59) lambdaFilter -> LAMBDA COL . expressionStmt
-    (31) expressionStmt -> . expressionStmt OR andExpression
-    (32) expressionStmt -> . andExpression
-    (33) andExpression -> . andExpression AND unaryRelExpression
-    (34) andExpression -> . unaryRelExpression
-    (35) unaryRelExpression -> . NOT unaryRelExpression
-    (36) unaryRelExpression -> . relExpression
+    (60) lambdaFilter -> LAMBDA COL . relExpression
     (37) relExpression -> . sumExpression relop sumExpression
     (38) relExpression -> . sumExpression
     (45) sumExpression -> . sumExpression sumop term
@@ -1539,29 +1536,25 @@ state 91
     (51) sumElement -> . ID
     (52) sumElement -> . NUMBER
 
-    NOT             shift and go to state 23
     ID              shift and go to state 39
     NUMBER          shift and go to state 28
 
-    expressionStmt                 shift and go to state 102
-    andExpression                  shift and go to state 13
-    unaryRelExpression             shift and go to state 22
-    relExpression                  shift and go to state 24
+    relExpression                  shift and go to state 104
     sumExpression                  shift and go to state 25
     term                           shift and go to state 26
     sumElement                     shift and go to state 27
 
-state 92
-
-    (56) functionalStmt -> MAP LPAREN lambdaStmt RPAREN .
-
-    SEMI            reduce using rule 56 (functionalStmt -> MAP LPAREN lambdaStmt RPAREN .)
-    RPAREN          reduce using rule 56 (functionalStmt -> MAP LPAREN lambdaStmt RPAREN .)
-
-
 state 93
 
-    (58) lambdaStmt -> LAMBDA COL . sumExpression
+    (56) functionalStmt -> MAP LPAREN lambdaMap RPAREN .
+
+    SEMI            reduce using rule 56 (functionalStmt -> MAP LPAREN lambdaMap RPAREN .)
+    RPAREN          reduce using rule 56 (functionalStmt -> MAP LPAREN lambdaMap RPAREN .)
+
+
+state 94
+
+    (58) lambdaMap -> LAMBDA COL . sumExpression
     (45) sumExpression -> . sumExpression sumop term
     (46) sumExpression -> . term
     (49) term -> . term mulop sumElement
@@ -1572,26 +1565,46 @@ state 93
     ID              shift and go to state 39
     NUMBER          shift and go to state 28
 
-    sumExpression                  shift and go to state 103
+    sumExpression                  shift and go to state 105
     term                           shift and go to state 26
     sumElement                     shift and go to state 27
 
-state 94
-
-    (57) functionalStmt -> REDUCE LPAREN lambdaStmt RPAREN .
-
-    SEMI            reduce using rule 57 (functionalStmt -> REDUCE LPAREN lambdaStmt RPAREN .)
-    RPAREN          reduce using rule 57 (functionalStmt -> REDUCE LPAREN lambdaStmt RPAREN .)
-
-
 state 95
 
-    (61) outputStmt -> OUTPUT LPAREN declarationElement RPAREN .
+    (57) functionalStmt -> REDUCE LPAREN lambdaReduce RPAREN .
 
-    SEMI            reduce using rule 61 (outputStmt -> OUTPUT LPAREN declarationElement RPAREN .)
+    SEMI            reduce using rule 57 (functionalStmt -> REDUCE LPAREN lambdaReduce RPAREN .)
+    RPAREN          reduce using rule 57 (functionalStmt -> REDUCE LPAREN lambdaReduce RPAREN .)
 
 
 state 96
+
+    (59) lambdaReduce -> LAMBDA COL . relExpression
+    (37) relExpression -> . sumExpression relop sumExpression
+    (38) relExpression -> . sumExpression
+    (45) sumExpression -> . sumExpression sumop term
+    (46) sumExpression -> . term
+    (49) term -> . term mulop sumElement
+    (50) term -> . sumElement
+    (51) sumElement -> . ID
+    (52) sumElement -> . NUMBER
+
+    ID              shift and go to state 39
+    NUMBER          shift and go to state 28
+
+    relExpression                  shift and go to state 106
+    sumExpression                  shift and go to state 25
+    term                           shift and go to state 26
+    sumElement                     shift and go to state 27
+
+state 97
+
+    (62) outputStmt -> OUTPUT LPAREN declarationElement RPAREN .
+
+    SEMI            reduce using rule 62 (outputStmt -> OUTPUT LPAREN declarationElement RPAREN .)
+
+
+state 98
 
     (12) list -> LSQUARE listElements RSQUARE .
 
@@ -1600,35 +1613,35 @@ state 96
     COL             reduce using rule 12 (list -> LSQUARE listElements RSQUARE .)
 
 
-state 97
+state 99
 
     (14) listElements -> NUMBER OP_NUMBER .
 
     RSQUARE         reduce using rule 14 (listElements -> NUMBER OP_NUMBER .)
 
 
-state 98
+state 100
 
     (16) listElements -> STRING OP_STRING .
 
     RSQUARE         reduce using rule 16 (listElements -> STRING OP_STRING .)
 
 
-state 99
+state 101
 
     (18) listElements -> BOOLEAN OP_BOOLEAN .
 
     RSQUARE         reduce using rule 18 (listElements -> BOOLEAN OP_BOOLEAN .)
 
 
-state 100
+state 102
 
     (30) conditionalStmt -> IF expressionStmt COL declarationList ELSE . COL declarationList
 
-    COL             shift and go to state 104
+    COL             shift and go to state 107
 
 
-state 101
+state 103
 
     (26) iterationStmt -> FOR ID IN iterationElement COL . declarationList
     (1) declarationList -> . declaration declarationList
@@ -1649,11 +1662,11 @@ state 101
     (30) conditionalStmt -> . IF expressionStmt COL declarationList ELSE COL declarationList
     (26) iterationStmt -> . FOR ID IN iterationElement COL declarationList
     (55) functionalStmt -> . FILTER LPAREN lambdaFilter RPAREN
-    (56) functionalStmt -> . MAP LPAREN lambdaStmt RPAREN
-    (57) functionalStmt -> . REDUCE LPAREN lambdaStmt RPAREN
-    (60) inputStmt -> . INPUT LPAREN RPAREN
-    (61) outputStmt -> . OUTPUT LPAREN declarationElement RPAREN
-    (62) commentStmt -> . COMMENT
+    (56) functionalStmt -> . MAP LPAREN lambdaMap RPAREN
+    (57) functionalStmt -> . REDUCE LPAREN lambdaReduce RPAREN
+    (61) inputStmt -> . INPUT LPAREN RPAREN
+    (62) outputStmt -> . OUTPUT LPAREN declarationElement RPAREN
+    (63) commentStmt -> . COMMENT
     (33) andExpression -> . andExpression AND unaryRelExpression
     (34) andExpression -> . unaryRelExpression
     (35) unaryRelExpression -> . NOT unaryRelExpression
@@ -1679,7 +1692,7 @@ state 101
     NOT             shift and go to state 23
     NUMBER          shift and go to state 28
 
-    declarationList                shift and go to state 105
+    declarationList                shift and go to state 108
     declaration                    shift and go to state 2
     varDeclaration                 shift and go to state 3
     statement                      shift and go to state 4
@@ -1697,29 +1710,34 @@ state 101
     term                           shift and go to state 26
     sumElement                     shift and go to state 27
 
-state 102
+state 104
 
-    (59) lambdaFilter -> LAMBDA COL expressionStmt .
-    (31) expressionStmt -> expressionStmt . OR andExpression
+    (60) lambdaFilter -> LAMBDA COL relExpression .
 
-    RPAREN          reduce using rule 59 (lambdaFilter -> LAMBDA COL expressionStmt .)
-    OR              shift and go to state 33
+    RPAREN          reduce using rule 60 (lambdaFilter -> LAMBDA COL relExpression .)
 
 
-state 103
+state 105
 
-    (58) lambdaStmt -> LAMBDA COL sumExpression .
+    (58) lambdaMap -> LAMBDA COL sumExpression .
     (45) sumExpression -> sumExpression . sumop term
     (47) sumop -> . PLUS
     (48) sumop -> . MINUS
 
-    RPAREN          reduce using rule 58 (lambdaStmt -> LAMBDA COL sumExpression .)
+    RPAREN          reduce using rule 58 (lambdaMap -> LAMBDA COL sumExpression .)
     PLUS            shift and go to state 55
     MINUS           shift and go to state 56
 
     sumop                          shift and go to state 48
 
-state 104
+state 106
+
+    (59) lambdaReduce -> LAMBDA COL relExpression .
+
+    RPAREN          reduce using rule 59 (lambdaReduce -> LAMBDA COL relExpression .)
+
+
+state 107
 
     (30) conditionalStmt -> IF expressionStmt COL declarationList ELSE COL . declarationList
     (1) declarationList -> . declaration declarationList
@@ -1740,11 +1758,11 @@ state 104
     (30) conditionalStmt -> . IF expressionStmt COL declarationList ELSE COL declarationList
     (26) iterationStmt -> . FOR ID IN iterationElement COL declarationList
     (55) functionalStmt -> . FILTER LPAREN lambdaFilter RPAREN
-    (56) functionalStmt -> . MAP LPAREN lambdaStmt RPAREN
-    (57) functionalStmt -> . REDUCE LPAREN lambdaStmt RPAREN
-    (60) inputStmt -> . INPUT LPAREN RPAREN
-    (61) outputStmt -> . OUTPUT LPAREN declarationElement RPAREN
-    (62) commentStmt -> . COMMENT
+    (56) functionalStmt -> . MAP LPAREN lambdaMap RPAREN
+    (57) functionalStmt -> . REDUCE LPAREN lambdaReduce RPAREN
+    (61) inputStmt -> . INPUT LPAREN RPAREN
+    (62) outputStmt -> . OUTPUT LPAREN declarationElement RPAREN
+    (63) commentStmt -> . COMMENT
     (33) andExpression -> . andExpression AND unaryRelExpression
     (34) andExpression -> . unaryRelExpression
     (35) unaryRelExpression -> . NOT unaryRelExpression
@@ -1771,7 +1789,7 @@ state 104
     NUMBER          shift and go to state 28
 
     expressionStmt                 shift and go to state 6
-    declarationList                shift and go to state 106
+    declarationList                shift and go to state 109
     declaration                    shift and go to state 2
     varDeclaration                 shift and go to state 3
     statement                      shift and go to state 4
@@ -1788,7 +1806,7 @@ state 104
     term                           shift and go to state 26
     sumElement                     shift and go to state 27
 
-state 105
+state 108
 
     (26) iterationStmt -> FOR ID IN iterationElement COL declarationList .
 
@@ -1807,7 +1825,7 @@ state 105
     ELSE            reduce using rule 26 (iterationStmt -> FOR ID IN iterationElement COL declarationList .)
 
 
-state 106
+state 109
 
     (30) conditionalStmt -> IF expressionStmt COL declarationList ELSE COL declarationList .
 
@@ -1839,4 +1857,4 @@ WARNING: shift/reduce conflict for OUTPUT in state 2 resolved as shift
 WARNING: shift/reduce conflict for COMMENT in state 2 resolved as shift
 WARNING: shift/reduce conflict for NOT in state 2 resolved as shift
 WARNING: shift/reduce conflict for NUMBER in state 2 resolved as shift
-WARNING: shift/reduce conflict for ELSE in state 86 resolved as shift
+WARNING: shift/reduce conflict for ELSE in state 87 resolved as shift
