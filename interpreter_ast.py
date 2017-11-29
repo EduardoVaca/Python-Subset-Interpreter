@@ -1,3 +1,5 @@
+import functools
+
 class SymbolTable(object):
     """Structure for storing symbols.
     { 'ID-Scope': (Type, Value, Scope)}
@@ -234,6 +236,24 @@ class Print(Node):
 
     def execute(self):
         print(self.item.execute())
+
+class LambdaReduce(Node):
+
+    def __init__(self, id_name, scope):
+        self.type = 'LAMBDA_REDUCE'
+        self.id_name = id_name
+        self.scope = scope
+
+    def execute(self):
+        current_id = symbol_table.get_element(self.id_name, self.scope)
+        if current_id:
+            if p[3] == '+': return functools.reduce(lambda x,y: x+y, current_id[1])
+            if p[3] == '-': return functools.reduce(lambda x,y: x-y, current_id[1])
+            if p[3] == '/': return functools.reduce(lambda x,y: x/y, current_id[1])
+            if p[3] == '*': return functools.reduce(lambda x,y: x*y, current_id[1])
+        else:
+            print("Undefined name {}".format(self.name))
+            p[0] = 0
 
 symbol_table.add_symbol('x', '', 10, 0)
 n = Number(12)
