@@ -173,7 +173,7 @@ def p_varDeclaration(p):
 # 4
 def p_declarationElement(p):
     '''declarationElement   : list
-                            | sumExpression
+                            | expressionStmt
                             | STRING                        
                             | BOOLEAN
                             | inputStmt
