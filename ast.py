@@ -68,10 +68,27 @@ class ID(Node):
             return value[1]
         else:
             print("Undefined name {}".format(p[1]))
-            return 0 # Maybe None    
+            return 0 # Maybe None
+
+class BinaryOp(Node):
+
+    def __init__(self, left, op, right):
+        self.left = left
+        self.right = right
+        self.op = op
+        self.type = 'BINARY_OP'
+
+    def execute(self):
+        if self.op == '+': return self.left.execute() + self.right.execute()
+        if self.op == '-': return self.left.execute() - self.right.execute()
+        if self.op == '*': return self.left.execute() * self.right.execute()
+        if self.op == '/': return self.left.execute() / self.right.execute()
+        else: return 0
 
 symbol_table.add_symbol('x', '', 10, 0)
 n = Number(12)
 print(n.execute())
 i = ID('x', 0)
 print(i.execute())
+bop = BinaryOp(i, '+', n)
+print(bop.execute())
