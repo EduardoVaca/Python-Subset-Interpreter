@@ -63,7 +63,7 @@ tokens = [
     'COMMENT', 'STRING', 'OP_STRING', 'OP_NUMBER', 'BOOLEAN', 'OP_BOOLEAN',
     'EQ', 'NEQ', 'GT', 'GE', 'LT', 'LE',
     'PLUS', 'MINUS', 'PROD', 'DIV', 'EQUALS',
-    'LPAREN', 'RPAREN', 'LSQUARE', 'RSQUARE', 'COMA',
+    'LPAREN', 'RPAREN', 'LSQUARE', 'RSQUARE',
     'ID', 'NUMBER', 'COL', 'SEMI',
 ] + list(reserved_words.values())
 
@@ -86,7 +86,6 @@ t_LPAREN    = r'\('
 t_RPAREN    = r'\)'
 t_LSQUARE   = r'\['
 t_RSQUARE   = r'\]'
-t_COMA      = r','
 t_SEMI      = r';'
 
 # More complex tokens are defined with functions.

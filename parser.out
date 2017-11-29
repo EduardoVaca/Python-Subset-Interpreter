@@ -1,9 +1,5 @@
 Created by PLY version 3.10 (http://www.dabeaz.com/ply)
 
-Unused terminals:
-
-    COMA
-
 Grammar
 
 Rule 0     S' -> declarationList
@@ -75,7 +71,6 @@ Terminals, with rules where they appear
 AND                  : 33
 BOOLEAN              : 9 17 18
 COL                  : 26 29 30 30 58 59
-COMA                 : 
 COMMENT              : 62
 DIV                  : 54
 ELSE                 : 30
