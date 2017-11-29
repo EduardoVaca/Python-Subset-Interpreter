@@ -149,7 +149,10 @@ def p_declarationElement(p):
                             | BOOLEAN
                             | inputStmt
                             | functionalStmt'''
-    p[0] = p[1]
+    if p[1][0] == '\'':
+        p[0] = in_ast.String(p[1])
+    else:
+        p[0] = p[1]
 
 # 5
 def p_list(p):
