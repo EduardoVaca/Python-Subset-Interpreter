@@ -260,6 +260,18 @@ class LambdaReduce(Node):
             print("Undefined name {}".format(self.id_name))
             return 0
 
+class DeclarationList(Node):
+
+    def __init__(self, declaration, declaration_list=None):
+        self.type = 'DECLARATION_LIST'
+        self.declaration = declaration
+        self.declaration_list = declaration_list
+
+    def execute(self):
+        self.declaration.execute()
+        if self.declaration_list:
+            self.declaration_list.execute()
+
 symbol_table.add_symbol('x', '', 10, 0)
 n = Number(12)
 print(n.execute())
