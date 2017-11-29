@@ -37,6 +37,10 @@ class SymbolTable(object):
             current_symbol = symbol
         self.table[id_name+'-'+str(scope)] = (symbol_type, current_symbol, scope)
 
+    def get_element(self, symbol, scope):
+        return self.table.get(symbol+'-'+str(scope), None)
+
+
 # Dictionary for reserverd words. { reserved_word : token }
 reserved_words = {
     'if': 'IF',
@@ -169,8 +173,7 @@ def p_declaration(t):
 # 3
 def p_varDeclaration(p):
     'varDeclaration   : ID EQUALS declarationElement'
-    lexer.input(p[3])
-    symbol_table.add_symbol(p[1], lexer.token().type, p[3], current_scope)
+    symbol_table.add_symbol(p[1], '', p[3], current_scope)
 
 # 4
 def p_declarationElement(p):
@@ -253,63 +256,81 @@ def p_andExpression(t):
 def p_unaryRelExpression(t):
     '''unaryRelExpression   : NOT unaryRelExpression
                             | relExpression'''
-    pass
+    if len(p) > 2:
+        p[0] = not p[2]
+    else:
+        p[0] = p[1]
 
 # 14
-def p_relExpression(t):
+def p_relExpression(p):
     '''relExpression    : sumExpression relop sumExpression
                         | sumExpression'''
-    pass
+    if len(p) > 2:
+        if p[2] == '<': p[0] = p[1] < p[3]
+        if p[2] == '<=': p[0] = p[1] <= p[3]
+        if p[2] == '>': p[0] = p[1] > p[3]
+        if p[2] == '>=': p[0] = p[1] >= p[3]
+        if p[2] == '==': p[0] = p[1] == p[3]
+        if p[2] == '!=': p[0] = p[1] != p[3]
+    else:
+        p[0] = p[1]
 
 # 15
-def p_relop(t):
+def p_relop(p):
     '''relop    : LE
                 | LT
                 | GT
                 | GE
                 | EQ
                 | NEQ'''
-    pass
+    p[0] = p[1]
 
 # 16
-def p_sumExpression(t):
+def p_sumExpression(p):
     '''sumExpression    : sumExpression sumop term
                         | term'''
-    pass
+    if len(p) > 2:
+        if p[2] == '+': p[0] = p[1] + p[3]
+        if p[2] == '-': p[0] = p[1] - p[3]
+    else:
+        p[0] = p[1]
 
 # 17
-def p_sumop(t):
+def p_sumop(p):
     '''sumop    : PLUS
                 | MINUS'''
-    pass
+    p[0] = p[1]
 
 # 18
-def p_term(t):
+def p_term(p):
     '''term : term mulop sumElement
             | sumElement'''
-    pass
+    if len(p) > 2:
+        if p[2] == '*': p[0] = p[1] * p[3]
+        if p[2] == '/': p[0] = p[1] / p[3]
+    else:
+        p[0] = p[1]
 
 # 19
 def p_sumElement(p):
     '''sumElement   : ID
-                    | NUMBER'''
-    lexer.input(str(p[1]))
-    if lexer.token().type == 'ID':
-        try:
-            symbol = symbol_table[p[1]+'-'+str(current_scope)]
-            p[0] = symbol[1]
-        except LookupError:
+                    | NUMBER'''    
+    if not str(p[1])[0].isdigit():
+        value = symbol_table.get_element(p[1], current_scope)
+        if value:
+            p[0] = value[1]
+        else:
             print("Undefined name {}".format(p[1]))
-            p[0] = 0
+            p[0] = 0        
     else:
         print('RETURNING {}'.format(p[1]))
         p[0] = p[1]
 
 # 20
-def p_mulop(t):
+def p_mulop(p):
     '''mulop    : PROD
                 | DIV'''
-    pass
+    p[0] = p[1]
 
 # 21
 def p_functionalStmt(t):
