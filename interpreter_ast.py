@@ -151,7 +151,11 @@ class ListBinaryOp(Node):
         right_exec = self.right.execute()
         temp_list = left_exec if isinstance(left_exec, list) else right_exec
         temp_value = left_exec if not isinstance(left_exec, list) else right_exec
-        return [x+temp_value if self.op == '+' else x-temp_value for x in temp_list]
+        if self.op == '+': return [x+temp_value for x in temp_list]
+        if self.op == '-': return [x-temp_value for x in temp_list]
+        if self.op == '*': return [x*temp_value for x in temp_list]
+        if self.op == '/': return [x/temp_value for x in temp_list]
+        else: return 0
 
 class RelExpression(Node):
 
