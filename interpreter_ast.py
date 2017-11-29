@@ -55,6 +55,24 @@ class Number(Node):
     def execute(self):
         return self.value
 
+class Boolean(Node):
+    
+    def __init__(self, value):
+        self.type = 'BOOLEAN'
+        self.value = value
+
+    def execute(self):
+        return True if self.value == 'true' else False
+
+class String(Node):
+    
+    def __init__(self, value):
+        self.type = 'STRING'
+        self.value = value
+
+    def execute(self):
+        return self.value
+
 class ID(Node):
 
     def __init__(self, name, scope):
@@ -160,6 +178,35 @@ class ListRelExpression(Node):
         if self.op == '!=': return [x for x in temp_list if x != temp_value]
         else: return 0
 
+class UnaryRelExpression(Node):
+
+    def __init__(self, item):
+        self.type = 'UNARY_REL_EXPR'
+        self.item = item
+
+    def execute(self):
+        return not self.item.execute()
+
+class AndRelExpression(Node):
+
+    def __init__(self, left, right):
+        self.type = 'AND_REL_EXPR'
+        self.left = left
+        self.right = right
+
+    def execute(self):
+        return self.left.execute() and self.right.execute()
+
+class OrRelExpression(Node):
+
+    def __init__(self, left, right):
+        self.type = 'OR_REL_EXPR'
+        self.left = left
+        self.right = right
+
+    def execute(self):
+        return self.left.execute() or self.right.execute()
+
 
 symbol_table.add_symbol('x', '', 10, 0)
 n = Number(12)
@@ -173,3 +220,7 @@ l = List(1)
 print(l.execute())
 lbop = ListRelExpression(n, '>', l)
 print(lbop.execute())
+
+t = Boolean('true')
+print(t.execute())
+print(AndRelExpression(t, t).execute())
