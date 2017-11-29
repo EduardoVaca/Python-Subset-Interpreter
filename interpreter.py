@@ -211,7 +211,7 @@ def p_listElements(p):
             p[0] = [p[1]] + [x for x in elements]
 
 # 7
-def p_statement(t):
+def p_statement(p):
     '''statement    : expressionStmt SEMI
                     | conditionalStmt
                     | iterationStmt
@@ -219,7 +219,7 @@ def p_statement(t):
                     | inputStmt SEMI
                     | outputStmt SEMI
                     | commentStmt'''
-    pass
+    p[0] = p[1]
 
 # 8
 def p_iterationStmt(t):
@@ -239,25 +239,22 @@ def p_conditionalStmt(t):
     pass
 
 # 11
-def p_expressionStmt(t):
+def p_expressionStmt(p):
     '''expressionStmt   : expressionStmt OR andExpression
                         | andExpression'''
-    pass
+    p[0] = p[1] or p[3] if len(p) > 2 else p[1]
 
 # 12
-def p_andExpression(t):
+def p_andExpression(p):
     '''andExpression    : andExpression AND unaryRelExpression
                         | unaryRelExpression'''
-    pass
+    p[0] = p[1] and p[3] if len(p) > 2 else p[1]
 
 # 13
-def p_unaryRelExpression(t):
+def p_unaryRelExpression(p):
     '''unaryRelExpression   : NOT unaryRelExpression
                             | relExpression'''
-    if len(p) > 2:
-        p[0] = not p[2]
-    else:
-        p[0] = p[1]
+    p[0] = not p[2] if len(p) > 2 else p[1]
 
 # 14
 def p_relExpression(p):
@@ -347,19 +344,19 @@ def p_lambdaElement(t):
     pass
 
 # 23
-def p_lambdaFilter(t):
+def p_lambdaFilter(p):
     'lambdaFilter : LAMBDA lambdaElement COL expressionStmt COMA iterationElement'
     pass
 
 # 24
-def p_inputStmt(t):
+def p_inputStmt(p):
     'inputStmt  : INPUT LPAREN RPAREN'
     pass
 
 # 25
-def p_outputStmt(t):
+def p_outputStmt(p):
     'outputStmt : OUTPUT LPAREN declarationElement RPAREN'
-    pass
+    print(p[3])
 
 def p_commentStmt(t):
     'commentStmt    : COMMENT'
