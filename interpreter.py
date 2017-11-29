@@ -5,49 +5,7 @@
 # -------------------------------------
 import ply.lex as lex
 import ply.yacc as yacc
-import functools
-
-class SymbolTable(object):
-    """Structure for storing symbols.
-    { 'ID-Scope': (Type, Value, Scope)}
-    """
-
-    def __init__(self):
-        self.table = {}
-    
-    def __str__(self):
-        return str(self.table)
-
-    def add_symbol(self, id_name, symbol_type, symbol, scope):
-        """Adds a symbol to the table
-        PARAMS:
-        - id_name : Name of ID
-        - symbol_type : Type of the symbol
-        - symbol : Symbol to be stored
-        - scope : Current scope
-        """
-        current_symbol = 0
-        if symbol_type == 'STRING':
-            current_symbol = symbol[1:-1]
-        elif symbol_type == 'BOOLEAN':
-            current_symbol = True if symbol == 'true' else False
-        elif symbol_type == 'NUMBER':
-            current_symbol = symbol
-        else:
-            #TODO: Missing lists!
-            current_symbol = symbol
-        self.table[id_name+'-'+str(scope)] = (symbol_type, current_symbol, scope)
-
-    def get_element(self, symbol, scope):
-        """Gets and element from symbol table
-        PARAMS:
-        - symbol : name of symbol to be fetched
-        - scope : scope of symbol
-        RETURNS:
-        - value if symbol found, None if not
-        """
-        return self.table.get(symbol+'-'+str(scope), None)
-
+import interpreter_ast as in_ast
 
 # Dictionary for reserverd words. { reserved_word : token }
 reserved_words = {
@@ -166,18 +124,22 @@ symbol_table = SymbolTable()
 def p_declarationList(p):
     '''declarationList  : declaration declarationList
                         | declaration'''
-    pass
+    if len(p) > 2:
+        p[0] = in_ast.DeclarationList(p[1], p[2])
+    else:
+        p[0] = in_ast.DeclarationList(p[1])
+    p[0].execute()
 
 # 2
 def p_declaration(p):
     '''declaration  : varDeclaration SEMI
                     | statement'''
-    pass
+    p[0] = p[1]
 
 # 3
 def p_varDeclaration(p):
     'varDeclaration   : ID EQUALS declarationElement'
-    symbol_table.add_symbol(p[1], '', p[3], current_scope)
+    p[0] = in_ast.Declaration(p[1], p[3], current_scope)
 
 # 4
 def p_declarationElement(p):
@@ -203,18 +165,9 @@ def p_listElements(p):
                     | BOOLEAN
                     | BOOLEAN OP_BOOLEAN'''
     if len(p) == 2:
-        if p[1] == 'true' or p[1] == 'false':
-            p[0] = [True if p[1] == 'true' else False]
-        else:
-            p[0] = [p[1]]
+        p[0] = in_ast.List(p[1])
     else:
-        elements = p[2].split(',')[1:]
-        if p[1] == 'true' or p[1] == 'false':
-            p[0] = [True if p[1] == 'true' else False] + [True if x == 'true' else False for x in elements]
-        elif isinstance(p[1], int):
-            p[0] = [p[1]] + [int(x) for x in elements]
-        else:
-            p[0] = [p[1]] + [x for x in elements]
+        p[0] = in_ast.List(p[1], p[2])
 
 # 7
 def p_statement(p):
@@ -248,19 +201,19 @@ def p_conditionalStmt(p):
 def p_expressionStmt(p):
     '''expressionStmt   : expressionStmt OR andExpression
                         | andExpression'''
-    p[0] = p[1] or p[3] if len(p) > 2 else p[1]
+    p[0] = in_ast.OrRelExpression(p[1], p[2]) if len(p) > 2 else p[1]
 
 # 12
 def p_andExpression(p):
     '''andExpression    : andExpression AND unaryRelExpression
                         | unaryRelExpression'''
-    p[0] = p[1] and p[3] if len(p) > 2 else p[1]
+    p[0] = in_ast.AndRelExpression(p[1], p[2]) if len(p) > 2 else p[1]
 
 # 13
 def p_unaryRelExpression(p):
     '''unaryRelExpression   : NOT unaryRelExpression
                             | relExpression'''
-    p[0] = not p[2] if len(p) > 2 else p[1]
+    p[0] = in_ast.UnaryRelExpression(p[2]) if len(p) > 2 else p[1]
 
 # 14
 def p_relExpression(p):
@@ -268,21 +221,9 @@ def p_relExpression(p):
                         | sumExpression'''
     if len(p) > 2:
         if (isinstance(p[1], list) and not isinstance(p[3], list)) or (not isinstance(p[1], list) and isinstance(p[3], list)):
-            temp_list = p[1] if isinstance(p[1], list) else p[3]
-            temp_value = p[1] if not isinstance(p[1], list) else p[3]
-            if p[2] == '<': p[0] = [x for x in temp_list if x < temp_value]
-            if p[2] == '<=': p[0] = [x for x in temp_list if x <= temp_value]
-            if p[2] == '>': p[0] = [x for x in temp_list if x > temp_value]
-            if p[2] == '<=': p[0] = [x for x in temp_list if x <= temp_value]
-            if p[2] == '==': p[0] = [x for x in temp_list if x == temp_value]
-            if p[2] == '!=': p[0] = [x for x in temp_list if x != temp_value]
+            p[0] = in_ast.ListRelExpression(p[1], p[2], p[3])
         else:
-            if p[2] == '<': p[0] = p[1] < p[3]
-            if p[2] == '<=': p[0] = p[1] <= p[3]
-            if p[2] == '>': p[0] = p[1] > p[3]
-            if p[2] == '>=': p[0] = p[1] >= p[3]
-            if p[2] == '==': p[0] = p[1] == p[3]
-            if p[2] == '!=': p[0] = p[1] != p[3]
+            p[0] = in_ast.RelExpression(p[1], p[2], p[3])
     else:
         p[0] = p[1]
 
@@ -302,12 +243,9 @@ def p_sumExpression(p):
                         | term'''
     if len(p) > 2:
         if (isinstance(p[1], list) and not isinstance(p[3], list)) or (not isinstance(p[1], list) and isinstance(p[3], list)):
-            temp_list = p[1] if isinstance(p[1], list) else p[3]
-            temp_value = p[1] if not isinstance(p[1], list) else p[3]
-            p[0] = [x+temp_value if p[2] == '+' else x-temp_value for x in temp_list]
+            p[0] = in_ast.ListBinaryOp(p[1], p[2], p[3])
         else:
-            if p[2] == '+': p[0] = p[1] + p[3]
-            if p[2] == '-': p[0] = p[1] - p[3]
+            p[0] = in_ast.BinaryOp(p[1], p[2], p[3])
     else:
         p[0] = p[1]
 
@@ -323,12 +261,9 @@ def p_term(p):
             | sumElement'''
     if len(p) > 2:
         if (isinstance(p[1], list) and not isinstance(p[3], list)) or (not isinstance(p[1], list) and isinstance(p[3], list)):
-            temp_list = p[1] if isinstance(p[1], list) else p[3]
-            temp_value = p[1] if not isinstance(p[1], list) else p[3]
-            p[0] = [x*temp_value if p[2] == '*' else x/temp_value for x in temp_list]
+            p[0] = in_ast.ListBinaryOp(p[1], p[2], p[3])           
         else:
-            if p[2] == '*': p[0] = p[1] * p[3]
-            if p[2] == '/': p[0] = p[1] / p[3]
+            p[0] = in_ast.BinaryOp(p[1], p[2], p[3])
     else:
         p[0] = p[1]
 
@@ -337,14 +272,9 @@ def p_sumElement(p):
     '''sumElement   : ID
                     | NUMBER'''    
     if not str(p[1]).isdigit():
-        value = symbol_table.get_element(p[1], current_scope)
-        if value:
-            p[0] = value[1]
-        else:
-            print("Undefined name {}".format(p[1]))
-            p[0] = 0        
+        p[0] = in_ast.ID(p[1], current_scope)
     else:        
-        p[0] = p[1]
+        p[0] = in_ast.Number(p[1])
 
 # 20
 def p_mulop(p):
@@ -368,15 +298,7 @@ def p_lambdaMap(p):
 def p_lambdaReduce(p):
     '''lambdaReduce : LAMBDA COL mulop COMA ID
                     | LAMBDA COL sumop COMA ID'''
-    current_id = symbol_table.get_element(p[5], current_scope)
-    if current_id:
-        if p[3] == '+': p[0] = functools.reduce(lambda x,y: x+y, current_id[1])
-        if p[3] == '-': p[0] = functools.reduce(lambda x,y: x-y, current_id[1])
-        if p[3] == '/': p[0] = functools.reduce(lambda x,y: x/y, current_id[1])
-        if p[3] == '*': p[0] = functools.reduce(lambda x,y: x*y, current_id[1])
-    else:
-        print("Undefined name {}".format(p[5]))
-        p[0] = 0
+    p[0] = in_ast.LambdaReduce(p[5], p[3], current_scope)    
 
 # 24
 def p_lambdaFilter(p):
@@ -386,12 +308,12 @@ def p_lambdaFilter(p):
 # 25
 def p_inputStmt(p):
     'inputStmt  : INPUT LPAREN RPAREN'
-    p[0] = input()
+    p[0] = in_ast.Input()
 
 # 26
 def p_outputStmt(p):
     'outputStmt : OUTPUT LPAREN declarationElement RPAREN'
-    print(p[3])
+    p[0] = in_ast.Print(p[3])
 
 def p_commentStmt(t):
     'commentStmt    : COMMENT'
