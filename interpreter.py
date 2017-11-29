@@ -196,18 +196,16 @@ def p_listElements(p):
                     | STRING OP_STRING
                     | BOOLEAN
                     | BOOLEAN OP_BOOLEAN'''
-    lexer.input(str(p[1]))
-    current_type = lexer.token().type
     if len(p) == 2:
-        if current_type == 'BOOLEAN':
+        if p[1] == 'true' or p[1] == 'false':
             p[0] = [True if p[1] == 'true' else False]
         else:
             p[0] = [p[1]]
     else:
         elements = p[2].split(',')[1:]
-        if current_type == 'BOOLEAN':
+        if p[1] == 'true' or p[1] == 'false':
             p[0] = [True if p[1] == 'true' else False] + [True if x == 'true' else False for x in elements]
-        elif current_type == 'NUMBER':
+        elif isinstance(p[1], int):
             p[0] = [p[1]] + [int(x) for x in elements]
         else:
             p[0] = [p[1]] + [x for x in elements]
@@ -322,8 +320,7 @@ def p_sumElement(p):
         else:
             print("Undefined name {}".format(p[1]))
             p[0] = 0        
-    else:
-        print('RETURNING {}'.format(p[1]))
+    else:        
         p[0] = p[1]
 
 # 20
