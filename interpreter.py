@@ -39,6 +39,13 @@ class SymbolTable(object):
         self.table[id_name+'-'+str(scope)] = (symbol_type, current_symbol, scope)
 
     def get_element(self, symbol, scope):
+        """Gets and element from symbol table
+        PARAMS:
+        - symbol : name of symbol to be fetched
+        - scope : scope of symbol
+        RETURNS:
+        - value if symbol found, None if not
+        """
         return self.table.get(symbol+'-'+str(scope), None)
 
 
