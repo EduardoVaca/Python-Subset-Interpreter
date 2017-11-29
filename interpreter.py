@@ -120,6 +120,10 @@ symbol_table = in_ast.symbol_table
 
 # Parser rules
 
+def p_line(p):
+    'executionLine : declarationList'
+    p[1].execute()
+
 # 1
 def p_declarationList(p):
     '''declarationList  : declaration declarationList
