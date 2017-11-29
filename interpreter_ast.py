@@ -239,21 +239,22 @@ class Print(Node):
 
 class LambdaReduce(Node):
 
-    def __init__(self, id_name, scope):
+    def __init__(self, id_name, op, scope):
         self.type = 'LAMBDA_REDUCE'
         self.id_name = id_name
         self.scope = scope
+        self.op = op
 
     def execute(self):
         current_id = symbol_table.get_element(self.id_name, self.scope)
         if current_id:
-            if p[3] == '+': return functools.reduce(lambda x,y: x+y, current_id[1])
-            if p[3] == '-': return functools.reduce(lambda x,y: x-y, current_id[1])
-            if p[3] == '/': return functools.reduce(lambda x,y: x/y, current_id[1])
-            if p[3] == '*': return functools.reduce(lambda x,y: x*y, current_id[1])
+            if self.op == '+': return functools.reduce(lambda x,y: x+y, current_id[1])
+            if self.op == '-': return functools.reduce(lambda x,y: x-y, current_id[1])
+            if self.op == '/': return functools.reduce(lambda x,y: x/y, current_id[1])
+            if self.op == '*': return functools.reduce(lambda x,y: x*y, current_id[1])
         else:
-            print("Undefined name {}".format(self.name))
-            p[0] = 0
+            print("Undefined name {}".format(self.id_name))
+            return 0
 
 symbol_table.add_symbol('x', '', 10, 0)
 n = Number(12)
