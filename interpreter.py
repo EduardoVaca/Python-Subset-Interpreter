@@ -181,7 +181,8 @@ def p_declarationElement(p):
                             | sumExpression
                             | STRING                        
                             | BOOLEAN
-                            | inputStmt'''
+                            | inputStmt
+                            | functionalStmt'''
     p[0] = p[1]
 
 # 5
@@ -231,7 +232,7 @@ def p_iterationStmt(p):
 def p_iterationElement(p):
     '''iterationElement : list
                         | ID'''
-    pass
+    p[0] = p[1]
 
 # 10
 def p_conditionalStmt(p):
@@ -286,8 +287,13 @@ def p_sumExpression(p):
     '''sumExpression    : sumExpression sumop term
                         | term'''
     if len(p) > 2:
-        if p[2] == '+': p[0] = p[1] + p[3]
-        if p[2] == '-': p[0] = p[1] - p[3]
+        if (isinstance(p[1], list) and not isinstance(p[3], list)) or (not isinstance(p[1], list) and isinstance(p[3], list)):
+            temp_list = p[1] if isinstance(p[1], list) else p[3]
+            temp_value = p[1] if not isinstance(p[1], list) else p[3]
+            p[0] = [x+temp_value if p[2] == '+' else x-temp_value for x in temp_list]
+        else:
+            if p[2] == '+': p[0] = p[1] + p[3]
+            if p[2] == '-': p[0] = p[1] - p[3]
     else:
         p[0] = p[1]
 
@@ -332,17 +338,21 @@ def p_functionalStmt(p):
     '''functionalStmt   : FILTER LPAREN lambdaFilter RPAREN
                         | MAP LPAREN lambdaStmt RPAREN
                         | REDUCE LPAREN lambdaStmt RPAREN'''
-    pass
+    p[0] = p[3]
 
 # 22
 def p_lambdaStmt(p):
     '''lambdaStmt   : LAMBDA lambdaElement COL sumExpression COMA iterationElement'''
-    pass
+    if isinstance(p[2], list):
+        pass
+    else:
+        p[0] = p[4]
 
 def p_lambdaElement(p):
     '''lambdaElement    : ID
                         | ID OP_ID'''
-    pass
+    #TODO: Missing support for second
+    p[0] = p[1]
 
 # 23
 def p_lambdaFilter(p):
