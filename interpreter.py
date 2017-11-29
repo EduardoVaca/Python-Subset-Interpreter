@@ -5,6 +5,7 @@
 # -------------------------------------
 import ply.lex as lex
 import ply.yacc as yacc
+import functools
 
 class SymbolTable(object):
     """Structure for storing symbols.
@@ -64,7 +65,7 @@ tokens = [
     'EQ', 'NEQ', 'GT', 'GE', 'LT', 'LE',
     'PLUS', 'MINUS', 'PROD', 'DIV', 'EQUALS',
     'LPAREN', 'RPAREN', 'LSQUARE', 'RSQUARE',
-    'ID', 'NUMBER', 'COL', 'SEMI',
+    'ID', 'NUMBER', 'COL', 'SEMI', 'COMA',
 ] + list(reserved_words.values())
 
 # Token definition with regex.
@@ -86,6 +87,7 @@ t_LPAREN    = r'\('
 t_RPAREN    = r'\)'
 t_LSQUARE   = r'\['
 t_RSQUARE   = r'\]'
+t_COMA      = r','
 t_SEMI      = r';'
 
 # More complex tokens are defined with functions.
@@ -352,25 +354,34 @@ def p_functionalStmt(p):
 
 # 22
 def p_lambdaMap(p):
-    'lambdaMap   : LAMBDA COL sumExpression'
-    #TODO: Missing Reduce and Filter
+    'lambdaMap   : LAMBDA COL sumExpression'    
     p[0] = p[3]
 
-def p_lambdaReduce(p):
-    'lambdaReduce : LAMBDA COL relExpression'
-    pass
-
 # 23
+def p_lambdaReduce(p):
+    '''lambdaReduce : LAMBDA COL mulop COMA ID
+                    | LAMBDA COL sumop COMA ID'''
+    current_id = symbol_table.get_element(p[5], current_scope)
+    if current_id:
+        if p[3] == '+': p[0] = functools.reduce(lambda x,y: x+y, current_id[1])
+        if p[3] == '-': p[0] = functools.reduce(lambda x,y: x-y, current_id[1])
+        if p[3] == '/': p[0] = functools.reduce(lambda x,y: x/y, current_id[1])
+        if p[3] == '*': p[0] = functools.reduce(lambda x,y: x*y, current_id[1])
+    else:
+        print("Undefined name {}".format(p[5]))
+        p[0] = 0
+
+# 24
 def p_lambdaFilter(p):
     'lambdaFilter : LAMBDA COL relExpression'
     p[0] = p[3]
 
-# 24
+# 25
 def p_inputStmt(p):
     'inputStmt  : INPUT LPAREN RPAREN'
     p[0] = input()
 
-# 25
+# 26
 def p_outputStmt(p):
     'outputStmt : OUTPUT LPAREN declarationElement RPAREN'
     print(p[3])
