@@ -31,7 +31,7 @@ class SymbolTable(object):
         elif symbol_type == 'BOOLEAN':
             current_symbol = True if symbol == 'true' else False
         elif symbol_type == 'NUMBER':
-            current_symbol = int(symbol)
+            current_symbol = symbol
         else:
             #TODO: Missing lists!
             current_symbol = symbol
@@ -181,19 +181,33 @@ def p_declarationElement(p):
     p[0] = p[1]
 
 # 5
-def p_list(t):
+def p_list(p):
     'list   : LSQUARE listElements RSQUARE'
-    pass
+    p[0] = p[2]
 
 # 6
-def p_listElements(t):
+def p_listElements(p):
     '''listElements : NUMBER
                     | NUMBER OP_NUMBER
                     | STRING
                     | STRING OP_STRING
                     | BOOLEAN
                     | BOOLEAN OP_BOOLEAN'''
-    pass
+    lexer.input(str(p[1]))
+    current_type = lexer.token().type
+    if len(p) == 2:
+        if current_type == 'BOOLEAN':
+            p[0] = [True if p[1] == 'true' else False]
+        else:
+            p[0] = [p[1]]
+    else:
+        elements = p[2].split(',')[1:]
+        if current_type == 'BOOLEAN':
+            p[0] = [True if p[1] == 'true' else False] + [True if x == 'true' else False for x in elements]
+        elif current_type == 'NUMBER':
+            p[0] = [p[1]] + [int(x) for x in elements]
+        else:
+            p[0] = [p[1]] + [x for x in elements]
 
 # 7
 def p_statement(t):
