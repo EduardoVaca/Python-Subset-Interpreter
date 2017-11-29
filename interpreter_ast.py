@@ -110,6 +110,17 @@ class List(Node):
             else:
                 return [self.item] + [x for x in elements]
 
+class Declaration(Node):
+
+    def __init__(self, name, value, scope):
+        self.type = 'DECLARATION'
+        self.name = name
+        self.value = value
+        self.scope = scope
+
+    def execute(self):
+        symbol_table.add_symbol(self.name, '', self.value.execute(), self.scope)
+
 class BinaryOp(Node):
 
     def __init__(self, left, op, right):
