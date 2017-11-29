@@ -128,7 +128,6 @@ def p_declarationList(p):
         p[0] = in_ast.DeclarationList(p[1], p[2])
     else:
         p[0] = in_ast.DeclarationList(p[1])
-    p[0].execute()
 
 # 2
 def p_declaration(p):
@@ -149,7 +148,7 @@ def p_declarationElement(p):
                             | BOOLEAN
                             | inputStmt
                             | functionalStmt'''
-    if p[1][0] == '\'':
+    if isinstance(p[1], str) and p[1][0] == '\'':
         p[0] = in_ast.String(p[1])
     else:
         p[0] = p[1]
@@ -223,7 +222,7 @@ def p_relExpression(p):
     '''relExpression    : sumExpression relop sumExpression
                         | sumExpression'''
     if len(p) > 2:
-        if (isinstance(p[1], list) and not isinstance(p[3], list)) or (not isinstance(p[1], list) and isinstance(p[3], list)):
+        if (isinstance(p[1].execute(), list) and not isinstance(p[3].execute(), list)) or (not isinstance(p[1].execute(), list) and isinstance(p[3].execute(), list)):            
             p[0] = in_ast.ListRelExpression(p[1], p[2], p[3])
         else:
             p[0] = in_ast.RelExpression(p[1], p[2], p[3])
@@ -244,8 +243,8 @@ def p_relop(p):
 def p_sumExpression(p):
     '''sumExpression    : sumExpression sumop term
                         | term'''
-    if len(p) > 2:
-        if (isinstance(p[1], list) and not isinstance(p[3], list)) or (not isinstance(p[1], list) and isinstance(p[3], list)):
+    if len(p) > 2:        
+        if (isinstance(p[1].execute(), list) and not isinstance(p[3].execute(), list)) or (not isinstance(p[1].execute(), list) and isinstance(p[3].execute(), list)):            
             p[0] = in_ast.ListBinaryOp(p[1], p[2], p[3])
         else:
             p[0] = in_ast.BinaryOp(p[1], p[2], p[3])
@@ -263,7 +262,7 @@ def p_term(p):
     '''term : term mulop sumElement
             | sumElement'''
     if len(p) > 2:
-        if (isinstance(p[1], list) and not isinstance(p[3], list)) or (not isinstance(p[1], list) and isinstance(p[3], list)):
+        if (isinstance(p[1].execute(), list) and not isinstance(p[3].execute(), list)) or (not isinstance(p[1].execute(), list) and isinstance(p[3].execute(), list)):
             p[0] = in_ast.ListBinaryOp(p[1], p[2], p[3])           
         else:
             p[0] = in_ast.BinaryOp(p[1], p[2], p[3])
