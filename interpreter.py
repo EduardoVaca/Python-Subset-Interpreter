@@ -180,7 +180,8 @@ def p_declarationElement(p):
     '''declarationElement   : list
                             | sumExpression
                             | STRING                        
-                            | BOOLEAN'''
+                            | BOOLEAN
+                            | inputStmt'''
     p[0] = p[1]
 
 # 5
@@ -351,7 +352,7 @@ def p_lambdaFilter(p):
 # 24
 def p_inputStmt(p):
     'inputStmt  : INPUT LPAREN RPAREN'
-    pass
+    p[0] = input()
 
 # 25
 def p_outputStmt(p):
