@@ -336,7 +336,7 @@ def p_term(p):
 def p_sumElement(p):
     '''sumElement   : ID
                     | NUMBER'''    
-    if not str(p[1])[0].isdigit():
+    if not str(p[1]).isdigit():
         value = symbol_table.get_element(p[1], current_scope)
         if value:
             p[0] = value[1]

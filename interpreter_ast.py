@@ -207,6 +207,22 @@ class OrRelExpression(Node):
     def execute(self):
         return self.left.execute() or self.right.execute()
 
+class Input(Node):
+
+    def __init__(self):
+        self.type = 'INPUT'
+
+    def execute(self):
+        return input()
+
+class Print(Node):
+
+    def __init__(self, item):
+        self.type = 'PRINT'
+        self.item = item
+
+    def execute(self):
+        print(self.item.execute())
 
 symbol_table.add_symbol('x', '', 10, 0)
 n = Number(12)
@@ -224,3 +240,5 @@ print(lbop.execute())
 t = Boolean('true')
 print(t.execute())
 print(AndRelExpression(t, t).execute())
+p = Print(l)
+p.execute()
