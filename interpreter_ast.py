@@ -272,7 +272,7 @@ class DeclarationList(Node):
         if self.declaration_list:
             self.declaration_list.execute()
 
-symbol_table.add_symbol('x', '', 10, 0)
+"""symbol_table.add_symbol('x', '', 10, 0)
 n = Number(12)
 print(n.execute())
 i = ID('x', 0)
@@ -289,4 +289,4 @@ t = Boolean('true')
 print(t.execute())
 print(AndRelExpression(t, t).execute())
 p = Print(l)
-p.execute()
+p.execute()"""

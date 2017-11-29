@@ -116,7 +116,7 @@ lexer = lex.lex()
 current_scope = 0
 
 # Symbol table for IDs
-symbol_table = SymbolTable()
+symbol_table = in_ast.symbol_table
 
 # Parser rules
 
@@ -336,7 +336,7 @@ def main():
         except EOFError:
             break
         parser.parse(s)
-        print(symbol_table)
+        print(symbol_table)      
 
 if __name__ == '__main__':
     main()
