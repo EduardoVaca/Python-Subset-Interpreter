@@ -159,13 +159,13 @@ symbol_table = SymbolTable()
 # Parser rules
 
 # 1
-def p_declarationList(t):
+def p_declarationList(p):
     '''declarationList  : declaration declarationList
                         | declaration'''
     pass
 
 # 2
-def p_declaration(t):
+def p_declaration(p):
     '''declaration  : varDeclaration SEMI
                     | statement'''
     pass
@@ -222,18 +222,18 @@ def p_statement(p):
     p[0] = p[1]
 
 # 8
-def p_iterationStmt(t):
+def p_iterationStmt(p):
     'iterationStmt    : FOR ID IN iterationElement COL declarationList'
     pass
 
 # 9
-def p_iterationElement(t):
+def p_iterationElement(p):
     '''iterationElement : list
                         | ID'''
     pass
 
 # 10
-def p_conditionalStmt(t):
+def p_conditionalStmt(p):
     '''conditionalStmt  : IF expressionStmt COL declarationList
                         | IF expressionStmt COL declarationList ELSE COL declarationList'''
     pass
@@ -327,18 +327,18 @@ def p_mulop(p):
     p[0] = p[1]
 
 # 21
-def p_functionalStmt(t):
+def p_functionalStmt(p):
     '''functionalStmt   : FILTER LPAREN lambdaFilter RPAREN
                         | MAP LPAREN lambdaStmt RPAREN
                         | REDUCE LPAREN lambdaStmt RPAREN'''
     pass
 
 # 22
-def p_lambdaStmt(t):
+def p_lambdaStmt(p):
     '''lambdaStmt   : LAMBDA lambdaElement COL sumExpression COMA iterationElement'''
     pass
 
-def p_lambdaElement(t):
+def p_lambdaElement(p):
     '''lambdaElement    : ID
                         | ID OP_ID'''
     pass
