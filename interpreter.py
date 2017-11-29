@@ -64,7 +64,7 @@ tokens = [
     'EQ', 'NEQ', 'GT', 'GE', 'LT', 'LE',
     'PLUS', 'MINUS', 'PROD', 'DIV', 'EQUALS',
     'LPAREN', 'RPAREN', 'LSQUARE', 'RSQUARE', 'COMA',
-    'ID', 'OP_ID', 'NUMBER', 'COL', 'SEMI',
+    'ID', 'NUMBER', 'COL', 'SEMI',
 ] + list(reserved_words.values())
 
 # Token definition with regex.
@@ -123,10 +123,6 @@ def t_OP_BOOLEAN(t):
 
 def t_BOOLEAN(t):
     r'true|false'
-    return t
-
-def t_OP_ID(t):
-    r'(,[a-zA-Z_][a-zA-Z0-9_]*)+'
     return t
 
 def t_ID(t):
@@ -308,8 +304,13 @@ def p_term(p):
     '''term : term mulop sumElement
             | sumElement'''
     if len(p) > 2:
-        if p[2] == '*': p[0] = p[1] * p[3]
-        if p[2] == '/': p[0] = p[1] / p[3]
+        if (isinstance(p[1], list) and not isinstance(p[3], list)) or (not isinstance(p[1], list) and isinstance(p[3], list)):
+            temp_list = p[1] if isinstance(p[1], list) else p[3]
+            temp_value = p[1] if not isinstance(p[1], list) else p[3]
+            p[0] = [x*temp_value if p[2] == '*' else x/temp_value for x in temp_list]
+        else:
+            if p[2] == '*': p[0] = p[1] * p[3]
+            if p[2] == '/': p[0] = p[1] / p[3]
     else:
         p[0] = p[1]
 
@@ -342,21 +343,13 @@ def p_functionalStmt(p):
 
 # 22
 def p_lambdaStmt(p):
-    '''lambdaStmt   : LAMBDA lambdaElement COL sumExpression COMA iterationElement'''
-    if isinstance(p[2], list):
-        pass
-    else:
-        p[0] = p[4]
-
-def p_lambdaElement(p):
-    '''lambdaElement    : ID
-                        | ID OP_ID'''
-    #TODO: Missing support for second
-    p[0] = p[1]
+    '''lambdaStmt   : LAMBDA COL sumExpression'''
+    #TODO: Missing Reduce and Filter
+    p[0] = p[3]
 
 # 23
 def p_lambdaFilter(p):
-    'lambdaFilter : LAMBDA lambdaElement COL expressionStmt COMA iterationElement'
+    'lambdaFilter : LAMBDA COL expressionStmt'
     pass
 
 # 24
