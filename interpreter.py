@@ -195,7 +195,10 @@ def p_iterationStmt(p):
 def p_iterationElement(p):
     '''iterationElement : list
                         | ID'''
-    p[0] = p[1]
+    if isinstance(p[1], in_ast.List):
+        p[0] = p[1]
+    else:        
+        p[0] = in_ast.ID(p[1])
 
 # 10
 def p_conditionalStmt(p):

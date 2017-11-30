@@ -1,7 +1,7 @@
 import functools
 
 class SymbolTable(object):
-    """Structure for storing symbols.
+    """Structure for storing symbols on each scope.
     { 'ID-Scope': (Type, Value, Scope)}
     """
 
@@ -13,9 +13,13 @@ class SymbolTable(object):
         return str(self.table)
 
     def increase_scope(self):
+        """Increase the scope on symbol table
+        """
         self.current_scope += 1
     
     def decrese_scope(self):
+        """Decrease the scope on symbol table
+        """
         self.current_scope -= 1
 
     def add_symbol(self, id_name, symbol_type, symbol):
@@ -25,17 +29,7 @@ class SymbolTable(object):
         - symbol_type : Type of the symbol
         - symbol : Symbol to be stored 
         """
-        current_symbol = 0
-        if symbol_type == 'STRING':
-            current_symbol = symbol[1:-1]
-        elif symbol_type == 'BOOLEAN':
-            current_symbol = True if symbol == 'true' else False
-        elif symbol_type == 'NUMBER':
-            current_symbol = symbol
-        else:
-            #TODO: Missing lists!
-            current_symbol = symbol
-        self.table[id_name+'-'+str(self.current_scope)] = (symbol_type, current_symbol, self.current_scope)
+        self.table[id_name+'-'+str(self.current_scope)] = (symbol_type, symbol, self.current_scope)
 
     def get_element(self, symbol):
         """Gets and element from symbol table
