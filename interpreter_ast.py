@@ -160,11 +160,14 @@ class BinaryOp(Node):
         self.type = 'BINARY_OP'
 
     def execute(self):
-        if self.op == '+': return self.left.execute() + self.right.execute()
-        if self.op == '-': return self.left.execute() - self.right.execute()
-        if self.op == '*': return self.left.execute() * self.right.execute()
-        if self.op == '/': return self.left.execute() / self.right.execute()
-        else: return 0
+        if isinstance(self.left, Number) and isinstance(self.right, Number):
+            if self.op == '+': return self.left.execute() + self.right.execute()
+            if self.op == '-': return self.left.execute() - self.right.execute()
+            if self.op == '*': return self.left.execute() * self.right.execute()
+            if self.op == '/': return self.left.execute() / self.right.execute()
+            else: return 0
+        else:
+            print('Error: On binary operation must have ints')
 
 class ListBinaryOp(Node):
 
@@ -179,11 +182,14 @@ class ListBinaryOp(Node):
         right_exec = self.right.execute()
         temp_list = left_exec if isinstance(left_exec, list) else right_exec
         temp_value = left_exec if not isinstance(left_exec, list) else right_exec
-        if self.op == '+': return [x+temp_value for x in temp_list]
-        if self.op == '-': return [x-temp_value for x in temp_list]
-        if self.op == '*': return [x*temp_value for x in temp_list]
-        if self.op == '/': return [x/temp_value for x in temp_list]
-        else: return 0
+        if isinstance(temp_value, Number) or isinstance(temp_value, int):
+            if self.op == '+': return [x+temp_value for x in temp_list]
+            if self.op == '-': return [x-temp_value for x in temp_list]
+            if self.op == '*': return [x*temp_value for x in temp_list]
+            if self.op == '/': return [x/temp_value for x in temp_list]
+            else: return 0
+        else:
+            print('Error: On List binary operation must have list and int')
 
 class RelExpression(Node):
 
@@ -194,13 +200,16 @@ class RelExpression(Node):
         self.type = 'REL_EXPR'
 
     def execute(self):
-        if self.op == '<': return self.left.execute() < self.right.execute()
-        if self.op == '<=': return self.left.execute() <= self.right.execute()
-        if self.op == '>': return self.left.execute() > self.right.execute()
-        if self.op == '>=': return self.left.execute() >= self.right.execute()
-        if self.op == '==': return self.left.execute() == self.right.execute()
-        if self.op == '!=': return self.left.execute() != self.right.execute()
-        else: return 0
+        if (isinstance(self.left, Number) or isinstance(self.left, Boolean)) and (isinstance(self.right, Number) or isinstance(self.right, Boolean)):
+            if self.op == '<': return self.left.execute() < self.right.execute()
+            if self.op == '<=': return self.left.execute() <= self.right.execute()
+            if self.op == '>': return self.left.execute() > self.right.execute()
+            if self.op == '>=': return self.left.execute() >= self.right.execute()
+            if self.op == '==': return self.left.execute() == self.right.execute()
+            if self.op == '!=': return self.left.execute() != self.right.execute()
+            else: return 0
+        else:
+            print('Error: On Comparison operation must have bools or ints')
 
 class ListRelExpression(Node):
 
@@ -215,13 +224,16 @@ class ListRelExpression(Node):
         right_exec = self.right.execute()
         temp_list = left_exec if isinstance(left_exec, list) else right_exec
         temp_value = left_exec if not isinstance(left_exec, list) else right_exec
-        if self.op == '<': return [x for x in temp_list if x < temp_value]
-        if self.op == '<=': return [x for x in temp_list if x <= temp_value]
-        if self.op == '>': return [x for x in temp_list if x > temp_value]
-        if self.op == '>=': return [x for x in temp_list if x >= temp_value]
-        if self.op == '==': return [x for x in temp_list if x == temp_value]
-        if self.op == '!=': return [x for x in temp_list if x != temp_value]
-        else: return 0
+        if isinstance(temp_value, Number) or isinstance(temp_value, int):
+            if self.op == '<': return [x for x in temp_list if x < temp_value]
+            if self.op == '<=': return [x for x in temp_list if x <= temp_value]
+            if self.op == '>': return [x for x in temp_list if x > temp_value]
+            if self.op == '>=': return [x for x in temp_list if x >= temp_value]
+            if self.op == '==': return [x for x in temp_list if x == temp_value]
+            if self.op == '!=': return [x for x in temp_list if x != temp_value]
+            else: return 0
+        else:
+            print('Error: On List comparison operation must have list and int')
 
 class UnaryRelExpression(Node):
 
