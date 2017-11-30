@@ -49,8 +49,12 @@ class SymbolTable(object):
                 return self.table[symbol+'-'+str(x)]
         return None
 
-    def remove_element(self, symbol):
-        del self.table[symbol+'-'+str(self.current_scope)]
+    def remove_elements_in_scope(self):
+        """Deletes elements created in current scope
+        """
+        keys_to_delete = [k for k in self.table.keys() if '-'+str(self.current_scope) in k]
+        for k in keys_to_delete:
+            del self.table[k]
 
 symbol_table = SymbolTable()
 
@@ -306,6 +310,6 @@ class For(Node):
         symbol_table.increase_scope()
         for x in self.items.execute():
             symbol_table.add_symbol(self.id_name, '', x)
-            self.stmt.execute()
-        symbol_table.remove_element(self.id_name)
+            self.stmt.execute()        
+        symbol_table.remove_elements_in_scope()
         symbol_table.decrese_scope()
