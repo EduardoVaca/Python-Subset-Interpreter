@@ -192,7 +192,7 @@ def p_statement(p):
 # 8
 def p_iterationStmt(p):
     'iterationStmt    : FOR ID IN iterationElement COL declarationList'
-    pass
+    p[0] = in_ast.For(p[2], p[4], p[6], current_scope)
 
 # 9
 def p_iterationElement(p):
