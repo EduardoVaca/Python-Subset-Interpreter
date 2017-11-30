@@ -1,3 +1,8 @@
+# -------------------------------------
+# COMPILERS PROJECT: AST Tree
+# Carlos Eduardo Vaca Guerra
+# A01207563
+# -------------------------------------
 import functools
 
 class SymbolTable(object):
@@ -53,8 +58,12 @@ class SymbolTable(object):
 symbol_table = SymbolTable()
 
 class Node(object):
+    """Interface for a Node of AST
+    """
 
     def execute(self):
+        """Function to execute the stmt of the node
+        """
         raise NotImplementedError("Subclass must implement abstract method")
 
 class DeclarationList(Node):
