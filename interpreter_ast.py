@@ -44,7 +44,10 @@ class SymbolTable(object):
         RETURNS:
         - value if symbol found, None if not
         """
-        return self.table.get(symbol+'-'+str(self.current_scope), None)
+        for x in range(self.current_scope, -1, -1):
+            if symbol+'-'+str(x) in self.table:
+                return self.table[symbol+'-'+str(x)]
+        return None
 
     def remove_element(self, symbol):
         del self.table[symbol+'-'+str(self.current_scope)]
