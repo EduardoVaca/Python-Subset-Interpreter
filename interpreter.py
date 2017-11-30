@@ -112,9 +112,6 @@ def t_error(t):
 # Build the lexer
 lexer = lex.lex()
 
-# Scope tracker
-current_scope = 0
-
 # Symbol table for IDs
 symbol_table = in_ast.symbol_table
 
@@ -143,7 +140,7 @@ def p_declaration(p):
 # 3
 def p_varDeclaration(p):
     'varDeclaration   : ID EQUALS declarationElement'
-    p[0] = in_ast.Declaration(p[1], p[3], current_scope)
+    p[0] = in_ast.Declaration(p[1], p[3])
 
 # 4
 def p_declarationElement(p):
@@ -192,7 +189,7 @@ def p_statement(p):
 # 8
 def p_iterationStmt(p):
     'iterationStmt    : FOR ID IN iterationElement COL declarationList'
-    p[0] = in_ast.For(p[2], p[4], p[6], current_scope)
+    p[0] = in_ast.For(p[2], p[4], p[6])
 
 # 9
 def p_iterationElement(p):
@@ -284,7 +281,7 @@ def p_sumElement(p):
     '''sumElement   : ID
                     | NUMBER'''    
     if not str(p[1]).isdigit():
-        p[0] = in_ast.ID(p[1], current_scope)
+        p[0] = in_ast.ID(p[1])
     else:        
         p[0] = in_ast.Number(p[1])
 
@@ -310,7 +307,7 @@ def p_lambdaMap(p):
 def p_lambdaReduce(p):
     '''lambdaReduce : LAMBDA COL mulop COMA ID
                     | LAMBDA COL sumop COMA ID'''
-    p[0] = in_ast.LambdaReduce(p[5], p[3], current_scope)    
+    p[0] = in_ast.LambdaReduce(p[5], p[3])    
 
 # 24
 def p_lambdaFilter(p):

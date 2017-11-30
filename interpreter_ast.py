@@ -7,17 +7,23 @@ class SymbolTable(object):
 
     def __init__(self):
         self.table = {}
+        self.current_scope = 0
     
     def __str__(self):
         return str(self.table)
 
-    def add_symbol(self, id_name, symbol_type, symbol, scope):
+    def increase_scope(self):
+        self.current_scope += 1
+    
+    def decrese_scope(self):
+        self.current_scope -= 1
+
+    def add_symbol(self, id_name, symbol_type, symbol):
         """Adds a symbol to the table
         PARAMS:
         - id_name : Name of ID
         - symbol_type : Type of the symbol
-        - symbol : Symbol to be stored
-        - scope : Current scope
+        - symbol : Symbol to be stored 
         """
         current_symbol = 0
         if symbol_type == 'STRING':
@@ -29,20 +35,19 @@ class SymbolTable(object):
         else:
             #TODO: Missing lists!
             current_symbol = symbol
-        self.table[id_name+'-'+str(scope)] = (symbol_type, current_symbol, scope)
+        self.table[id_name+'-'+str(self.current_scope)] = (symbol_type, current_symbol, self.current_scope)
 
-    def get_element(self, symbol, scope):
+    def get_element(self, symbol):
         """Gets and element from symbol table
         PARAMS:
         - symbol : name of symbol to be fetched
-        - scope : scope of symbol
         RETURNS:
         - value if symbol found, None if not
         """
-        return self.table.get(symbol+'-'+str(scope), None)
+        return self.table.get(symbol+'-'+str(self.current_scope), None)
 
-    def remove_element(self, symbol, scope):
-        del self.table[symbol+'-'+str(scope)]
+    def remove_element(self, symbol):
+        del self.table[symbol+'-'+str(self.current_scope)]
 
 symbol_table = SymbolTable()
 
@@ -92,13 +97,12 @@ class String(Node):
 
 class ID(Node):
 
-    def __init__(self, name, scope):
+    def __init__(self, name):
         self.name = name
-        self.type = 'ID'
-        self.scope = scope
+        self.type = 'ID'        
     
     def execute(self):
-        value = symbol_table.get_element(self.name, self.scope)
+        value = symbol_table.get_element(self.name)
         if value:
             return value[1]
         else:
@@ -129,14 +133,13 @@ class List(Node):
 
 class Declaration(Node):
 
-    def __init__(self, name, value, scope):
+    def __init__(self, name, value):
         self.type = 'DECLARATION'
         self.name = name
-        self.value = value
-        self.scope = scope
+        self.value = value        
 
     def execute(self):
-        symbol_table.add_symbol(self.name, '', self.value.execute(), self.scope)
+        symbol_table.add_symbol(self.name, '', self.value.execute())
 
 class BinaryOp(Node):
 
@@ -258,14 +261,13 @@ class Print(Node):
 
 class LambdaReduce(Node):
 
-    def __init__(self, id_name, op, scope):
+    def __init__(self, id_name, op):
         self.type = 'LAMBDA_REDUCE'
-        self.id_name = id_name
-        self.scope = scope
+        self.id_name = id_name 
         self.op = op
 
     def execute(self):
-        current_id = symbol_table.get_element(self.id_name, self.scope)
+        current_id = symbol_table.get_element(self.id_name)
         if current_id:
             if self.op == '+': return functools.reduce(lambda x,y: x+y, current_id[1])
             if self.op == '-': return functools.reduce(lambda x,y: x-y, current_id[1])
@@ -291,17 +293,16 @@ class If(Node):
 
 class For(Node):
 
-    def __init__(self, id_name, items, stmt, scope):
+    def __init__(self, id_name, items, stmt):
         self.id_name = id_name
         self.items = items
-        self.stmt = stmt
-        self.scope = scope
+        self.stmt = stmt        
         self.type = 'FOR'
 
     def execute(self):
-        current_scope = self.scope + 1
+        symbol_table.increase_scope()
         for x in self.items.execute():
-            symbol_table.add_symbol(self.id_name, '', x, current_scope)
+            symbol_table.add_symbol(self.id_name, '', x)
             self.stmt.execute()
-        symbol_table.remove_element(self.id_name, current_scope)
-        current_scope = self.scope - 1
+        symbol_table.remove_element(self.id_name)
+        symbol_table.decrese_scope()
