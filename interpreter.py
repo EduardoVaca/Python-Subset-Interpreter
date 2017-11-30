@@ -120,6 +120,7 @@ symbol_table = in_ast.symbol_table
 
 # Parser rules
 
+# 0
 def p_line(p):
     'executionLine : declarationList'
     p[1].execute()
@@ -201,7 +202,10 @@ def p_iterationElement(p):
 def p_conditionalStmt(p):
     '''conditionalStmt  : IF expressionStmt COL declarationList
                         | IF expressionStmt COL declarationList ELSE COL declarationList'''
-    pass
+    if len(p) == 5:
+        p[0] = in_ast.If(p[2], p[4])
+    else:
+        p[0] = in_ast.If(p[2], p[4], p[7])
 
 # 11
 def p_expressionStmt(p):

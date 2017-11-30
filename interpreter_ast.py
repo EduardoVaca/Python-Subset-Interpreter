@@ -48,6 +48,18 @@ class Node(object):
     def execute(self):
         raise NotImplementedError("Subclass must implement abstract method")
 
+class DeclarationList(Node):
+
+    def __init__(self, declaration, declaration_list=None):
+        self.type = 'DECLARATION_LIST'
+        self.declaration = declaration
+        self.declaration_list = declaration_list
+
+    def execute(self):
+        self.declaration.execute()
+        if self.declaration_list:
+            self.declaration_list.execute()
+
 class Number(Node):
     
     def __init__(self, value):
@@ -260,34 +272,16 @@ class LambdaReduce(Node):
             print("Undefined name {}".format(self.id_name))
             return 0
 
-class DeclarationList(Node):
+class If(Node):
 
-    def __init__(self, declaration, declaration_list=None):
-        self.type = 'DECLARATION_LIST'
-        self.declaration = declaration
-        self.declaration_list = declaration_list
+    def __init__(self, condition, stmt, else_stmt=None):
+        self.type = 'IF'
+        self.condition = condition
+        self.stmt = stmt
+        self.else_stmt = else_stmt
 
     def execute(self):
-        self.declaration.execute()
-        if self.declaration_list:
-            self.declaration_list.execute()
-
-
-"""symbol_table.add_symbol('x', '', 10, 0)
-n = Number(12)
-print(n.execute())
-i = ID('x', 0)
-print(i.execute())
-bop = BinaryOp(i, '+', n)
-print(bop.execute())
-print('hi')
-l = List(1)
-print(l.execute())
-lbop = ListRelExpression(n, '>', l)
-print(lbop.execute())
-
-t = Boolean('true')
-print(t.execute())
-print(AndRelExpression(t, t).execute())
-p = Print(l)
-p.execute()"""
+        if self.condition.execute():
+            self.stmt.execute()
+        elif self.else_stmt:
+            self.else_stmt.execute()
