@@ -82,26 +82,26 @@ class TestLexer(unittest.TestCase):
     def test_map_func(self):
         """Tests that map function is tokenized correctly.
         """
-        LEXER.input('map(lambda x: x+1, list)')
+        LEXER.input('map(lambda: x+1)')
         self.checks_tokens([
-            'MAP', 'LPAREN', 'LAMBDA', 'ID', 'COL', 'ID', 'PLUS',
-            'NUMBER', 'COMA', 'ID', 'RPAREN'])
+            'MAP', 'LPAREN', 'LAMBDA', 'COL', 'ID', 'PLUS',
+            'NUMBER', 'RPAREN'])
 
     def test_filter_func(self):
         """Tests that filter function is tokenized correctly.
         """
-        LEXER.input('filter(lambda x: x == 2, list)')
+        LEXER.input('filter(lambda: x == 2)')
         self.checks_tokens([
-            'FILTER', 'LPAREN', 'LAMBDA', 'ID', 'COL', 'ID', 'EQ',
-            'NUMBER', 'COMA', 'ID', 'RPAREN'])
+            'FILTER', 'LPAREN', 'LAMBDA', 'COL', 'ID', 'EQ',
+            'NUMBER', 'RPAREN'])
 
     def tests_reduce_func(self):
         """Tests that reduce function is tokenized correctly.
         """
-        LEXER.input('reduce(lambda x,y: x+y, list)')
+        LEXER.input('reduce(lambda: +, list)')
         self.checks_tokens([
-            'REDUCE', 'LPAREN', 'LAMBDA', 'ID', 'OP_ID', 'COL',
-            'ID', 'PLUS', 'ID', 'COMA', 'ID', 'RPAREN'])
+            'REDUCE', 'LPAREN', 'LAMBDA', 'COL',
+            'PLUS', 'COMA', 'ID', 'RPAREN'])
 
     # Tests that only succed on lexical analyzer phase.
     def test_var_definition_misplaced(self):

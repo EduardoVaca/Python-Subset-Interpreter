@@ -1,0 +1,15 @@
+x = 10 + 5;
+print(x);
+x = true; if x: print('True'); else: print('false');
+for x in [1,2,3,4,5]: print(x);
+y = 100;
+for x in [1,2,3,4,5]: print(y);
+my_list = [1,2];
+for element in my_list: print('In my list');
+print(element);
+a = 20; b = 25;
+c = input();
+if c > a and c < b: print('c between 20 and 25'); if c == 22: print('c = 22'); else: print('c NO 22'); else: print('c not between 20 and 25');
+for e in [1,2,3,4,5]: if e > 3: print('e is > 3'); else: print('e <= 3');
+x = [1,2,3,4,5];
+print(map(lambda: x*10)); print(filter(lambda: x>=3)); print(reduce(lambda: +, x));

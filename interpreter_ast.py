@@ -209,7 +209,7 @@ class ListRelExpression(Node):
         if self.op == '<': return [x for x in temp_list if x < temp_value]
         if self.op == '<=': return [x for x in temp_list if x <= temp_value]
         if self.op == '>': return [x for x in temp_list if x > temp_value]
-        if self.op == '<=': return [x for x in temp_list if x <= temp_value]
+        if self.op == '>=': return [x for x in temp_list if x >= temp_value]
         if self.op == '==': return [x for x in temp_list if x == temp_value]
         if self.op == '!=': return [x for x in temp_list if x != temp_value]
         else: return 0
