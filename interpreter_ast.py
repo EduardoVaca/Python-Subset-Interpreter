@@ -294,9 +294,15 @@ class If(Node):
 
     def execute(self):
         if self.condition.execute():
+            symbol_table.increase_scope()
             self.stmt.execute()
+            symbol_table.remove_elements_in_scope()
+            symbol_table.decrese_scope()
         elif self.else_stmt:
+            symbol_table.increase_scope()
             self.else_stmt.execute()
+            symbol_table.remove_elements_in_scope()
+            symbol_table.decrese_scope()
 
 class For(Node):
 
