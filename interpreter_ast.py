@@ -249,7 +249,13 @@ class Input(Node):
         self.type = 'INPUT'
 
     def execute(self):
-        return input()
+        value = input()
+        if value.isdigit():
+            return int(value)
+        elif value == 'true' or 'false':
+            return True if value == 'true' else False
+        else:
+            return input()
 
 class Print(Node):
 

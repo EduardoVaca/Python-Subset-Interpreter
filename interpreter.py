@@ -348,7 +348,7 @@ def main():
         except EOFError:
             break
         parser.parse(s)
-        print(symbol_table)      
+        #print(symbol_table)      
 
 if __name__ == '__main__':
     main()
