@@ -160,7 +160,8 @@ class BinaryOp(Node):
         self.type = 'BINARY_OP'
 
     def execute(self):
-        if isinstance(self.left, Number) and isinstance(self.right, Number):
+        if (isinstance(self.left, Number) or (isinstance(self.left, ID) and isinstance(self.left.execute(), int))) \
+        and (isinstance(self.right, Number) or (isinstance(self.right, ID) and isinstance(self.right.execute(), int))):
             if self.op == '+': return self.left.execute() + self.right.execute()
             if self.op == '-': return self.left.execute() - self.right.execute()
             if self.op == '*': return self.left.execute() * self.right.execute()
@@ -200,7 +201,8 @@ class RelExpression(Node):
         self.type = 'REL_EXPR'
 
     def execute(self):
-        if (isinstance(self.left, Number) or isinstance(self.left, Boolean)) and (isinstance(self.right, Number) or isinstance(self.right, Boolean)):
+        if (isinstance(self.left, Number) or isinstance(self.left, Boolean) or (isinstance(self.left, ID) and isinstance(self.left.execute(), int))) \
+        and (isinstance(self.right, Number) or isinstance(self.right, Boolean) or (isinstance(self.right, ID) and isinstance(self.right.execute(), int))):
             if self.op == '<': return self.left.execute() < self.right.execute()
             if self.op == '<=': return self.left.execute() <= self.right.execute()
             if self.op == '>': return self.left.execute() > self.right.execute()
