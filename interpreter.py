@@ -155,6 +155,8 @@ def p_declarationElement(p):
                             | functionalStmt'''
     if isinstance(p[1], str) and p[1][0] == '\'':
         p[0] = in_ast.String(p[1])
+    elif p[1] == 'true' or p[1] == 'false':
+        p[0] = in_ast.Boolean(p[1])
     else:
         p[0] = p[1]
 
@@ -211,13 +213,13 @@ def p_conditionalStmt(p):
 def p_expressionStmt(p):
     '''expressionStmt   : expressionStmt OR andExpression
                         | andExpression'''
-    p[0] = in_ast.OrRelExpression(p[1], p[2]) if len(p) > 2 else p[1]
+    p[0] = in_ast.OrRelExpression(p[1], p[3]) if len(p) > 2 else p[1]
 
 # 12
 def p_andExpression(p):
     '''andExpression    : andExpression AND unaryRelExpression
                         | unaryRelExpression'''
-    p[0] = in_ast.AndRelExpression(p[1], p[2]) if len(p) > 2 else p[1]
+    p[0] = in_ast.AndRelExpression(p[1], p[3]) if len(p) > 2 else p[1]
 
 # 13
 def p_unaryRelExpression(p):
